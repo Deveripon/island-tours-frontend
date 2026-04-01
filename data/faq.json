@@ -1,0 +1,56 @@
+{
+    "faqs": [
+        {
+            "question": "What features are included in each subscription tier?",
+            "answer": "Every plan provides essential tools for creating and managing your travel booking platform, including customizable website templates, reservation management, secure payment processing, and detailed analytics. Premium tiers unlock advanced capabilities like custom domain integration, expanded storage capacity, and priority customer support."
+        },
+        {
+            "question": "Can I modify my subscription plan?",
+            "answer": "Absolutely! You can easily upgrade or downgrade your subscription at any time through your TripWheel account dashboard with just a few clicks."
+        },
+        {
+            "question": "Do you provide a trial period?",
+            "answer": "Yes! We offer a comprehensive 30-day free trial that lets you explore all of TripWheel's features and find the perfect plan for your business. No credit card information required to get started."
+        },
+        {
+            "question": "Are there any additional charges or fees?",
+            "answer": "We maintain complete pricing transparency. The subscription cost you see is exactly what you'll pay—no surprise setup fees, hidden charges, or unexpected costs."
+        },
+        {
+            "question": "How flexible is subscription cancellation?",
+            "answer": "You have complete control over your subscription and can cancel at any time. Your travel booking website will continue operating normally until your current billing period expires."
+        },
+        {
+            "question": "Do you offer savings for yearly subscriptions?",
+            "answer": "Yes! Annual subscription plans include substantial savings compared to monthly billing. Choose yearly payments to maximize your cost savings."
+        },
+        {
+            "question": "What occurs if I surpass my plan's usage limits?",
+            "answer": "When you approach or exceed your plan limits for storage space or booking volume, we'll send you notifications and present upgrade options to support your business growth seamlessly."
+        },
+        {
+            "question": "Is support assistance available with every plan?",
+            "answer": "Customer support is included across all subscription tiers. Premium plan subscribers receive priority support with faster response times and dedicated personalized assistance."
+        },
+        {
+            "question": "Can I connect my own website domain?",
+            "answer": "Yes, custom domain connection is supported. You can link your existing domain name or purchase a new one directly through our TripWheel platform."
+        },
+        {
+            "question": "Which payment options do you support?",
+            "answer": "We accept all major credit and debit cards, PayPal, and various digital payment methods. All transactions are processed through our secure, encrypted payment gateway for maximum safety."
+        },
+        {
+            "question": "What is your refund policy?",
+            "answer": "We provide a 7-day money-back guarantee for all annual subscription purchases. Contact our customer support team to initiate any refund requests."
+        },
+        {
+            "question": "How do you protect my website and business data?",
+            "answer": "Security is our top priority. Every TripWheel website includes SSL encryption certificates, and all your business data is stored on secure servers with automated daily backups for maximum protection."
+        },
+        {
+            "question": "Can I expand my plan with additional features?",
+            "answer": "Yes, you can purchase feature add-ons or upgrade to a higher plan tier at any time to access additional functionality that matches your evolving business requirements."
+        }
+    ]
+}

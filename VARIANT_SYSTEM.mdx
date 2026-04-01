@@ -1,0 +1,58 @@
+# Architecture Overview: Itinerary & Block Management
+
+The system follows a modular, "Registry-driven" architecture where block behavior, UI variations (variants), and data schemas are centralized.
+
+### 1. The Source of Truth: `block-registry.js`
+All available blocks are defined here. For the **Itinerary** block, the registry specifies:
+*   **Metadata**: Labels, icons, and descriptions.
+*   **Components**: Maps a `variantId` (e.g., `'classic'`, `'timeline'`) to a specific React Component.
+*   **Default Data**: The initial JSON structure needed for a specific layout to render beautifully on the first load.
+
+### 2. Component Selection: The `block-wrapper-factory.jsx`
+Instead of hardcoding "If variant is X, show Y", we use a **Higher-Order Component (HOC)** called `createBlockWrapper`.
+*   **How it works**: It takes a map of components from the registry.
+*   **Selection Logic**: When it renders, it looks at `props.data.variant`. 
+    *   If `variant === 'timeline'`, it pulls the `ItineraryTimeline` component from the map.
+    *   It passes all props (data, trip details, edit status) down to that selected component.
+
+---
+
+# The Workflow: Step-by-Step
+
+### Phase A: Adding a new Block (The Library Sidebar)
+1.  **Selection**: In `BlockLibrarySidebar.jsx`, when you click "Itinerary", the system checks if `BLOCK_METADATA.ITINERARY` has variants.
+2.  **Variant Dialog**: If variants exist, it opens `VariantSelectionDialog`.
+3.  **Creation**: When you pick a layout (e.g., Timeline), it calls `onAddBlock('ITINERARY', { variant: 'timeline' })`. 
+4.  **Insertion**: The `trip-content-wrapper.jsx` generates a unique ID and saves this initial data to the trip state. Because we pass the `variant` ID, the UI immediately knows which component to render.
+
+### Phase B: Switching Variants in a Live Block
+If you've already added an Itinerary block and want to change its style:
+1.  **Trigger**: Inside `ItineraryForm.jsx`, the `BlockVariantSelector` component is rendered.
+2.  **Synchronization**: The form is "aware" of the currently selected variant via the `watchedVariant` prop (which uses `itineraryData.variant`).
+3.  **The Change**:
+    *   You pick a different layout in the dialog.
+    *   The `onSelectVariant` function is triggered.
+    *   It updates the local `itineraryData` state: `{ ...itineraryData, variant: 'new_variant_id' }`.
+4.  **Immediate Feedback**: Since the block wrapper is listening to this data change, the entire component swaps instantly in the background without refreshing the page.
+
+### Phase C: The Editing Process
+1.  **State Management**: `ItineraryBlock` (or `ItineraryTimeline`) manages its own local state (`itineraryData`).
+2.  **Backups**: Because switching between Single-Day and Multi-Day modes can be destructive, we implement **Backup States** (`singleDayBackup`, `multiDayBackup`).
+    *   When you switch modes, we save the current fields to a backup.
+    *   We then restore the backup for the other mode.
+    *   **Crucial Fix**: We ensured that the `variant` ID is manually preserved during these switches so the layout doesn't reset to default.
+3.  **Persistence**: When you hit **"Save All"** in the sidebar:
+    *   The `onUpdate(itineraryData)` function is called.
+    *   This pushes the final JSON (including the `variant` key) to the parent state.
+    *   The parent executes the Server Action `updateAffiliateTripById` to save your design to the database permanently.
+
+---
+
+### Key Components involved:
+| Component | Responsibility |
+| :--- | :--- |
+| **`BlockLibrarySidebar`** | Initial discovery and block creation. |
+| **`VariantSelectionDialog`** | Renders live scaled-down previews of layouts using default data. |
+| **`BlockVariantSelector`** | The "Switch Style" button found inside the editing forms. |
+| **`block-wrapper-factory`** | The dynamic switcher that decides *which* JS file to actually run. |
+| **`ItineraryForm`** | The data entry interface (inputs, drag & drop) shared by all variants. |

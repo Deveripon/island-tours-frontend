@@ -1,0 +1,34 @@
+{
+    "businessTypes": [
+        { "id": "leisure", "name": "Leisure Travel" },
+        { "id": "adventure", "name": "Adventure & Outdoor" },
+        { "id": "cruise", "name": "Cruise & Water Travel" },
+        { "id": "corporate", "name": "Corporate / Business\nTravel & Retreats" },
+        { "id": "wellness", "name": "Wellness & Retreats" },
+        { "id": "luxury", "name": "Luxury Travel" },
+        { "id": "educational", "name": "Educational / Cultural\nTravel" },
+        { "id": "religious", "name": "Religious & Spiritual\nTravel" },
+        { "id": "custom", "name": "Custom Travel\nExperiences" }
+    ],
+    "goalTypes": [
+        { "id": "ota", "name": "Complete OTA Solution" },
+        { "id": "itinerary", "name": "Automate itinerary creation" },
+        { "id": "customer", "name": "Manage customer inquiries" },
+        { "id": "ai", "name": "Offer AI assistant to clients" },
+        { "id": "Listing", "name": "Listing my trips" },
+        { "id": "payments", "name": "Accept payments online" },
+        { "id": "bookings", "name": "Get more bookings" },
+        { "id": "other", "name": "Other" }
+    ],
+    "platformTypes": [
+        { "id": "wordpress", "name": "WordPress" },
+        { "id": "shopify", "name": "Shopify" },
+        { "id": "wix", "name": "Wix" },
+        { "id": "squarespace", "name": "Squarespace" },
+        { "id": "joomla", "name": "Joomla" },
+        { "id": "drupal", "name": "Drupal" },
+        { "id": "ghost", "name": "Ghost" },
+        { "id": "webflow", "name": "Webflow" },
+        { "id": "contentful", "name": "Contentful" }
+    ]
+}

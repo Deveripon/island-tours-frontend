@@ -1,0 +1,20 @@
+import * as React from 'react';
+
+function SquareIcon(props) {
+    return (
+        <svg
+            fill='#000'
+            height='200px'
+            width='200px'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            xmlSpace='preserve'
+            {...props}>
+            <path d='M17 22H7c-2.8 0-5-2.2-5-5V7c0-2.8 2.2-5 5-5h10c2.8 0 5 2.2 5 5v10c0 2.7-2.2 5-5 5zM7 4C5.3 4 4 5.3 4 7v10c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V7c0-1.7-1.3-3-3-3H7z' />
+            <path d='M14 9h-4c-.6 0-1 .4-1 1v4c0 .6.4 1 1 1h4c.6 0 1-.4 1-1v-4c0-.6-.4-1-1-1z' />
+        </svg>
+    );
+}
+
+export default SquareIcon;
+

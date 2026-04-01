@@ -1,0 +1,39 @@
+// constants/categoryTypes.js
+
+// Define the category types as constants first
+export const CATEGORY_TYPES = {
+    GENERAL: 'GENERAL',
+    TOUR_TYPE: 'TOUR_TYPE',
+    CURRENCY: 'CURRENCY',
+    DIFFICULTY_LEVEL: 'DIFFICULTY_LEVEL',
+    SUITABLE_FOR: 'SUITABLE_FOR',
+    TOUR_STYLE: 'TOUR_STYLE',
+    INCLUSIONS: 'INCLUSIONS',
+    EXCLUSIONS: 'EXCLUSIONS',
+    AGE_CATEGORY: 'AGE_CATEGORY',
+    PREPARATION: 'PREPARATION',
+    POLICIES: 'POLICIES',
+    FAQ: 'FAQ',
+    CUSTOMISATION: 'CUSTOMISATION',
+    ADDONS: 'ADDONS',
+    UNKNOWN: 'UNKNOWN',
+};
+
+export const CategoryTypesArray = [
+    { name: 'GENERAL', value: CATEGORY_TYPES.GENERAL },
+    { name: 'TOUR_TYPE', value: CATEGORY_TYPES.TOUR_TYPE },
+    { name: 'CURRENCY', value: CATEGORY_TYPES.CURRENCY },
+    { name: 'DIFFICULTY_LEVEL', value: CATEGORY_TYPES.DIFFICULTY_LEVEL },
+    { name: 'SUITABLE_FOR', value: CATEGORY_TYPES.SUITABLE_FOR },
+    { name: 'TOUR_STYLE', value: CATEGORY_TYPES.TOUR_STYLE },
+    { name: 'INCLUSIONS', value: CATEGORY_TYPES.INCLUSIONS },
+    { name: 'EXCLUSIONS', value: CATEGORY_TYPES.EXCLUSIONS },
+    { name: 'AGE_CATEGORY', value: CATEGORY_TYPES.AGE_CATEGORY },
+    { name: 'PREPARATION', value: CATEGORY_TYPES.PREPARATION },
+    { name: 'POLICIES', value: CATEGORY_TYPES.POLICIES },
+    { name: 'FAQ', value: CATEGORY_TYPES.FAQ },
+    { name: 'CUSTOMISATION', value: CATEGORY_TYPES.CUSTOMISATION },
+    { name: 'ADDONS', value: CATEGORY_TYPES.ADDONS },
+    { name: 'UNKNOWN', value: CATEGORY_TYPES.UNKNOWN },
+];
+

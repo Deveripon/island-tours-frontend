@@ -1,0 +1,199 @@
+{
+    "sassLandingPage": {
+        "mainNav": {
+            "signin": "Inloggen",
+            "startFreeTrial": "Gratis Proberen",
+            "bookAdemo": "Demo Boeken"
+        },
+
+        "homePage": {
+            "hero": {
+                "title": "Eerste volledig AI-aangedreven CRM-oplossing voor touroperators",
+                "subtitle": "Bouw krachtige en moderne boekingswebsites in enkele minuten. Onze CRM helpt touroperators, activiteitenaanbieders en reisbedrijven meer bezoekers om te zetten in klanten.",
+                "cta": "Start 30 dagen gratis proefperiode",
+                "secondaryCta": "Bekijk demo",
+                "features": [
+                    "Geen creditcard nodig",
+                    "30 dagen gratis proefperiode"
+                ]
+
+            }
+        },
+
+        "sections": {
+            "createWebsite": {
+                "title": "Maak Uw Website in Minuten",
+                "points": [
+                    "Maak prachtige websites zonder codering.",
+                    "AI-gegenereerde sjablonen aangepast aan uw merk.",
+                    "Mobielvriendelijk en SEO-geoptimaliseerd.",
+                    "Geïntegreerd boekings- en betalingssysteem."
+                ],
+                "cta": "Meer Weten"
+            },
+            "increaseSales": {
+                "title": "Verhoog Uw Verkoop met Krachtige Omzetverhogende Tools",
+                "points": [
+                    "Geavanceerde verkooptracking en rapportage.",
+                    "Dynamisch prijs- en kortingsbeheer.",
+                    "Geautomatiseerde upsell- en cross-sell-functies.",
+                    "Klantsegmentatie en targeting."
+                ],
+                "cta": "Meer Weten"
+            },
+            "makeItineraries": {
+                "title": "Maak Gedetailleerde Reisplannen die Verkopen",
+                "points": [
+                    "Maak en deel eenvoudig aantrekkelijke reisplannen.",
+                    "AI-aanbevelingen voor de beste reiservaringen.",
+                    "Aanpasbare lay-outs en branding.",
+                    "Direct boeken vanuit reisplannen."
+                ],
+                "cta": "Meer Weten"
+            },
+            "performanceMetrics": {
+                "title": "Verbeter Prestaties met Belangrijke Statistieken",
+                "points": [
+                    "Volg al uw KPI's in één dashboard.",
+                    "Controleer boekingen, omzet en klanttrends.",
+                    "Identificeer groeimogelijkheden.",
+                    "AI-aangedreven analyses en voorspellingen."
+                ],
+                "cta": "Meer Weten"
+            },
+            "receivePayments": {
+                "title": "Ontvang Betalingen van Over de Hele Wereld",
+                "points": [
+                    "Accepteer grote creditcards en wallets.",
+                    "Ondersteuning voor meerdere valuta.",
+                    "Directe afwikkeling en eenvoudige tracking.",
+                    "Veilige en conforme betalingsverwerking."
+                ],
+                "cta": "Meer Weten"
+            },
+            "teamManagement": {
+                "title": "Vereenvoudig Teamtoegang en Beheer",
+                "points": [
+                    "Wijs eenvoudig rollen en rechten toe.",
+                    "Werk naadloos samen tussen teams.",
+                    "Gecentraliseerde communicatiehub.",
+                    "Volg de prestaties van medewerkers."
+                ],
+                "cta": "Meer Weten"
+            }
+        },
+
+        "pricing": {
+            "title": "Probeer elk abonnement 30 dagen gratis",
+            "plans": {
+                "starter": {
+                    "name": "Starter",
+                    "price": "$22,50 / gebruiker / maand"
+                },
+                "business": {
+                    "name": "Business",
+                    "price": "$45,00 / gebruiker / maand"
+                },
+                "enterprise": {
+                    "name": "Enterprise",
+                    "price": "$67,50 / gebruiker / maand"
+                }
+            }
+        },
+
+        "faq": {
+            "title": "Veelgestelde Vragen",
+            "questions": [
+                "Wat maakt deze CRM anders?",
+                "Kan ik het gratis uitproberen?",
+                "Is het geschikt voor alle soorten tours?",
+                "Ondersteunt het online betalingen?",
+                "Kan mijn team efficiënt samenwerken?",
+                "Is de software mobielvriendelijk?"
+            ]
+        },
+
+        "footer": {
+            "cta": "Nog vragen? Stuur ons een bericht en ons supportteam helpt u verder.",
+            "button": "Neem Contact Op"
+        }
+    },
+    "userDashboard": {
+        "header": {
+            "breadcrumb": {
+                "dashboard": "Dashboard"
+            },
+            "cta": {
+                "manageSite": "Beheer je Website",
+                "visitSite": "Bezoek Website",
+                "siteProtection": "Website Beveiliging",
+                "purgeCache": "Cache Legen",
+                "siteCache": "Website Cache",
+                "clearSiteCache": "Website cache wissen",
+                "noItemsAvailable": "Geen items beschikbaar",
+                "cloudfareCache": "Cloudflare Cache",
+                "clearAllCache": "Alle Cache Wissen",
+                "removeAllCache": "Alle gecachte inhoud verwijderen"
+            },
+            "profileDropdown": {
+                "viewProfile": "Profiel Bekijken",
+                "gotoSite": "Ga naar Website",
+                "changeLog": "Wijzigingslog",
+                "support": "Ondersteuning",
+                "community": "Community",
+                "signOut": "Uitloggen"
+            }
+        }
+    },
+    "b2bSite": {
+        "homePage": {
+            "heroSection": {
+                "title": "Ontdek de schoonheid van eilanden met",
+                "subtitle": "onvergetelijke rondleidingen en activiteiten",
+                "searchForm": {
+                    "whereTo": "Waar naartoe?",
+                    "datePlaceholder": "Selecteer Datum",
+                    "guest": "Gast",
+                    "adult": "Volwassene",
+                    "children": "Kinderen",
+                    "infant": "Baby",
+                    "age": "Leeftijd",
+                    "ages": "Leeftijden",
+                    "under": "Onder",
+                    "findTrips": "Vind Reizen"
+                }
+            },
+            "features": {
+                "secureBooking": "Veilig Boeken",
+                "secureBookingDescription": "Uw betalingen en persoonlijke informatie zijn altijd beschermd met ons veilige boekingssysteem.",
+                "handpickedExperiences": "Handgeselecteerde Ervaringen",
+                "handpickedExperiencesDescription": "Wij controleren persoonlijk al onze tours en activiteiten om kwaliteitservaringen te garanderen.",
+                "availability": "24/7 Beschikbaarheid",
+                "availabilityDescription": "Boek altijd en overal. Ons platform is altijd beschikbaar voor uw reisbehoeften.",
+                "customerSupport": "Toegewijde Ondersteuning",
+                "customerSupportDescription": "Onze reisexperts zijn beschikbaar om u tijdens uw reis te helpen.",
+                "customisableItineraries": "Aanpasbare Reisroutes",
+                "customisableItinerariesDescription": "Creëer unieke en gepersonaliseerde reisroutes die bij uw voorkeuren passen."
+            },
+            "popularDestinations": {
+                "title": "Populaire Bestemmingen",
+                "subtitle": "Verken onze handgeselecteerde selectie van trending bestemmingen die reizigers geweldig vinden. Vind uw perfecte uitje onder deze geweldige locaties."
+            },
+            "populerTrips": {
+                "title": "Populaire Reizen",
+                "subtitle": "Verken onze handgeselecteerde selectie van trending reizen die reizigers geweldig vinden. Vind uw perfecte uitje onder deze geweldige locaties."
+            },
+            "partner": {
+                "title": "Wij zijn trots partner van"
+            },
+            "testimonial": {
+                "title": "Wat Onze Klanten Zeggen",
+                "subtitle": "Lees wat onze klanten te zeggen hebben over hun ervaring met onze diensten."
+            },
+            "footer": {
+            }
+        }
+    }
+
+}
+

@@ -1,0 +1,180 @@
+{
+    "discount": {
+        "monthly": 10,
+        "yearly": 20
+    },
+    "plans": [
+        {
+            "id": "starter",
+            "name": "Starter",
+            "description": "Entry-level plan with essential features for small-scale usage.",
+            "price": { "monthly": 25 },
+            "features": [
+                {
+                    "name": "Commission",
+                    "value": "0%"
+                }, {
+                    "name": "Unlimited Trips Creation",
+                    "value": true
+                },
+                {
+                    "name": "Advanced SEO Analysis",
+                    "value": true
+                }, {
+                    "name": "Advanced Iterinary Creation",
+                    "value": true
+                }, {
+                    "name": "Add ons for Trips",
+                    "value": true
+                }, {
+                    "name": "Payment Gateways",
+                    "value": "All Payment Gateways"
+                },
+                {
+                    "name": "Custom Domain",
+                    "value": true
+                },
+                {
+                    "name": "Email Notifications",
+                    "value": true
+                },
+                {
+                    "name": "Embed Reviews",
+                    "value": true
+                },
+                {
+                    "name": "Storage Space",
+                    "value": "10GB"
+                }, {
+                    "name": "Deposit Payment",
+                    "value": false
+                }, {
+                    "name": "Accommodation Creation",
+                    "value": false
+                }, {
+                    "name": "Booking Fee",
+                    "value": false
+                }, {
+                    "name": "Number of Team Members",
+                    "value": 5
+                }
+            ],
+            "popular": false
+        },
+        {
+            "id": "business",
+            "name": "Bussiness",
+            "description": "Advanced plan with extended features for growing teams and businesses.",
+            "price": { "monthly": 50 },
+            "features": [
+                {
+                    "name": "Commission",
+                    "value": "0%"
+                }, {
+                    "name": "Unlimited Trips Creation",
+                    "value": true
+                },
+                {
+                    "name": "Advanced SEO Analysis",
+                    "value": true
+                }, {
+                    "name": "Advanced Iterinary Creation",
+                    "value": true
+                }, {
+                    "name": "Add ons for Trips",
+                    "value": true
+                }, {
+                    "name": "Payment Gateways",
+                    "value": "All Payment Gateways"
+                },
+                {
+                    "name": "Custom Domain",
+                    "value": true
+                },
+                {
+                    "name": "Email Notifications",
+                    "value": true
+                },
+                {
+                    "name": "Embed Reviews",
+                    "value": true
+                },
+                {
+                    "name": "Storage Space",
+                    "value": "30GB"
+                }, {
+                    "name": "Deposit Payment",
+                    "value": true
+                }, {
+                    "name": "Accommodation Creation",
+                    "value": true
+                }, {
+                    "name": "Booking Fee",
+                    "value": true
+                }, {
+                    "name": "Number of Team Members",
+                    "value": 12
+                }
+            ],
+            "popular": true
+        },
+        {
+            "id": "enterprise",
+            "name": "Enterprise",
+            "description": "Comprehensive plan with full features for large-scale operations and enterprises.",
+            "price": { "monthly": 75 },
+            "features": [
+                {
+                    "name": "Commission",
+                    "value": "0%"
+                }, {
+                    "name": "Unlimited Trips Creation",
+                    "value": true
+                },
+                {
+                    "name": "Advanced SEO Analysis",
+                    "value": true
+                }, {
+                    "name": "Advanced Iterinary Creation",
+                    "value": true
+                }, {
+                    "name": "Add ons for Trips",
+                    "value": true
+                }, {
+                    "name": "Payment Gateways",
+                    "value": "All Payment Gateways"
+                },
+                {
+                    "name": "Custom Domain",
+                    "value": true
+                },
+                {
+                    "name": "Email Notifications",
+                    "value": true
+                },
+                {
+                    "name": "Embed Reviews",
+                    "value": true
+                },
+                {
+                    "name": "Storage Space",
+                    "value": "50GB"
+                }, {
+                    "name": "Deposit Payment",
+                    "value": true
+                }, {
+                    "name": "Accommodation Creation",
+                    "value": true
+                }, {
+                    "name": "Booking Fee",
+                    "value": true
+                }, {
+                    "name": "Number of Team Members",
+                    "value": "Unlimited"
+                }
+            ],
+            "popular": false
+        }
+    ]
+}
+

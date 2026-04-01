@@ -1,0 +1,115 @@
+
+import { getTenantById, getTenantsMailchimp } from '@/app/_actions/settingsActions';
+import AutomationSetup from './components/automation-setup';
+
+export default async function AutomationPage({ params }) {
+    const { tenant } = await params;
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_APP_URL;
+    const endpoints = {
+        leads: {
+            mailchimp: {
+                id: 'mailchimp',
+                title: 'Connect Mailchimp API',
+                description: 'Integrate Mailchimp directly to automate your lead nurturing.',
+                endpoint: null,
+                method: null,
+                instructions: [
+                    'Log in to Mailchimp and go to Account & Billing > Extras > API Keys.',
+                    'Create a new API Key and copy it.',
+                    'Go to Audience > Settings to find your "Unique Audience ID".',
+                    'Enter the API Key and Audience ID in the fields below.',
+                    'Ensure your Server Prefix (e.g., us19) is correct.',
+                    'Click "Save Configuration" to save.'
+                ],
+                payload: null
+            },
+            zapier: {
+                id: 'leads-by-zapier',
+                title: 'Lead Collection via Zapier',
+                description: 'Collect and store leads from your forms via Zapier',
+                endpoint: `${backendUrl}/webhook/leads`,
+                method: 'POST',
+                instructions: [
+                    'Create a new Zap in Zapier and select your form trigger (Google Forms, Typeform, etc.)',
+                    'Choose "Webhooks by Zapier" as the action app',
+                    'Select "POST" as the action event',
+                    'Copy the webhook URL above and paste it into the URL field',
+                    'Map your form fields to the webhook payload',
+                    'Test your webhook and turn on your Zap',
+                ],
+
+                payload: {
+                    tenantId: `${tenant} (required)`,
+                    email: "Lead' Email             => eg. john@example.com (required)",
+
+                    name: "Lead's Name              => eg. John Doe  (optional)",
+                    image: "Lead' Image url         => eg. https://example.com/image.jpg  (optional)",
+                    phone: "Lead' Phone             => eg. +1234567890  (optional)",
+                    company: "Lead' Cpmany          => eg. Island Tours  (optional)",
+                    source: 'Collecting Source      => eg. Google Form  (optional)',
+                    message:
+                        'Any Message           => eg. Interested in your services (optional)',
+                },
+            },
+            n8n: {
+                id: 'leads-by-n8n',
+                title: 'Lead Collection via n8n',
+                description: 'Collect and store leads from your forms via n8n',
+                endpoint: `${backendUrl}/webhook/leads`,
+                method: 'POST',
+                instructions: [
+                    'Create a new workflow in n8n and select your form trigger (Google Forms, Typeform, etc.)',
+                    'Add an HTTP Request node to your workflow',
+                    'Set the HTTP Method to "POST"',
+                    'Copy the webhook URL above and paste it into the URL field',
+                    'Map your form fields to the webhook payload',
+                    'Execute the workflow to test the webhook',
+                ],
+
+                payload: {
+                    tenantId: `${tenant} (required)`,
+                    email: "Lead' Email             => eg. john@example.com (required)",
+
+                    name: "Lead's Name              => eg. John Doe  (optional)",
+                    image: "Lead' Image url         => eg. https://example.com/image.jpg  (optional)",
+                    phone: "Lead' Phone             => eg. +1234567890  (optional)",
+                    company: "Lead' Cpmany          => eg. Island Tours  (optional)",
+                    source: 'Collecting Source      => eg. Google Form  (optional)',
+                    message:
+                        'Any Message           => eg. Interested in your services (optional)',
+                },
+            },
+        },
+    };
+    const [tenantConfig, mailchimpConfig] = await Promise.all([getTenantById(tenant), getTenantsMailchimp(tenant)]);
+    const webhookUrlConfig = tenantConfig?.result?.data?.webhooks?.webhookUrls || [];
+    const existingZapierCatchUrl = webhookUrlConfig.find(
+        config => config.type === 'zapier_leads_catch_url'
+    )?.url;
+
+    const existingN8nCatchUrl = webhookUrlConfig.find(
+        config => config.type === 'n8n_leads_catch_url'
+    )?.url;
+    const mailchimpConfigData = mailchimpConfig?.result;
+    return (
+        <div className='container'>
+            <div className='flex items-center justify-between'>
+                <div>
+                    <h1 className='text-2xl font-semibold tracking-tight'>
+                        Integrations & Automation
+                    </h1>
+                    <p className='text-sm text-muted-foreground'>
+                        Connect your automation tools with Tripwheel
+                    </p>
+                </div>
+            </div>
+            <AutomationSetup
+                tenant={tenant}
+                instructions={endpoints?.leads}
+                existingZapierCatchUrl={existingZapierCatchUrl}
+                existingN8nCatchUrl={existingN8nCatchUrl}
+                mailchimpConfig={mailchimpConfigData}
+            />
+        </div>
+    );
+}

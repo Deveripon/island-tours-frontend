@@ -1,0 +1,167 @@
+'use client';
+import {
+    createNewBlog,
+    getSingleBlog,
+    updateBlogById,
+} from '@/app/_actions/blogs';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import MainFormSection from './components/main-form-input';
+import { BlogSeoForm } from './components/seo-configuration';
+import FormSidebar from './components/sidebar';
+
+export default function PostCreationPage() {
+    const [tags, setTags] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [dataToEdit, setDataToEdit] = useState(null);
+    const router = useRouter();
+    const params = useSearchParams();
+    const blogId = params.get('id');
+    const mode = params.get('mode');
+    const { tenant } = useParams();
+
+    const form = useForm({
+        defaultValues: {
+            title: '',
+            content: '',
+            category: ['uncategorized'],
+            mainImage: null,
+            tags: [],
+            status: 'draft',
+            seo: {
+                title: '',
+                description: '',
+                focusKeyword: '',
+                canonical: '',
+                ogTitle: '',
+                ogDescription: '',
+                ogImage: null,
+                twitterTitle: '',
+                twitterDescription: '',
+                twitterCard: 'summary_large_image',
+                robots: 'index,follow',
+                schemaType: 'Article',
+            },
+        } });
+    const {
+        control,
+        handleSubmit,
+        watch,
+        formState: { errors },
+        reset,
+        setValue,
+    } = form;
+
+    useEffect(() => {
+        if (mode === 'update' && blogId) {
+            async function getBlogData() {
+                try {
+                    setLoading(true);
+                    const data = await getSingleBlog(blogId);
+
+
+                    setLoading(false);
+                    if (data?.success) {
+                        setDataToEdit(data?.blog?.data);
+                        form.reset(data?.blog?.data);
+                        form.setValue('category', data?.blog?.data?.category);
+                        form.setValue('tags', data?.blog?.data?.tags);
+                        setTags(data?.blog?.data?.tags);
+                        setTimeout(() => { }, 0);
+                    } else {
+                        toast.error('Failed to load blog data for editing');
+                    }
+                } catch (error) {
+
+                    toast.error('There was an error while fetching data to edit');
+                }
+            }
+            getBlogData();
+        }
+    }, [mode, form, blogId]);
+
+    const onSaveDraft = async () => {
+        const formData = {
+            title: watch('title'),
+            content: watch('content'),
+            category: watch('category'),
+            mainImage: watch('mainImage'),
+            tags,
+            status: 'DRAFT',
+            seo: watch('seo'),
+        };
+
+
+        try {
+            if (mode !== 'update') {
+                const res = await createNewBlog(formData);
+
+                toast.success('Blog Saved successfully');
+            } else {
+                const res = await updateBlogById(blogId, formData);
+
+                toast.success('Blog Updated successfully');
+            }
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const onSubmit = async data => {
+        const formData = {
+            ...data,
+            tags,
+            status: 'PUBLISHED',
+        };
+        try {
+            if (mode !== 'update') {
+                const res = await createNewBlog(formData);
+                toast.success('Blog created successfully');
+            } else {
+                const res = await updateBlogById(blogId, formData);
+                toast.success('Blog Updated successfully');
+            }
+            router.push(`/${tenant}/dashboard/blogs`);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    return (
+        <div className='min-h-screen'>
+            <FormProvider {...form}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className=''>
+                        {/* Header */}
+                        <div className='flex mb-5 items-center justify-between'>
+                            <div className='space-y-1'>
+                                <h1 className='text-2xl font-semibold tracking-tight'>
+                                    {mode === 'update' ? 'Update' : 'Create New'} Post
+                                </h1>
+                                <p className='text-sm text-muted-foreground'>
+                                    Share your travel stories and experiences with the world
+                                </p>
+                            </div>
+                        </div>
+                        <div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
+                            {/* Main Content Area */}
+                            <div className='lg:col-span-3 flex flex-col space-y-6'>
+                                <MainFormSection mode={mode} />
+                                <BlogSeoForm />
+                            </div>
+                            {/* Sidebar */}
+                            <FormSidebar
+                                onSaveDraft={onSaveDraft}
+                                tags={tags}
+                                setTags={setTags}
+                            />
+                        </div>
+                    </div>
+                </form>
+            </FormProvider>
+        </div >
+    );
+}

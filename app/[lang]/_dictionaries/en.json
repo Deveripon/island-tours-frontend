@@ -1,0 +1,194 @@
+{
+    "sassLandingPage": {
+        "mainNav": {
+            "signin": "Sign In",
+            "startFreeTrial": "Start Free Trial",
+            "bookAdemo": "Book a Demo"
+        },
+        "homePage": {
+            "hero": {
+                "title": "First ever AI Powered Complete CRM Solution for Tour Operators",
+                "subtitle": "Build powerful and mordern booking websites in minutes. Our CRM helps tour operators, activity providers and travel businesses convert more visitors into customers.",
+                "cta": "Start 30 day Free Trial",
+                "secondaryCta": "View Demo",
+                "features": [
+                    "No credit card required",
+                    "30-day free trial"
+                ]
+            },
+
+            "sections": {
+                "createWebsite": {
+                    "title": "Create Your Website in Minutes",
+                    "points": [
+                        "Build stunning websites without coding.",
+                        "AI-generated templates customized for your brand.",
+                        "Mobile-friendly and SEO-optimized.",
+                        "Integrated booking and payment system."
+                    ],
+                    "cta": "Learn More"
+                },
+                "increaseSales": {
+                    "title": "Increase Your Sales with Powerful Revenue-Driving Tools",
+                    "points": [
+                        "Advanced sales tracking and reporting.",
+                        "Dynamic pricing and discount management.",
+                        "Automated upsell and cross-sell features.",
+                        "Customer segmentation and targeting."
+                    ],
+                    "cta": "Learn More"
+                },
+                "makeItineraries": {
+                    "title": "Make Detailed Itineraries That Sell",
+                    "points": [
+                        "Easily create and share attractive itineraries.",
+                        "AI suggestions for best trip experiences.",
+                        "Customizable layouts and branding.",
+                        "Instant booking from itineraries."
+                    ],
+                    "cta": "Learn More"
+                },
+                "performanceMetrics": {
+                    "title": "Improve Performance with Key Metrics",
+                    "points": [
+                        "Track all your KPIs in one dashboard.",
+                        "Monitor bookings, revenue, and customer trends.",
+                        "Identify growth opportunities.",
+                        "AI-powered analytics and forecasting."
+                    ],
+                    "cta": "Learn More"
+                },
+                "receivePayments": {
+                    "title": "Receive Payments From Around The World",
+                    "points": [
+                        "Accept major credit cards and wallets.",
+                        "Multi-currency support.",
+                        "Instant settlement and easy tracking.",
+                        "Secure and compliant payment processing."
+                    ],
+                    "cta": "Learn More"
+                },
+                "teamManagement": {
+                    "title": "Simplify Team Access and Management",
+                    "points": [
+                        "Assign roles and permissions easily.",
+                        "Collaborate seamlessly across teams.",
+                        "Centralized communication hub.",
+                        "Track staff performance."
+                    ],
+                    "cta": "Learn More"
+                }
+            },
+            "pricing": {
+                "title": "Try any plan for free for 30 days",
+                "plans": {
+                    "starter": {
+                        "name": "Starter",
+                        "price": "$22.50 / user / month"
+                    },
+                    "business": {
+                        "name": "Business",
+                        "price": "$45.00 / user / month"
+                    },
+                    "enterprise": {
+                        "name": "Enterprise",
+                        "price": "$67.50 / user / month"
+                    }
+                }
+            },
+            "faq": {
+                "title": "Frequently Asked Questions",
+                "questions": [
+                    "What makes this CRM different?",
+                    "Can I try it for free?",
+                    "Is it suitable for all types of tours?",
+                    "Does it support online payments?",
+                    "Can my team collaborate efficiently?",
+                    "Is the software mobile-friendly?"
+                ]
+            },
+            "footer": {
+                "cta": "Still have questions? Send us a message and our support team will assist you.",
+                "button": "Contact Us"
+            }
+        }
+    },
+    "userDashboard": {
+        "header": {
+            "breadcrumb": {
+                "dashboard": "Dashboard"
+            },
+            "cta": {
+                "manageSite": "Manage your Site",
+                "visitSite": "Visit Website",
+                "siteProtection": "Site Protection",
+                "purgeCache": "Purge Cache",
+                "siteCache": "Site Cache",
+                "clearSiteCache": "Clear site cache",
+                "noItemsAvailable": "No items available",
+                "cloudfareCache": "Cloudflare Cache",
+                "clearAllCache": "Clear All Cache",
+                "removeAllCache": "Remove all cached contents"
+            },
+            "profileDropdown": {
+                "viewProfile": "View Profile",
+                "gotoSite": "Go to Site",
+                "changeLog": "Changelog",
+                "support": "Support",
+                "community": "Community",
+                "signOut": "Sign Out"
+            }
+
+        }
+    },
+    "b2bSite": {
+        "homePage": {
+            "heroSection": {
+                "title": "Discover the beauty of islands through ",
+                "subtitle": "unforgettable tours and activities",
+                "searchForm": {
+                    "whereTo": "Where to?",
+                    "datePlaceholder": "Select a Date",
+                    "guest": "Guest",
+                    "adult": "Adult",
+                    "children": "Children",
+                    "infant": "Infant",
+                    "age": "Age",
+                    "ages": "Ages",
+                    "under": "Under",
+                    "findTrips": "Find Trips"
+                }
+            },
+            "features": {
+                "secureBooking": "Secure Booking",
+                "secureBookingDescription": "Your payments and personal information are always protected with our secure booking system.",
+                "handpickedExperiences": "Handpicked Experiences",
+                "handpickedExperiencesDescription": "We personally vet all our tours and activities to ensure quality experiences.",
+                "availability": "24/7 Availability",
+                "availabilityDescription": "Book anytime, anywhere. Our platform is always available for your travel needs.",
+                "customerSupport": "Dedicated Support",
+                "customerSupportDescription": "Our travel experts are available to assist you throughout your journey.",
+                "customisableItineraries": "Customizable Itineraries",
+                "customisableItinerariesDescription": "Create unique and personalized itineraries to suit your preferences."
+
+            },
+            "popularDestinations": {
+                "title": "Popular Destinations",
+                "subtitle": "Explore our handpicked selection of trending destinations that travelers love. Find your perfect getaway among these amazing locations."
+            },
+            "populerTrips": {
+                "title": "Popular Trips",
+                "subtitle": "Explore our handpicked selection of trending trips that travelers love. Find your perfect getaway among these amazing locations."
+            },
+            "partner": {
+                "title": "We are proudly partner with"
+            },
+            "testimonial": {
+                "title": "What Our Customers Are Saying",
+                "subtitle": "Read what our customers have to say about their experience with our services."
+            },
+            "footer": {
+            }
+        }
+    }
+}
