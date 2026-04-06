@@ -61,14 +61,13 @@ export async function handleCustomerSignup(data) {
 /**
  * Customer Sign In
  */
-export async function handleCustomerSignIn({ email, password, tenantId }) {
+export async function handleCustomerSignIn({ email, password }) {
     if (!email || !password) return { success: false, error: { message: 'Email and password are required' } };
 
     try {
         const result = await signIn('credentials-customer', {
             email,
             password,
-            tenantId, // Preserved for now
             redirect: false
         });
 

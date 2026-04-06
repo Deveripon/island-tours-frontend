@@ -1,7 +1,7 @@
 import { Blogs } from './blog-table';
 import { columns } from './blogs-column';
 
-export function AllBlogs({ blogs, tenantId }) {
+export function AllBlogs({ blogs }) {
     return (
         <div className='space-y-6'>
             {/* Header */}
@@ -19,7 +19,6 @@ export function AllBlogs({ blogs, tenantId }) {
             {/* Blog Table */}
             <Blogs
                 data={blogs || []}
-                tenantId={tenantId}
                 columns={columns}
             />
         </div>

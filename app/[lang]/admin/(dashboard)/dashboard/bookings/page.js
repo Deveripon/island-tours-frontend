@@ -1,10 +1,9 @@
-import { getAllAffiliateTripBookingsOfTenant } from '@/app/_actions/bookingActions';
+import { getAllBookings } from '@/app/_actions/bookingActions';
 import { getGroupedDataOfStatus } from '@/lib/utils';
 import PageContent from './components/page-content';
 
-export default async function Bookings({ params }) {
-    const { tenant } = await params;
-    const bookings = await getAllAffiliateTripBookingsOfTenant(tenant);
+export default async function Bookings() {
+    const bookings = await getAllBookings();
     console.log('Bookings:', bookings);
     const bookingsData = bookings?.result?.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -14,7 +13,10 @@ export default async function Bookings({ params }) {
 
     return (
         <div className='container space-y-6'>
-            <PageContent groupedBookings={groupedData} bookings={bookingsData ?? []} />
+            <PageContent
+                groupedBookings={groupedData}
+                bookings={bookingsData ?? []}
+            />
         </div>
     );
 }

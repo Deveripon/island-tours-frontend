@@ -107,7 +107,8 @@ function SidebarProvider({
             isMobile,
             openMobile,
             setOpenMobile,
-            toggleSidebar }),
+            toggleSidebar,
+        }),
         [
             state,
             open,
@@ -456,7 +457,9 @@ const sidebarMenuButtonVariants = cva(
         defaultVariants: {
             variant: 'default',
             size: 'default',
-        } });
+        },
+    }
+);
 
 function SidebarMenuButton({
     asChild = false,
@@ -667,3 +670,4 @@ export {
     SidebarTrigger,
     useSidebar,
 };
+

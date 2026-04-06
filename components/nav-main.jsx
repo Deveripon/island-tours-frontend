@@ -22,7 +22,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Badge } from './ui/badge';
 
-export function NavMain({ items, lang, pendingInquries, pendingReviewsCount }) {
+export function NavMain({ items, lang, pendingInquiries, pendingReviewsCount }) {
     const pathname = usePathname();
     const isHomeActive = pathname === `/${lang}/admin/dashboard`;
 
@@ -201,12 +201,12 @@ export function NavMain({ items, lang, pendingInquries, pendingReviewsCount }) {
                                         <span className='font-medium text-sm'>
                                             {item.title}
                                         </span>
-                                        {item.url === 'enquires' &&
-                                            pendingInquries > 0 && (
+                                        {item.url === 'inquiries' &&
+                                            pendingInquiries > 0 && (
                                                 <Badge
                                                     variant='destructive'
                                                     className='absolute  top-0 right-0'>
-                                                    {pendingInquries}
+                                                    {pendingInquiries}
                                                 </Badge>
                                             )}
                                         {item.url === 'reviews' &&

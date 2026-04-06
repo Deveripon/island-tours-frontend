@@ -1,19 +1,21 @@
-import { getAllActivityOfTenant } from '@/app/_actions/trips/activityActions';
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import PageContent from './components/page-content';
 
-export default async function ActivitiesPage({ params }) {
-    const { tenant } = await params;
-    const res = await getAllActivityOfTenant(tenant, 'limit=100');
+export default async function ActivitiesPage() {
+    const res = await getAllActivities('limit=100');
 
-    const activities = res?.data;
-    const destinationRes = await getAllDestinationOfTenant(tenant, 'limit=100');
+    const activities = res?.result?.data;
+    const destinationRes = await getAllDestinations();
 
-    const destinations = destinationRes?.data;
+    const destinations = destinationRes?.result?.data;
 
     return (
         <div className='container space-y-6'>
-            <PageContent destinations={destinations ?? []} activities={activities ?? []} />
+            <PageContent
+                destinations={destinations ?? []}
+                activities={activities ?? []}
+            />
         </div>
     );
 }

@@ -31,7 +31,7 @@ import { useSession } from 'next-auth/react';
 import { useFormContext } from 'react-hook-form';
 
 // Destination Field Component
-import { getAllAffiliateTripsCreatedByUser } from '@/app/_actions/trips/affiliateTripsAction';
+import { getAllTrips } from '@/app/_actions/trips/affiliateTripsAction';
 import { useCallback } from 'react';
 
 export const TripSelectionField = ({ control }) => {
@@ -49,14 +49,11 @@ export const TripSelectionField = ({ control }) => {
 
         setLoading(true);
         try {
-            const res = await getAllAffiliateTripsCreatedByUser(
-                userId,
-                'limit=100'
-            );
+            const res = await getAllTrips(`createdById=${userId}&limit=100`);
             console.log(`res`, res);
 
             if (res?.success) {
-                setTrips(res?.data?.data || []);
+                setTrips(res?.result?.data?.data || []);
             }
         } catch (error) {
             setTrips([]);
@@ -85,9 +82,9 @@ export const TripSelectionField = ({ control }) => {
                     <FormControl>
                         <TripSelection
                             trips={trips}
-                            defaultValues={trips.find(
+                            defaultValues={Array.isArray(trips) ? trips.find(
                                 trip => trip.id === tripId
-                            )}
+                            ) : undefined}
                             onValueChange={field.onChange}
                             value={field.value}
                             loading={loading}
@@ -124,7 +121,7 @@ function TripSelection({ trips, onValueChange, loading, defaultValues }) {
                             Fetching trips
                         </div>
                     ) : value ? (
-                        trips.find(trip => trip.id === value)?.title
+                        Array.isArray(trips) && trips?.find(trip => trip.id === value)?.title
                     ) : (
                         'Select Trip...'
                     )}
@@ -147,7 +144,7 @@ function TripSelection({ trips, onValueChange, loading, defaultValues }) {
                             <>
                                 <CommandEmpty>No trip found.</CommandEmpty>
                                 <CommandGroup>
-                                    {trips.map(trip => (
+                                    {Array.isArray(trips) && trips.map(trip => (
                                         <CommandItem
                                             className={
                                                 value === trip.id &&

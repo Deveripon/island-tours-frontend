@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
-export function NavMain({ tenant, items }) {
+export function NavMain({ items }) {
     const pathname = usePathname();
     const router = useRouter();
     const [hoveredItem, setHoveredItem] = useState(null);
@@ -27,7 +27,8 @@ export function NavMain({ tenant, items }) {
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
     const [subPopupPosition, setSubPopupPosition] = useState({
         top: 0,
-        left: 0 });
+        left: 0,
+    });
     const [expandedItems, setExpandedItems] = useState(new Set());
     const timeoutRef = useRef(null);
     const subTimeoutRef = useRef(null);
@@ -39,8 +40,8 @@ export function NavMain({ tenant, items }) {
         // Try multiple approaches to match
         const cleanUrl = url.replace(/^\/+|\/+$/g, '');
         const approaches = [
-            `/${tenant}/dashboard/${cleanUrl}`,
-            `/${tenant}/dashboard/${url}`,
+            `/admin/dashboard/${cleanUrl}`,
+            `/admin/dashboard/${url}`,
             pathname.endsWith(`/${cleanUrl}`),
             pathname.includes(`/${cleanUrl}`),
             pathname.split('/').pop() === cleanUrl,
@@ -124,7 +125,7 @@ export function NavMain({ tenant, items }) {
             // If opening and has children, navigate to first submenu item
             const firstItem = findFirstNavigableItem(item.items);
             if (firstItem) {
-                router.push(`/${tenant}/dashboard/${firstItem.url}`);
+                router.push(`/admin/dashboard/${firstItem.url}`);
             }
         }
     };
@@ -134,7 +135,7 @@ export function NavMain({ tenant, items }) {
         if (item.url && item.url !== '#') {
             // Collapse all expanded items when navigating to a direct link
             setExpandedItems(new Set());
-            router.push(`/${tenant}/dashboard/${item.url}`);
+            router.push(`/admin/dashboard/${item.url}`);
         }
     };
 
@@ -153,7 +154,8 @@ export function NavMain({ tenant, items }) {
             const rect = event.currentTarget.getBoundingClientRect();
             setPopupPosition({
                 top: rect.top,
-                left: rect.right + 8 });
+                left: rect.right + 8,
+            });
             setHoveredItem(item);
         }
     };
@@ -175,7 +177,8 @@ export function NavMain({ tenant, items }) {
             const rect = event.currentTarget.getBoundingClientRect();
             setSubPopupPosition({
                 top: rect.top,
-                left: rect.right + 8 });
+                left: rect.right + 8,
+            });
             setHoveredSubItem(subItem);
         }
     };
@@ -337,7 +340,7 @@ export function NavMain({ tenant, items }) {
                                                                                                 firstSubItem
                                                                                             ) {
                                                                                                 router.push(
-                                                                                                    `/${tenant}/dashboard/${firstSubItem.url}`
+                                                                                                    `/admin/dashboard/${firstSubItem.url}`
                                                                                                 );
                                                                                             }
                                                                                         }
@@ -392,7 +395,7 @@ export function NavMain({ tenant, items }) {
                                                                                                                     'border-left border-l-6 border-primary text-white bg-slate-900/20'
                                                                                                             )}>
                                                                                                             <Link
-                                                                                                                href={`/${tenant}/dashboard/${thirdLevelItem.url}`}>
+                                                                                                                href={`/admin/dashboard/${thirdLevelItem.url}`}>
                                                                                                                 {thirdLevelItem.icon && (
                                                                                                                     <thirdLevelItem.icon className='w-4 h-4 shrink-0 mr-2' />
                                                                                                                 )}
@@ -426,7 +429,7 @@ export function NavMain({ tenant, items }) {
                                                                                     'border-left border-l-6 border-primary text-white bg-slate-700/20'
                                                                             )}>
                                                                             <Link
-                                                                                href={`/${tenant}/dashboard/${subItem.url}`}>
+                                                                                href={`/admin/dashboard/${subItem.url}`}>
                                                                                 <span className='text-xs truncate'>
                                                                                     {
                                                                                         subItem.title
@@ -460,7 +463,7 @@ export function NavMain({ tenant, items }) {
                                                 'border-left border-l-6 border-primary text-white bg-slate-800'
                                         )}>
                                         <Link
-                                            href={`/${tenant}/dashboard/${item.url}`}>
+                                            href={`/admin/dashboard/${item.url}`}>
                                             {item.icon && (
                                                 <item.icon className='w-5 h-5 shrink-0 ' />
                                             )}
@@ -542,7 +545,7 @@ export function NavMain({ tenant, items }) {
                                     </div>
                                 ) : subItem.url ? (
                                     <Link
-                                        href={`/${tenant}/dashboard/${subItem.url}`}
+                                        href={`/admin/dashboard/${subItem.url}`}
                                         className='block px-3 py-1 text-slate-200 hover:border-left border-l-6 border-transparent hover:border-primary hover:text-white transition-all duration-200 ease-out mx-1'
                                         onClick={() =>
                                             handleTooltipSubmenuClick(
@@ -591,7 +594,7 @@ export function NavMain({ tenant, items }) {
                         <div key={thirdLevelItem.title}>
                             {thirdLevelItem.url ? (
                                 <Link
-                                    href={`/${tenant}/dashboard/${thirdLevelItem.url}`}
+                                    href={`/admin/dashboard/${thirdLevelItem.url}`}
                                     className='block px-3 py-1 text-slate-200 hover:border-left border-l-6 hover:border-primary hover:text-white transition-all duration-200 ease-out rounded-md mx-1 group'
                                     onClick={() =>
                                         handleTooltipSubmenuClick(

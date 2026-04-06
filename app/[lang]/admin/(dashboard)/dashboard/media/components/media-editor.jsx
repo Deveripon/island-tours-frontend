@@ -1,4 +1,4 @@
-import { updateUploadedMedia } from '@/app/_actions/mediaActions';
+import { updateMedia } from '@/app/_actions/mediaActions';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ export default function MediaEditor({
 
     const handleSave = useCallback(async () => {
         const updatedData = { ...formData };
-        const res = await updateUploadedMedia(item.id, updatedData);
+        const res = await updateMedia(item.id, updatedData);
 
         if (res.success && res.result) {
             toast.success('Updated');

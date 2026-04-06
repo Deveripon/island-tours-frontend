@@ -1,7 +1,7 @@
 'use client';
 
 import { Permission } from '@/RBAC.config';
-import { deleteAffiliatesById } from '@/app/_actions/partnerActions';
+import { deletePartner } from '@/app/_actions/partnerActions';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -68,7 +68,7 @@ const PageContent = ({ tourOperators }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteAffiliatesById(tourOperatorToDelete);
+            const result = await deletePartner(tourOperatorToDelete);
 
             if (result?.success === true) {
                 toast.success('Tour Partner deleted successfully');

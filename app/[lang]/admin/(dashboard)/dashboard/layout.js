@@ -1,66 +1,38 @@
-import { getUserById } from '@/app/_actions/userActions';
-import { auth } from '@/auth';
 
 import { getDictionary } from '@/app/[lang]/_dictionaries/dictionaries';
 import { getGroupedDataOfStatus } from '@/lib/utils';
 import { ThemeProvider } from 'next-themes';
-import { redirect } from 'next/navigation';
 import ContentWrapper from './wrapper';
-/* export async function generateMetadata({ params }) {
-    const { tenant } = await params;
 
-    return {
-        title: `${tenant} Dashboard`,
-        description: `Manage trips, bookings, and payments for ${tenant}.`,
-        robots: {
-            index: false, // Dashboard is private
-            follow: false,
-        },
-        openGraph: {
-            title: `${tenant} Dashboard | Tripwheel`,
-            description: `Manage your travel business with Tripwheel dashboard for ${tenant}.`,
-            url: `https://frametheidea.xyz/${tenant}/dashboard`,
-            siteName: 'Tripwheel',
-            images: [
-                {
-                    url: '', // tenantInfo.logo , // from /public/icons/
-                    width: 512,
-                    height: 512,
-                    //alt: `${tenant} Logo`,
-                },
-            ],
-        },
-        twitter: {
-            card: 'summary',
-            title: `${tenant} Dashboard`,
-            description: `Manage your bookings and trips on Tripwheel dashboard.`,
-            //  images: [tenantInfo.logo],
-        },
-    };
-}
- */
-import { getAllInquiries } from '@/app/_actions/inqueryActions';
+import { getAllInquiries } from '@/app/_actions/inquiryActions';
 import { getPendingReviewsCount } from '@/app/_actions/reviewActions';
+import { getSiteInfo } from '@/app/_actions/settingsActions';
+import { getUserById } from '@/app/_actions/userActions';
+import { auth } from '@/auth';
 
 export default async function DashboardLayout({ children, params }) {
-    const session = await auth();
     const { lang } = await params;
-    const language = await getDictionary(lang);
+    const sessionPromise = auth();
+    const dictionaryPromise = getDictionary(lang);
+    const inquiriesPromise = getAllInquiries();
+    const reviewsPromise = getPendingReviewsCount();
+    const siteInfoPromise = getSiteInfo();
 
-    const loggedInUser = await getUserById(session?.user?.id);
+    const [session, language, inquiries, reviewsResponse, siteInfoResponse] = await Promise.all([
+        sessionPromise,
+        dictionaryPromise,
+        inquiriesPromise,
+        reviewsPromise,
+        siteInfoPromise
+    ]);
 
-    // Handle case where user doesn't exist in database
-    if (!loggedInUser?.user) {
-        redirect('/');
-    }
+    const loggedInUserResponse = session?.user?.id ? await getUserById(session.user.id) : null;
+    const loggedInUser = loggedInUserResponse?.result;
+    const siteInfo = siteInfoResponse?.data;
 
-    const inquries = await getAllInquiries();
-    const inquriesData = inquries?.result?.data;
-    const pendingInquries = getGroupedDataOfStatus(inquriesData)['PENDING']?.length || 0;
-
-    // Fetch pending reviews count
-    const pendingReviewsResponse = await getPendingReviewsCount();
-    const pendingReviewsCount = pendingReviewsResponse?.success ? pendingReviewsResponse?.count || 0 : 0;
+    const inquiriesData = inquiries?.result?.data;
+    const pendingInquiries = getGroupedDataOfStatus(inquiriesData)['PENDING']?.length || 0;
+    const pendingReviewsCount = reviewsResponse?.success ? reviewsResponse?.count || 0 : 0;
 
     return (
         <ThemeProvider
@@ -71,14 +43,14 @@ export default async function DashboardLayout({ children, params }) {
             <ContentWrapper
                 content={language?.userDashboard}
                 lang={lang}
-                preferences={loggedInUser?.user?.preferences}
-                key={loggedInUser?.user?.id}
-                loggedInUser={loggedInUser.user}
-                pendingInquries={pendingInquries}
+                preferences={siteInfo}
+                key={loggedInUser?.id}
+                loggedInUser={loggedInUser}
+                pendingInquiries={pendingInquiries}
                 pendingReviewsCount={pendingReviewsCount}
             >
                 <div className='rounded-xl dark:bg-[#1E2A3D]'>{children}</div>
             </ContentWrapper>
-        </ThemeProvider>   
+        </ThemeProvider>
     );
 }

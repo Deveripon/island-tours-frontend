@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteBookingById } from '@/app/_actions/bookingActions';
+import { deleteBooking } from '@/app/_actions/bookingActions';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -86,7 +86,7 @@ const PageContent = ({ groupedBookings, bookings }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteBookingById(BookingsIdToDelete);
+            const result = await deleteBooking(BookingsIdToDelete);
 
             if (result?.success === true) {
                 toast.success('Booking deleted successfully');

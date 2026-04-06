@@ -90,9 +90,7 @@ export function BlogSeoForm() {
         twitterTitle: false,
         twitterDescription: false });
 
-    const params = useParams();
-    const tenantUrl =
-        process.env.NEXT_PUBLIC_APP_URL + '/site/' + params?.tenant;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '';
 
     const title = watch('title');
     const content = watch('content');
@@ -332,7 +330,7 @@ export function BlogSeoForm() {
                                 <FormControl>
                                     <Input
                                         type='url'
-                                        placeholder={`e.g. ${tenantUrl}/trips/bali-luxury-adventure`}
+                                        placeholder={`e.g. ${baseUrl}/trips/bali-luxury-adventure`}
                                         {...field}
                                         className='h-10 border-input bg-background focus:ring-2 focus:ring-ring'
                                     />
@@ -691,7 +689,7 @@ export function BlogSeoForm() {
                                             className='space-y-4 mt-6'>
                                             <div className='border border-border rounded-lg p-5 bg-card shadow-sm'>
                                                 <div className='text-xs text-muted-foreground mb-1.5 font-medium'>
-                                                    {`${tenantUrl}/trips/converted-slug-of-trip-title`}
+                                                    {`${baseUrl}/trips/converted-slug-of-trip-title`}
                                                 </div>
                                                 <div className='text-lg text-primary mb-2 hover:underline cursor-pointer font-semibold'>
                                                     {seoTitle}

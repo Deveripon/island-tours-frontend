@@ -1,6 +1,6 @@
 'use client';
 
-import { uploadMultipleImage } from '@/app/_actions/imagesActions';
+import { uploadMultipleImage } from '@/app/_actions/mediaActions';
 import { saveAs } from 'file-saver';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';

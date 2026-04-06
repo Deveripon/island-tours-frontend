@@ -60,7 +60,7 @@ export async function resetUserPassword(data) {
 /**
  * Create user by admin
  */
-export async function createUserByAdmin(data) {
+export async function createUser(data) {
     if (!data) return { success: false, error: { message: 'User data is required' } };
 
     try {
@@ -87,7 +87,7 @@ export async function createUserByAdmin(data) {
 /**
  * Update forgotten password by email
  */
-export async function updateUserForgottedPassword(email, data) {
+export async function updateForgottenPassword(email, data) {
     if (!email || !data) return { success: false, error: { message: 'Email and data are required' } };
 
     try {
@@ -139,7 +139,7 @@ export async function updateUserRole(userId, data) {
 /**
  * Update any user by admin
  */
-export async function updateUserByAdmin(userId, data) {
+export async function updateUser(userId, data) {
     if (!userId || !data) return { success: false, error: { message: 'User ID and data are required' } };
 
     try {
@@ -167,7 +167,7 @@ export async function updateUserByAdmin(userId, data) {
 /**
  * Delete user (Admin)
  */
-export async function deleteUserByAdmin(userId) {
+export async function deleteUser(userId) {
     if (!userId) return { success: false, error: { message: 'User ID is required' } };
 
     try {
@@ -183,6 +183,30 @@ export async function deleteUserByAdmin(userId) {
         updateTag('users');
         updateTag(`user-${userId}`);
         revalidatePath('/dashboard/users');
+
+        return { success: true, result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message || 'An error occurred' } };
+    }
+}
+
+/**
+ * Delete User Profile Photo (Cloudinary)
+ */
+export async function removeProfilePhoto(publicId) {
+    if (!publicId) return { success: false, error: { message: 'Public ID is required' } };
+
+    try {
+        const responsePromise = fetchWithAuth(`${baseUrl}/upload/delete-profile-photo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ public_id: publicId })
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+
+        if (!response.ok) return { success: false, error: { message: result?.message || 'Delete failed' } };
 
         return { success: true, result };
     } catch (error) {

@@ -2,10 +2,10 @@
 
 import { Permission } from '@/RBAC.config';
 import {
-    createNewAffiliateTrip,
-    deleteAffiliateTripById,
-    getSingleAffiliateTrip,
-    updateAffiliateTripById,
+    createTrip,
+    deleteTrip,
+    getTripById,
+    updateTrip,
 } from '@/app/_actions/trips/affiliateTripsAction';
 import { Button } from '@/components/ui/button';
 import {
@@ -42,7 +42,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import DeleteConfirmationDialog from '../../../../../components/common/delete-confirmation-dialog';
 
-export function TripPackages({ tenantId, columns, data, enableExports }) {
+export function TripPackages({ columns, data, enableExports }) {
     const [sorting, setSorting] = useState([]);
     const [loading, setLoading] = useState(null);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -74,7 +74,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
     useEffect(() => {
         const handleDuplicate = async e => {
             const tripId = e.detail;
-            const detailsOfTrip = await getSingleAffiliateTrip(tripId);
+            const detailsOfTrip = await getTripById(tripId);
 
             if (detailsOfTrip?.success) {
                 const tripData = {
@@ -88,7 +88,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
                 };
 
                 if (tripData) {
-                    const res = await createNewAffiliateTrip(tripData);
+                    const res = await createTrip(tripData);
                     if (res?.success) {
                         toast.success('Trip duplicated successfully');
                     }
@@ -114,7 +114,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
         setIsDeleting(true);
 
         try {
-            const result = await deleteAffiliateTripById(tripToDelete);
+            const result = await deleteTrip(tripToDelete);
 
             if (result?.success === true) {
                 toast.success('Trip deleted successfully');
@@ -160,7 +160,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
                 try {
                     setLoading(id);
 
-                    const result = await updateAffiliateTripById(id, {
+                    const result = await updateTrip(id, {
                         status });
 
                     if (result.success) {
@@ -190,7 +190,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
             editTrip: id => {
                 const params = `edit&mode=update&id=${id}`;
                 router.push(
-                    `/${tenantId}/dashboard/create-affiliate-trips?${params}`
+                    `/admin/dashboard/create-affiliate-trips?${params}`
                 );
             },
             loading,
@@ -326,7 +326,7 @@ export function TripPackages({ tenantId, columns, data, enableExports }) {
 
                     {hasCreatePermission && (
                         <Link
-                            href={`/${tenantId}/dashboard/create-affiliate-trips`}>
+                            href={`/admin/dashboard/create-affiliate-trips`}>
                             <Button size='sm'>
                                 <HugeiconsIcon icon={Add01Icon} />
                                 Create Package

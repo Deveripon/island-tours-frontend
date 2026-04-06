@@ -85,9 +85,9 @@ export async function deleteLead(id) {
 }
 
 /**
- * Delete multiple leads
+ * Bulk delete leads
  */
-export async function deleteMultipleLeads(ids) {
+export async function bulkDeleteLeads(ids) {
     if (!ids || !ids.length) return { success: false, error: { message: 'IDs are required' } };
 
     try {
@@ -131,6 +131,25 @@ export async function pushLeadToZapier(leadId) {
 }
 
 /**
+ * Push bulk leads to Zapier
+ */
+export async function pushBulkLeadsToZapier(leadIds) {
+    try {
+        const responsePromise = fetchWithAuth(`${baseUrl}/leads/push-bulk-lead-to-zapier`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadIds })
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+        return response.ok ? { success: true, result } : { success: false, error: result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message } };
+    }
+}
+
+/**
  * Push lead to n8n
  */
 export async function pushLeadTon8n(leadId) {
@@ -150,11 +169,66 @@ export async function pushLeadTon8n(leadId) {
 }
 
 /**
+ * Push bulk leads to n8n
+ */
+export async function pushBulkLeadsTon8n(leadIds) {
+    try {
+        const responsePromise = fetchWithAuth(`${baseUrl}/leads/push-bulk-lead-to-n8n`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadIds })
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+        return response.ok ? { success: true, result } : { success: false, error: result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message } };
+    }
+}
+
+/**
  * Push lead to Mailchimp
  */
 export async function pushLeadToMailchimp(leadId) {
     try {
         const responsePromise = fetchWithAuth(`${baseUrl}/leads/push-lead-to-mailchimp/${leadId}`, {
+            method: 'POST'
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+        return response.ok ? { success: true, result } : { success: false, error: result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message } };
+    }
+}
+
+/**
+ * Push bulk leads to Mailchimp
+ */
+export async function pushBulkLeadsToMailchimp(leadIds) {
+    try {
+        const responsePromise = fetchWithAuth(`${baseUrl}/leads/push-bulk-lead-to-mailchimp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadIds })
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+        return response.ok ? { success: true, result } : { success: false, error: result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message } };
+    }
+}
+
+/**
+ * Push all leads to Mailchimp
+ */
+export async function pushAllLeadsToMailchimp() {
+    try {
+        const responsePromise = fetchWithAuth(`${baseUrl}/leads/push-all-lead-to-mailchimp`, {
             method: 'POST'
         });
 

@@ -308,7 +308,6 @@ export const { handlers, signIn, auth, signOut } = NextAuth({
             credentials: {
                 email: {},
                 password: {},
-                tenantId: {}, // Add tenant support for customers
             },
             async authorize(credentials) {
                 console.log(
@@ -328,11 +327,6 @@ export const { handlers, signIn, auth, signOut } = NextAuth({
                         email: credentials.email,
                         password: credentials.password,
                     };
-
-                    // Add tenantId if provided
-                    if (credentials.tenantId) {
-                        body.tenantId = credentials.tenantId;
-                    }
 
                     const response = await fetch(
                         `${process.env.NEXT_PUBLIC_API_BASE_URL}/b2c-customer/signin`,
@@ -363,7 +357,6 @@ export const { handlers, signIn, auth, signOut } = NextAuth({
                         provider: 'credentials-customer',
                         role: data.role,
                         userType: 'customer',
-                        tenantId: credentials.tenantId,
                     };
                 } catch (error) {
                     console.error('❌ [AUTHORIZE CUSTOMER] API Error:', error);
@@ -430,7 +423,6 @@ export const { handlers, signIn, auth, signOut } = NextAuth({
                         role: data.role,
                         accessToken: data.accessToken,
                         refreshToken: data.refreshToken,
-                        tenantId: data.tenantId,
                         provider: 'credentials-user',
                         userType: 'user',
                     };

@@ -1,12 +1,11 @@
-import { getTenantPaymentConfiguration } from '@/app/_actions/settingsActions';
+import { getPaymentConfiguration } from '@/app/_actions/settingsActions';
 import Link from 'next/link';
 import Configuration from './components/cofiguration';
 
-export default async function PaymentMethods({ params }) {
-    const { tenant } = await params;
-    const response = await getTenantPaymentConfiguration(tenant);
-    const configuration = response?.result?.paymentMethodConfiguration;
-    const preferredMethod = response?.result?.preferedPaymentMethod;
+export default async function PaymentMethods() {
+    const response = await getPaymentConfiguration();
+    const configuration = response?.result?.data?.paymentMethodConfiguration;
+    const preferredMethod = response?.result?.data?.preferedPaymentMethod;
 
     return (
         <div className='container'>
@@ -21,7 +20,6 @@ export default async function PaymentMethods({ params }) {
             </div>
 
             <Configuration
-                tenant={tenant}
                 enabledMethod={preferredMethod}
                 configuration={configuration}
             />

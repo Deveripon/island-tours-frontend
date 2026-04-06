@@ -1,7 +1,7 @@
 'use client';
 
 import { Permission } from '@/RBAC.config';
-import { deletePickupsById } from '@/app/_actions/pickupActions';
+import { deletePickup } from '@/app/_actions/pickupActions';
 import { Button } from '@/components/ui/button';
 import { useRolePermission } from '@/hooks/useRolePermission';
 import { Plus } from 'lucide-react';
@@ -51,7 +51,7 @@ const PageContent = ({ pickups }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deletePickupsById(pickupToDelete);
+            const result = await deletePickup(pickupToDelete);
 
             if (result?.success === true) {
                 toast.success('Pickup deleted successfully');

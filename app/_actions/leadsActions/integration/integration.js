@@ -8,13 +8,13 @@ const baseurl = process.env.NEXT_PUBLIC_API_BASE_URL;
 /**
  * Push Bulk Leads to Zapier
  */
-export async function pushLeadsToZapier(leadIds, tenant) {
-    if (!leadIds || !tenant) return { success: false, error: { message: 'IDs and Tenant are required' } };
+export async function pushLeadsToZapier(leadIds) {
+    if (!leadIds) return { success: false, error: { message: 'IDs are required' } };
 
-    console.log(`pushing leads to zapier`, leadIds, tenant);
+    console.log(`pushing leads to zapier`, leadIds);
 
     try {
-        const responsePromise = fetchWithAuth(`${baseurl}/leads/push-bulk-lead-to-zapier/${tenant}`, {
+        const responsePromise = fetchWithAuth(`${baseurl}/leads/push-bulk-lead-to-zapier`, {
             method: 'POST',
             body: JSON.stringify(leadIds),
             headers: { 'Content-Type': 'application/json' },
@@ -41,11 +41,11 @@ export async function pushLeadsToZapier(leadIds, tenant) {
 /**
  * Push Bulk Leads to n8n
  */
-export async function pushLeadsTon8n(leadIds, tenant) {
-    if (!leadIds || !tenant) return { success: false, error: { message: 'IDs and Tenant are required' } };
+export async function pushLeadsTon8n(leadIds) {
+    if (!leadIds) return { success: false, error: { message: 'IDs are required' } };
 
     try {
-        const responsePromise = fetchWithAuth(`${baseurl}/leads/push-bulk-lead-to-n8n/${tenant}`, {
+        const responsePromise = fetchWithAuth(`${baseurl}/leads/push-bulk-lead-to-n8n`, {
             method: 'POST',
             body: JSON.stringify(leadIds),
             headers: { 'Content-Type': 'application/json' },
@@ -69,10 +69,10 @@ export async function pushLeadsTon8n(leadIds, tenant) {
  * Push a Lead to Mailchimp
  */
 
-export async function pushLeadToMailchimp(leadId, tenant) {
+export async function pushLeadToMailchimp(leadId) {
     try {
         const response = await fetchWithAuth(
-            `${baseurl}/leads/push-lead-to-mailchimp/${tenant}/${leadId}`,
+            `${baseurl}/leads/push-lead-to-mailchimp/${leadId}`,
             {
                 method: 'POST',
                 headers: {
@@ -107,10 +107,10 @@ export async function pushLeadToMailchimp(leadId, tenant) {
 /**
  * Push Bulk Leads to Mailchimp
  */
-export async function pushBulkLeadsToMailchimp(leadIds, tenant) {
+export async function pushBulkLeadsToMailchimp(leadIds) {
     try {
         const response = await fetchWithAuth(
-            `${baseurl}/leads/push-bulk-lead-to-mailchimp/${tenant}`,
+            `${baseurl}/leads/push-bulk-lead-to-mailchimp`,
             {
                 method: 'POST',
                 body: JSON.stringify({ leadIds: leadIds }),
@@ -145,11 +145,11 @@ export async function pushBulkLeadsToMailchimp(leadIds, tenant) {
 /**
  * Push All Leads to Mailchimp
  */
-export async function pushAllLeadToMailchimp(tenant) {
+export async function pushAllLeadToMailchimp() {
 
     try {
         const response = await fetchWithAuth(
-            `${baseurl}/leads/push-all-lead-to-mailchimp/${tenant}`,
+            `${baseurl}/leads/push-all-lead-to-mailchimp`,
             {
                 method: 'POST',
                 headers: {

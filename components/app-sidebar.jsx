@@ -14,50 +14,24 @@ import {
 import { filterNavigationByPermissions } from '@/lib/rbac-utils';
 import { getNavigations } from '@/navigations/navigations';
 import { ROLE_PERMISSIONS } from '@/RBAC.config';
-import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
 export function AppSidebar({
     lang,
     preferences,
     menuItems = 'dashboardB2B',
-    pendingInquries,
+    pendingInquiries,
     pendingReviewsCount,
+    userRole,
     ...props
 }) {
-    const { data: session, status } = useSession();
     const data = getNavigations(lang);
 
     const filteredNavigations = useMemo(() => {
-        // Return empty array during loading to prevent flash
-        if (status === 'loading') return [];
-
-        const userRole = session?.user?.role;
         const userPermissions = ROLE_PERMISSIONS[userRole] || [];
         return filterNavigationByPermissions(data[menuItems], userPermissions);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [session?.user?.role, status, lang]); // Use lang instead of data object
-
-    // Show loading skeleton during initial load
-    if (status === 'loading') {
-        return (
-            <Sidebar
-                className='mt-8 min-w-[230px]'
-                collapsible='icon'
-                {...props}>
-                <SidebarContent className='hide-scrollbar mt-4'>
-                    <div className='space-y-4 p-2'>
-                        {[...Array(14)].map((_, i) => (
-                            <div
-                                key={i}
-                                className='h-4 bg-slate-600 rounded animate-pulse'
-                            />
-                        ))}
-                    </div>
-                </SidebarContent>
-            </Sidebar>
-        );
-    }
+    }, [userRole, lang]); // Use lang instead of data object
     return (
         <Sidebar collapsible='offcanvas' {...props}>
             <div className='ml-4'>
@@ -80,7 +54,7 @@ export function AppSidebar({
                 <NavMain
                     items={filteredNavigations}
                     lang={lang}
-                    pendingInquries={pendingInquries}
+                    pendingInquiries={pendingInquiries}
                     pendingReviewsCount={pendingReviewsCount}
                 />
                 {/* <NavDocuments items={data.documents} />*/}

@@ -1,4 +1,4 @@
-import { updateTenantPreferedPaymentMethod } from '@/app/_actions/settingsActions';
+import { updatePreferredPaymentMethod } from '@/app/_actions/settingsActions';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,7 +24,6 @@ const PaymentSwitcher = ({
     setEnabled,
     paymentMethod = 'square',
     comingSoon = false,
-    tenant,
 }) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -41,12 +40,9 @@ const PaymentSwitcher = ({
         const newValue = isEnabled ? '' : paymentMethod;
         setEnabled(newValue);
 
-        await updateTenantPreferedPaymentMethod(
-            {
-                preferedPaymentMethod: newValue,
-            },
-            tenant
-        );
+        await updatePreferredPaymentMethod({
+            preferedPaymentMethod: newValue,
+        });
 
         // Show appropriate toast based on action
         if (isEnabled) {

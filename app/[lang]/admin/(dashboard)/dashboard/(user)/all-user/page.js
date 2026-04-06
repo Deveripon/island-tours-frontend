@@ -1,10 +1,9 @@
-import { getAllUserOfTenant } from '@/app/_actions/membersActions';
+import { getAllUsers } from '@/app/_actions/userActions';
 import PageContent from './components/page-content';
 
-export default async function CouponPage({ params }) {
-    const { tenant } = await params;
-
-    const res = await getAllUserOfTenant(tenant);
+export default async function MembersPage() {
+    const res = await getAllUsers();
+    
     const sortingOrder = {
         ADMIN: 1,
         EDITOR: 2,
@@ -13,14 +12,14 @@ export default async function CouponPage({ params }) {
         USER: 5,
     };
 
-    const result = res?.users;
-    const sortedUser = result.users?.sort(
-        (a, b) => sortingOrder[a.role] - sortingOrder[b.role]
+    const users = res?.result || [];
+    const sortedUser = [...users].sort(
+        (a, b) => (sortingOrder[a.role] || 99) - (sortingOrder[b.role] || 99)
     );
 
     return (
         <div className='container space-y-6'>
-            <PageContent tenantId={tenant} users={sortedUser ?? []} />
+            <PageContent users={sortedUser} />
         </div>
     );
 }

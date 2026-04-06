@@ -3,7 +3,7 @@ import {
     moveImage,
     uploadMultipleImage,
     uploadSingleImage,
-} from '@/app/_actions/imagesActions';
+} from '@/app/_actions/mediaActions';
 import {
     AlertCircleIcon,
     Cancel01Icon,

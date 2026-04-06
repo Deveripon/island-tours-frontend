@@ -8,7 +8,7 @@ export const defaultFormValues = {
     galleryImages: [], // Empty array for File objects
     // Dates & Availability
     duration: '',
-    affiliateId: '',
+    partnerId: '',
     datesAvailability: {
         isFixedDeparture: false,
         onlyUponRequest: false,

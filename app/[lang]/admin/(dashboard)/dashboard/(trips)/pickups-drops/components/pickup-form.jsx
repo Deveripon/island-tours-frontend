@@ -11,10 +11,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-    createNewPickup,
-    updatepickupsById,
-} from '@/app/_actions/pickupActions';
+import { createPickup, updatePickup } from '@/app/_actions/pickupActions';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -68,7 +65,7 @@ export function PickUpForm({ open, editpickup, setEditpickup, onOpenChange }) {
             setIsPending(true);
             if (editpickup) {
                 (async () => {
-                    const result = await updatepickupsById(editpickup?.id, {
+                    const result = await updatePickup(editpickup?.id, {
                         ...values,
                     });
                     if (result?.success === true) {
@@ -87,7 +84,7 @@ export function PickUpForm({ open, editpickup, setEditpickup, onOpenChange }) {
                 })();
             } else {
                 (async () => {
-                    const result = await createNewPickup(values);
+                    const result = await createPickup(values);
 
                     if (result?.success === true) {
                         toast.success('Pickup Added Successfully');

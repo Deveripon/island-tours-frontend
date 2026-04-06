@@ -9,13 +9,13 @@ import { fieldToTabMapping } from './constants/field-mappings';
 import { formSections } from './constants/form-sections';
 
 // Import hooks
-import { getAllAffiliatesOfTenant } from '@/app/_actions/partnerActions';
+import { getAllPartners } from '@/app/_actions/partnerActions';
 import {
-    createNewAffiliateTrip,
-    getSingleAffiliateTrip,
-    updateAffiliateTripById,
+    createTrip,
+    getTripById,
+    updateTrip,
 } from '@/app/_actions/trips/affiliateTripsAction';
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import { Button } from '@/components/ui/button';
 import { formatDateForInput } from '@/utils/form-helpers';
 import {
@@ -33,7 +33,7 @@ import { FormNavigation } from '../../../../components/common/form-navigations';
 import GenerateWithAiButton from '../../../../components/generate-with-ai-button';
 import { FormContent } from './form-content';
 
-export function CreateTripPackageForm({ userId, tenant }) {
+export function CreateTripPackageForm({ userId }) {
     // Component state - ALWAYS start with 'basic' tab
     const [activeTab, setActiveTab] = useState('basic');
     const [loading, setLoading] = useState(false);
@@ -50,26 +50,22 @@ export function CreateTripPackageForm({ userId, tenant }) {
     const formSectionsWithOutSEO = formSections.filter(
         section => section.id !== 'seo'
     );
-    // set tenantid to localstorage
-    useEffect(() => {
-        localStorage.setItem('tenantId', tenant);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tripId]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 
     // Fetch destinations and tour operators
     useEffect(() => {
-        if (!tenant) return;
-
         const fetchOptions = async () => {
             setIsFetchingOptions(true);
             try {
                 const [destRes, affiliateRes] = await Promise.all([
-                    getAllDestinationOfTenant(tenant, 'limit=100'),
-                    getAllAffiliatesOfTenant(tenant, 'limit=100'),
+                    getAllDestinations(),
+                    getAllPartners(),
                 ]);
 
                 if (destRes?.success) {
-                    setDestinations(destRes.data || []);
+                    console.log('destRes', destRes);
+                    setDestinations(destRes.result?.data || []);
                 }
 
                 if (affiliateRes?.success) {
@@ -84,7 +80,7 @@ export function CreateTripPackageForm({ userId, tenant }) {
         };
 
         fetchOptions();
-    }, [tenant]);
+    }, []);
 
     // Initialize form with react-hook-form
     const methods = useForm({
@@ -119,39 +115,41 @@ export function CreateTripPackageForm({ userId, tenant }) {
             async function getTripData() {
                 try {
                     setLoading(true);
-                    const data = await getSingleAffiliateTrip(tripId);
-
+                    const data = await getTripById(tripId);
+                    console.log(`editing trip data`,data);
                     setLoading(false);
                     if (data?.success) {
-                        setDataToEdit(data?.trip?.data);
+                        setDataToEdit(data?.result?.data);
                         setActiveTab('basic'); // Ensure we start with basic tab in edit mode
                         // Reset form with the loaded data
-                        methods.reset(data?.trip?.data);
+                        methods.reset({
+                            ...data?.result?.data,
+                        });
 
                         setTimeout(() => {
                             methods.setValue(
                                 `datesAvailability.dateRangeStart`,
                                 formatDateForInput(
-                                    data?.trip?.data?.datesAvailability
-                                        .dateRangeStart
+                                    data?.result?.data?.datesAvailability
+                                        ?.dateRangeStart
                                 )
                             );
                             methods.setValue(
                                 `datesAvailability.dateRangeEnd`,
                                 formatDateForInput(
-                                    data?.trip?.data?.datesAvailability
-                                        .dateRangeEnd || ''
+                                    data?.result?.data?.datesAvailability
+                                        ?.dateRangeEnd || ''
                                 )
                             );
                             methods.setValue(
                                 `additionals`,
-                                data?.trip?.data?.additionals
+                                data?.result?.data?.additionals || []
                             );
                             methods.setValue(
                                 `activities`,
-                                data?.trip?.data?.activities.map(activity => {
+                                data?.result?.data?.activities?.map(activity => {
                                     return activity.id;
-                                })
+                                }) || []
                             );
                         }, 0);
                     } else {
@@ -274,9 +272,23 @@ export function CreateTripPackageForm({ userId, tenant }) {
             // Populate SEO defaults before submitting
             const processedData = populateSEODefaults(data);
 
+            // Clean up image payloads to strict matches so they don't get rejected silently
+            if (processedData.mainImage) {
+                processedData.mainImage = {
+                    imageId: processedData.mainImage.imageId || processedData.mainImage.id || processedData.mainImage
+                };
+            }
+
+            if (processedData.galleryImages && Array.isArray(processedData.galleryImages)) {
+                processedData.galleryImages = processedData.galleryImages.map((img, idx) => ({
+                    imageId: img.imageId || img.id || img,
+                    order: idx,
+                }));
+            }
+
             if (mode !== 'update') {
                 console.log(`trip create data`, processedData);
-                const res = await createNewAffiliateTrip(processedData);
+                const res = await createTrip(processedData);
                 console.log(`trip create response`, res);
 
                 if (res?.success === false) {
@@ -290,10 +302,7 @@ export function CreateTripPackageForm({ userId, tenant }) {
                 localStorage.removeItem('tripPackageDraft'); */
             } else {
                 console.log(`trip update data`, processedData);
-                const res = await updateAffiliateTripById(
-                    tripId,
-                    processedData
-                );
+                const res = await updateTrip(tripId, processedData);
 
                 console.log(`trip update response`, res);
 
@@ -321,8 +330,7 @@ export function CreateTripPackageForm({ userId, tenant }) {
             // Navigate to the next tab
             const isLastStep =
                 currentTabIndex === formSectionsWithOutSEO.length - 1;
-            isLastStep &&
-                router.push(`/${tenant}/dashboard/all-affiliate-trips`);
+            isLastStep && router.push(`/admin/dashboard/all-affiliate-trips`);
         } catch (error) {
             // Don't clear draft if there's an error
             throw error; // Re-throw to be handled by the calling function
@@ -633,7 +641,6 @@ export function CreateTripPackageForm({ userId, tenant }) {
                         className={
                             'col-span-12 lg:col-span-9 xl:col-span-9 rounded-lg lg:rounded-tl-none lg:rounded-bl-none p-6 border bg-card border-l-0 text-card-foreground shadow-sm'
                         }
-                        tenant={tenant}
                         destinations={destinations}
                         tourOperators={tourOperators}
                         isFetchingOptions={isFetchingOptions}

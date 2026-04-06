@@ -1,6 +1,6 @@
 'use client';
 
-import { getUploadedMediaofTenant } from '@/app/_actions/mediaActions';
+import { getAllMedia } from '@/app/_actions/mediaActions';
 import { useUser } from '@/hooks/use-user';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -51,25 +51,20 @@ const MediaGalleryManager = ({
     }
 
     useEffect(() => {
-        if (user) {
-            getUploadedMediaOfUser(
-                user?.tenant?.tenantId || user?.createdByTenantId
-            );
-        }
+        getUploadedMediaOfUser();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, []);
 
     // Set initial selection when currentSelection changes
     useEffect(() => {
         setBulkSelectedItems(currentSelection || []);
     }, [currentSelection]);
 
-    async function getUploadedMediaOfUser(tenant) {
+    async function getUploadedMediaOfUser() {
         try {
             setLoading(true);
-            const res = await getUploadedMediaofTenant(
-                tenant,
-                'limit=200 &sortBy=uploadedAt&sortOrder=desc'
+            const res = await getAllMedia(
+                'limit=200&sortBy=uploadedAt&sortOrder=desc'
             );
             console.log(`getUploadedMediaOfUser`, res);
 

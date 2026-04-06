@@ -1,4 +1,4 @@
-import { moveImage } from '@/app/_actions/imagesActions';
+import { moveImage } from '@/app/_actions/mediaActions';
 
 // Export the promote function separately for external use
 export const useImagePromotion = (userId, folder) => {

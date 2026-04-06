@@ -1,11 +1,12 @@
 export {
     updateUserById,
     resetUserPassword,
-    createUserByAdmin,
-    updateUserForgottedPassword,
+    createUser,
+    updateForgottenPassword,
     updateUserRole,
-    updateUserByAdmin,
-    deleteUserByAdmin
+    updateUser,
+    deleteUser,
+    removeProfilePhoto
 } from './update';
 
 export {

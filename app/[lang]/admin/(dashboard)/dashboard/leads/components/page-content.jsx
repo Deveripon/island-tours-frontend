@@ -4,11 +4,11 @@ import { leadsColumns } from './columns';
 import { DataTable } from './data-table';
 
 import {
-    deleteMultipleleadsById,
-    pushAllLeadToMailchimp,
+    bulkDeleteLeads,
+    pushAllLeadsToMailchimp,
     pushBulkLeadsToMailchimp,
-    pushLeadsTon8n,
-    pushLeadsToZapier,
+    pushBulkLeadsTon8n,
+    pushBulkLeadsToZapier,
     pushLeadToMailchimp,
 } from '@/app/_actions/leadsActions';
 import {
@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
-const PageContent = ({ tenant, leads }) => {
+const PageContent = ({ leads }) => {
     const [isShowConfirm, setIsShowConfirm] = useState(false);
     const [leadsToDelete, setLeadsToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -31,121 +31,105 @@ const PageContent = ({ tenant, leads }) => {
     const [isPushingN8n, setIsPushingN8n] = useState(false);
     const [isPushingMailchimp, setIsPushingMailchimp] = useState(false);
 
-    const handlePushBulkToZapier = useCallback(
-        async leadIds => {
-            if (!leadIds || !Array.isArray(leadIds) || leadIds.length === 0) {
-                toast.error('No leads selected to push');
-                return;
+    const handlePushBulkToZapier = useCallback(async leadIds => {
+        if (!leadIds || !Array.isArray(leadIds) || leadIds.length === 0) {
+            toast.error('No leads selected to push');
+            return;
+        }
+
+        setIsPushingZapier(true);
+
+        try {
+            const result = await pushBulkLeadsToZapier(leadIds);
+            if (result?.success) {
+                toast.success('Leads pushed to Zapier successfully');
+            } else {
+                const errorMessage =
+                    'Leads push to Zapier failed - See Your Zapier configuration from: Settings -> automation -> zapier';
+                toast.error(errorMessage);
             }
+        } catch (error) {
+            toast.error('An unexpected error occurred while pushing to Zapier');
+        } finally {
+            setIsPushingZapier(false);
+        }
+    }, []);
 
-            setIsPushingZapier(true);
+    const handlePushBulkTon8n = useCallback(async leadIds => {
+        if (!leadIds || !Array.isArray(leadIds) || leadIds.length === 0) {
+            toast.error('No leads selected to push');
+            return;
+        }
+        console.log('leadIds', leadIds);
+        setIsPushingN8n(true);
 
-            try {
-                const result = await pushLeadsToZapier(leadIds, tenant);
-                if (result?.success) {
-                    toast.success('Leads pushed to Zapier successfully');
-                } else {
-                    const errorMessage =
-                        'Leads push to Zapier failed - See Your Zapier configuration from: Settings -> automation -> zapier';
-                    toast.error(errorMessage);
-                }
-            } catch (error) {
-                toast.error(
-                    'An unexpected error occurred while pushing to Zapier'
-                );
-            } finally {
-                setIsPushingZapier(false);
+        try {
+            const result = await pushBulkLeadsTon8n(leadIds);
+            if (result?.success) {
+                toast.success('Leads pushed to n8n successfully');
+            } else {
+                const errorMessage =
+                    'Leads push to n8n failed - See Your n8n configuration from: Settings -> automation -> n8n';
+                toast.error(errorMessage);
             }
-        },
-        [tenant]
-    );
+        } catch (error) {
+            toast.error('An unexpected error occurred while pushing to n8n');
+        } finally {
+            setIsPushingN8n(false);
+        }
+    }, []);
 
-    const handlePushBulkTon8n = useCallback(
-        async leadIds => {
-            if (!leadIds || !Array.isArray(leadIds) || leadIds.length === 0) {
-                toast.error('No leads selected to push');
-                return;
+    const handlePushToMailchimp = useCallback(async leadId => {
+        if (!leadId) return;
+
+        setIsPushingMailchimp(true);
+
+        try {
+            const result = await pushLeadToMailchimp(leadId);
+            if (result?.success) {
+                toast.success('Lead pushed to Mailchimp successfully');
+            } else {
+                const errorMessage =
+                    'Lead push to Mailchimp failed - See Your Mailchimp configuration from: Settings -> automation -> mailchimp';
+                toast.error(errorMessage);
             }
-            console.log('leadIds', leadIds);
-            setIsPushingN8n(true);
+        } catch (error) {
+            toast.error(
+                'An unexpected error occurred while pushing to Mailchimp'
+            );
+        } finally {
+            setIsPushingMailchimp(false);
+        }
+    }, []);
 
-            try {
-                const result = await pushLeadsTon8n(leadIds, tenant);
-                if (result?.success) {
-                    toast.success('Leads pushed to n8n successfully');
-                } else {
-                    const errorMessage =
-                        'Leads push to n8n failed - See Your n8n configuration from: Settings -> automation -> n8n';
-                    toast.error(errorMessage);
-                }
-            } catch (error) {
-                toast.error(
-                    'An unexpected error occurred while pushing to n8n'
-                );
-            } finally {
-                setIsPushingN8n(false);
+    const handlePushBulkToMailchimp = useCallback(async leadIds => {
+        if (!leadIds || leadIds.length === 0) return;
+
+        setIsPushingMailchimp(true);
+
+        try {
+            const result = await pushBulkLeadsToMailchimp(leadIds);
+            if (result?.success) {
+                toast.success('Leads pushed to Mailchimp successfully');
+            } else {
+                const errorMessage =
+                    'Lead push to Mailchimp failed - See Your Mailchimp configuration from: Settings -> automation -> mailchimp';
+                toast.error(errorMessage);
             }
-        },
-        [tenant]
-    );
-
-    const handlePushToMailchimp = useCallback(
-        async leadId => {
-            if (!leadId) return;
-
-            setIsPushingMailchimp(true);
-
-            try {
-                const result = await pushLeadToMailchimp(leadId, tenant);
-                if (result?.success) {
-                    toast.success('Lead pushed to Mailchimp successfully');
-                } else {
-                    const errorMessage =
-                        'Lead push to Mailchimp failed - See Your Mailchimp configuration from: Settings -> automation -> mailchimp';
-                    toast.error(errorMessage);
-                }
-            } catch (error) {
-                toast.error(
-                    'An unexpected error occurred while pushing to Mailchimp'
-                );
-            } finally {
-                setIsPushingMailchimp(false);
-            }
-        },
-        [tenant]
-    );
-
-    const handlePushBulkToMailchimp = useCallback(
-        async leadIds => {
-            if (!leadIds || leadIds.length === 0) return;
-
-            setIsPushingMailchimp(true);
-
-            try {
-                const result = await pushBulkLeadsToMailchimp(leadIds, tenant);
-                if (result?.success) {
-                    toast.success('Leads pushed to Mailchimp successfully');
-                } else {
-                    const errorMessage =
-                        'Lead push to Mailchimp failed - See Your Mailchimp configuration from: Settings -> automation -> mailchimp';
-                    toast.error(errorMessage);
-                }
-            } catch (error) {
-                toast.error(
-                    'An unexpected error occurred while pushing to Mailchimp'
-                );
-            } finally {
-                setIsPushingMailchimp(false);
-            }
-        },
-        [tenant]
-    );
+        } catch (error) {
+            toast.error(
+                'An unexpected error occurred while pushing to Mailchimp'
+            );
+        } finally {
+            setIsPushingMailchimp(false);
+        }
+    }, []);
 
     const handlePushAllToMailchimp = useCallback(async () => {
         setIsPushingMailchimp(true);
 
         try {
-            const result = await pushAllLeadToMailchimp(tenant);
+            const result = await pushAllLeadsToMailchimp();
             if (result?.success) {
                 toast.success('All leads pushed to Mailchimp successfully');
             } else {
@@ -160,7 +144,7 @@ const PageContent = ({ tenant, leads }) => {
         } finally {
             setIsPushingMailchimp(false);
         }
-    }, [tenant]);
+    }, []);
 
     const handleDeleteConfirm = async () => {
         if (!leadsToDelete) return;
@@ -168,7 +152,7 @@ const PageContent = ({ tenant, leads }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteMultipleleadsById(leadsToDelete, tenant);
+            const result = await bulkDeleteLeads(leadsToDelete);
 
             if (result?.success) {
                 toast.success('Leads deleted successfully');

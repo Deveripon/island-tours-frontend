@@ -1,11 +1,11 @@
 'use client';
 
 import {
-    updateTenantSiteInfo,
-    updateTenantSiteSeo,
-    updateTenantSiteTheme,
-    updateTenantSMTP,
-    updateTenantSocialMedia,
+    updateSiteInfo,
+    updateSiteSeo,
+    updateSiteTheme,
+    updateSMTPConfig,
+    updateSocialMedia,
 } from '@/app/_actions/settingsActions';
 import {
     Globe02Icon,
@@ -26,86 +26,73 @@ import SMTPSettings from './sections/smtp-settings';
 import SocialMedia from './sections/social-media';
 import SectionTabs from './tabs';
 
-const SiteManagement = ({ data, tenant }) => {
+const SiteManagement = ({ data }) => {
     const [isSaving, setIsSaving] = useState(false);
     const [editingField, setEditingField] = useState(null);
     const [activeTab, setActiveTab] = useState('site');
-    const {
-        tenantSiteInfo,
-        tenantSMTP,
-        tenantSiteSEO,
-        tenantSiteTheme,
-        tenantSocialMedia,
-    } = data;
+    const { siteInfo, smtp, siteSEO, siteTheme, socialMedia } = data;
 
     const defaultValues = useMemo(
         () => ({
             // Site Information
-            siteName: tenantSiteInfo?.siteName || '',
-            siteTagline: tenantSiteInfo?.siteTagline || '',
-            siteDescription: tenantSiteInfo?.siteDescription || '',
-            bookingForm: tenantSiteInfo?.bookingForm || 'v2',
+            siteName: siteInfo?.siteName || '',
+            siteTagline: siteInfo?.siteTagline || '',
+            siteDescription: siteInfo?.siteDescription || '',
+            bookingForm: siteInfo?.bookingForm || 'v2',
             /*  faq Section */
-            faqs: tenantSiteInfo?.faqs || [],
-            enableWhatsappChat: tenantSiteInfo?.enableWhatsappChat || false,
-            whatsappNumber: tenantSiteInfo?.whatsappNumber || '',
+            faqs: siteInfo?.faqs || [],
+            enableWhatsappChat: siteInfo?.enableWhatsappChat || false,
+            whatsappNumber: siteInfo?.whatsappNumber || '',
 
             /* partners */
-            partners: tenantSiteInfo?.partners || [],
-            instagramWidgetId: tenantSiteInfo?.instagramWidgetId || '',
-            enableInstagram: tenantSiteInfo?.enableInstagram || false,
+            partners: siteInfo?.partners || [],
+            instagramWidgetId: siteInfo?.instagramWidgetId || '',
+            enableInstagram: siteInfo?.enableInstagram || false,
 
             // Branding
-            logo: tenantSiteInfo?.logo || '',
-            favicon: tenantSiteInfo?.favicon || '',
-            primaryColor: tenantSiteTheme?.primaryColor || '#3b82f6',
-            secondaryColor: tenantSiteTheme?.secondaryColor || '#64748b',
-            accentColor: tenantSiteTheme?.accentColor || '#f59e0b',
+            logo: siteInfo?.logo || '',
+            favicon: siteInfo?.favicon || '',
+            primaryColor: siteTheme?.primaryColor || '#3b82f6',
+            secondaryColor: siteTheme?.secondaryColor || '#64748b',
+            accentColor: siteTheme?.accentColor || '#f59e0b',
 
             // SEO Basic
-            metaTitle: tenantSiteSEO?.metaTitle || '',
-            metaDescription: tenantSiteSEO?.metaDescription || '',
-            metaKeywords: tenantSiteSEO?.metaKeywords || '',
-            canonicalUrl: tenantSiteSEO?.canonicalUrl || '',
-            robotsMeta: tenantSiteSEO?.robotsMeta || 'index, follow',
-            ogTitle: tenantSiteSEO?.ogTitle || '',
-            ogDescription: tenantSiteSEO?.ogDescription || '',
-            ogImage: tenantSiteSEO?.ogImage || '',
-            twitterTitle: tenantSiteSEO?.twitterTitle || '',
-            twitterDescription: tenantSiteSEO?.twitterDescription || '',
-            twitterImage: tenantSiteSEO?.twitterImage || '',
+            metaTitle: siteSEO?.metaTitle || '',
+            metaDescription: siteSEO?.metaDescription || '',
+            metaKeywords: siteSEO?.metaKeywords || '',
+            canonicalUrl: siteSEO?.canonicalUrl || '',
+            robotsMeta: siteSEO?.robotsMeta || 'index, follow',
+            ogTitle: siteSEO?.ogTitle || '',
+            ogDescription: siteSEO?.ogDescription || '',
+            ogImage: siteSEO?.ogImage || '',
+            twitterTitle: siteSEO?.twitterTitle || '',
+            twitterDescription: siteSEO?.twitterDescription || '',
+            twitterImage: siteSEO?.twitterImage || '',
 
             // Advanced SEO
-            googleAnalyticsId: tenantSiteSEO?.googleAnalyticsId || '',
-            googleTagManagerId: tenantSiteSEO?.googleTagManagerId || '',
-            googleSearchConsole: tenantSiteSEO?.googleSearchConsole || '',
-            facebookPixelId: tenantSiteSEO?.facebookPixelId || '',
-            schemaType: tenantSiteSEO?.schemaType || 'organization',
-            customSchema: tenantSiteSEO?.customSchema || '',
-            autoGenerateSitemap:
-                tenantSiteSEO?.autoGenerateSitemap || 'enabled',
-            robotsTxt: tenantSiteSEO?.robotsTxt || '',
+            googleAnalyticsId: siteSEO?.googleAnalyticsId || '',
+            googleTagManagerId: siteSEO?.googleTagManagerId || '',
+            googleSearchConsole: siteSEO?.googleSearchConsole || '',
+            facebookPixelId: siteSEO?.facebookPixelId || '',
+            schemaType: siteSEO?.schemaType || 'organization',
+            customSchema: siteSEO?.customSchema || '',
+            autoGenerateSitemap: siteSEO?.autoGenerateSitemap || 'enabled',
+            robotsTxt: siteSEO?.robotsTxt || '',
 
             // Social Media
-            facebookUrl: tenantSocialMedia?.facebookUrl || '',
-            twitterUrl: tenantSocialMedia?.twitterUrl || '',
-            linkedinUrl: tenantSocialMedia?.linkedinUrl || '',
-            instagramUrl: tenantSocialMedia?.instagramUrl || '',
+            facebookUrl: socialMedia?.facebookUrl || '',
+            twitterUrl: socialMedia?.twitterUrl || '',
+            linkedinUrl: socialMedia?.linkedinUrl || '',
+            instagramUrl: socialMedia?.instagramUrl || '',
 
             // Email Branding & SMTP
-            smtpHost: tenantSMTP?.smtpHost || '',
-            smtpPort: tenantSMTP?.smtpPort || '',
-            smtpUsername: tenantSMTP?.smtpUsername || '',
-            smtpPassword: tenantSMTP?.smtpPassword || '',
-            smtpSecure: tenantSMTP?.smtpSecure,
+            smtpHost: smtp?.smtpHost || '',
+            smtpPort: smtp?.smtpPort || '',
+            smtpUsername: smtp?.smtpUsername || '',
+            smtpPassword: smtp?.smtpPassword || '',
+            smtpSecure: smtp?.smtpSecure,
         }),
-        [
-            tenantSiteInfo,
-            tenantSiteTheme,
-            tenantSiteSEO,
-            tenantSocialMedia,
-            tenantSMTP,
-        ]
+        [siteInfo, siteTheme, siteSEO, socialMedia, smtp]
     );
     const methods = useForm({
         defaultValues: defaultValues,
@@ -344,42 +331,38 @@ const SiteManagement = ({ data, tenant }) => {
 
                 setEditingField(null);
 
-                if (tenant) {
-                    let result;
-
-                    if (siteInfoFields.includes(fieldId)) {
-                        result = await updateTenantSiteInfo(tenant, {
-                            [fieldId]: value,
-                        });
-                    } else if (siteThemeFields.includes(fieldId)) {
-                        result = await updateTenantSiteTheme(tenant, {
-                            [fieldId]: value,
-                        });
-                    } else if (seoFields.includes(fieldId)) {
-                        result = await updateTenantSiteSeo(tenant, {
-                            [fieldId]: value,
-                        });
-                    } else if (socialMediaFields.includes(fieldId)) {
-                        result = await updateTenantSocialMedia(tenant, {
-                            [fieldId]: value,
-                        });
-                    } else if (smtpFields.includes(fieldId)) {
-                        result = await updateTenantSMTP(tenant, {
-                            [fieldId]: value,
-                        });
-                    }
-
-                    // Handle the result
-                    if (result && !result.success) {
-                        console.error('Failed to update:', result.error);
-                        toast.error(result.error);
-                        return;
-                    }
-
-                    // Optional: Show success message
-                    setEditingField(null);
-                    toast.success('Updated successfully');
+                if (siteInfoFields.includes(fieldId)) {
+                    result = await updateSiteInfo({
+                        [fieldId]: value,
+                    });
+                } else if (siteThemeFields.includes(fieldId)) {
+                    result = await updateSiteTheme({
+                        [fieldId]: value,
+                    });
+                } else if (seoFields.includes(fieldId)) {
+                    result = await updateSiteSeo({
+                        [fieldId]: value,
+                    });
+                } else if (socialMediaFields.includes(fieldId)) {
+                    result = await updateSocialMedia({
+                        [fieldId]: value,
+                    });
+                } else if (smtpFields.includes(fieldId)) {
+                    result = await updateSMTPConfig({
+                        [fieldId]: value,
+                    });
                 }
+
+                // Handle the result
+                if (result && !result.success) {
+                    console.error('Failed to update:', result.error);
+                    toast.error(result.error);
+                    return;
+                }
+
+                // Optional: Show success message
+                setEditingField(null);
+                toast.success('Updated successfully');
             } catch (err) {
                 console.error('Error updating field:', err);
                 // Optional: Show error message to user
@@ -388,7 +371,7 @@ const SiteManagement = ({ data, tenant }) => {
                 setIsSaving(false);
             }
         },
-        [getValues, tenant]
+        [getValues]
     );
 
     const handleSaveField = useCallback(
@@ -419,7 +402,7 @@ const SiteManagement = ({ data, tenant }) => {
         if (data) {
             syncResponseWithFormData();
         }
-    }, [data, syncResponseWithFormData, tenant]);
+    }, [data, syncResponseWithFormData]);
     const formSections = [
         { id: 'site', label: 'General', icon: Globe02Icon },
         { id: 'branding', label: 'Branding', icon: PaintBoardIcon },
@@ -451,7 +434,7 @@ const SiteManagement = ({ data, tenant }) => {
                     isSaving={isSaving}
                     resetField={resetField}
                     formValidationRules={formValidationRules}
-                    siteInfo={tenantSiteInfo}
+                    siteInfo={siteInfo}
                 />
             ),
             seo: (
@@ -464,7 +447,7 @@ const SiteManagement = ({ data, tenant }) => {
                     resetField={resetField}
                     formValidationRules={formValidationRules}
                     robotsMetaOptions={robotsMetaOptions}
-                    seoInfo={tenantSiteSEO}
+                    seoInfo={siteSEO}
                 />
             ),
             advancedSeo: (
@@ -508,9 +491,9 @@ const SiteManagement = ({ data, tenant }) => {
             isSaving,
             resetField,
             formValidationRules,
-            tenantSiteInfo,
+            siteInfo,
             robotsMetaOptions,
-            tenantSiteSEO,
+            siteSEO,
         ]
     );
     const renderFormSection = useCallback(() => {

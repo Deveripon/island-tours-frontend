@@ -1,6 +1,6 @@
 'use client';
 
-import { createNewCategory, updateCategoryById } from '@/app/_actions/trips/category';
+import { createCategory, updateCategory } from '@/app/_actions/trips/category';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -76,7 +76,7 @@ export function CategoryForm({
         try {
             if (editingCategory) {
                 (async () => {
-                    const result = await updateCategoryById(
+                    const result = await updateCategory(
                         editingCategory?.id,
                         data
                     );
@@ -96,7 +96,7 @@ export function CategoryForm({
                 })();
             } else {
                 (async () => {
-                    const result = await createNewCategory(data);
+                    const result = await createCategory(data);
                     if (result?.success === true) {
                         toast.success('Category Added Successfully');
                         form.reset();

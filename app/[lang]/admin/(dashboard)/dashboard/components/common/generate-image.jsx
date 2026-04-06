@@ -1,6 +1,6 @@
 'use client';
 
-import { uploadMultipleImage } from '@/app/_actions/imagesActions';
+import { uploadMultipleImage } from '@/app/_actions/mediaActions';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { AnimatePresence, motion } from 'framer-motion';

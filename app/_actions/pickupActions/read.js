@@ -29,6 +29,27 @@ export async function getPickupsByTripId(tripId) {
 }
 
 /**
+ * Get all pickup locations
+ */
+export async function getAllPickups() {
+    try {
+        const responsePromise = fetch(`${baseUrl}/pickups`, {
+            method: 'GET',
+            next: { revalidate: 3600, tags: ['pickups'] }
+        });
+
+        const response = await responsePromise;
+        const result = await response.json();
+
+        if (!response.ok) return { success: false, error: { message: result?.message || 'Failed to fetch pickups' } };
+
+        return { success: true, result };
+    } catch (error) {
+        return { success: false, error: { message: error?.message || 'An error occurred' } };
+    }
+}
+
+/**
  * Search pickup locations
  */
 export async function searchPickups(query = '') {

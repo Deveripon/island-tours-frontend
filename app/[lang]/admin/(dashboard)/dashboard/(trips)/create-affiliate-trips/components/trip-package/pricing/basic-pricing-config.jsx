@@ -1,4 +1,4 @@
-import { getAllCategoriesOfTenant } from '@/app/_actions/trips/category';
+import { getAllCategories } from '@/app/_actions/trips/category';
 import {
     FormControl,
     FormDescription,
@@ -18,7 +18,6 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { tripPackageOptions } from '@/data/trip-options';
 import { getGroupedDataOfCategories } from '@/lib/utils';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import SelectOptions from '../../../../../components/common/select-options';
@@ -29,7 +28,6 @@ export function BasicPricingConfig() {
     const { control, watch, setValue } = useFormContext();
     // Get Currency Data
     const defaultCurrencies = tripPackageOptions.currencies;
-    const { tenant } = useParams();
 
     useEffect(() => {
         const affiliateCommissionType = watch(
@@ -44,20 +42,18 @@ export function BasicPricingConfig() {
     });
 
     useEffect(() => {
-        if (tenant) {
-            async function fetchCategories() {
-                const res = await getAllCategoriesOfTenant(tenant);
-                if (res?.success) {
-                    const groupedData = getGroupedDataOfCategories(
-                        res?.result?.data
-                    );
-                    setCategories(groupedData);
-                }
+        async function fetchCategories() {
+            const res = await getAllCategories();
+            if (res?.success) {
+                const groupedData = getGroupedDataOfCategories(
+                    res?.result?.data
+                );
+                setCategories(groupedData);
             }
-
-            fetchCategories();
         }
-    }, [tenant]);
+
+        fetchCategories();
+    }, []);
 
     return (
         <div className='space-y-6'>

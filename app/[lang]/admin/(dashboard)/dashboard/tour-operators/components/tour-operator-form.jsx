@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-    createNewAffiliates,
-    updateAffiliatesById,
+    createPartner,
+    updatePartner,
 } from '@/app/_actions/partnerActions';
 import { Button } from '@/components/ui/button';
 import {
@@ -81,7 +81,7 @@ export function TourOperatorForm({
                     },
                 };
 
-                const result = await updateAffiliatesById(
+                const result = await updatePartner(
                     edittourOperator?.id,
                     processedValues
                 );
@@ -101,7 +101,7 @@ export function TourOperatorForm({
                     );
                 }
             } else {
-                const result = await createNewAffiliates(values);
+                const result = await createPartner(values);
 
                 if (result?.success === true) {
                     toast.success('Tour Partner Added Successfully');

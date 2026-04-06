@@ -1,6 +1,6 @@
 'use client';
 
-import { updateMollieConfigurationOfTenant } from '@/app/_actions/settingsActions';
+import { updateMollieConfiguration } from '@/app/_actions/settingsActions';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -39,12 +39,7 @@ const mollieConfigSchema = z.object({
         .min(1, 'Select at least one payment method'),
 });
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_APP_URL;
-export default function Mollie({
-    mollieConfiguration,
-    enabled,
-    setEnabled,
-    tenant,
-}) {
+export default function Mollie({ mollieConfiguration, enabled, setEnabled }) {
     const [showApiKey, setShowApiKey] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
     const { data: session } = useSession();
@@ -99,10 +94,7 @@ export default function Mollie({
         setError(null);
 
         try {
-            const response = await updateMollieConfigurationOfTenant(
-                tenant,
-                data
-            );
+            const response = await updateMollieConfiguration(data);
 
             if (response.success) {
                 toast.success('Configuration saved successfully');
@@ -144,7 +136,6 @@ export default function Mollie({
                     to obtain the necessary keys.
                 </p>
                 <PaymentSwitcher
-                    tenant={tenant}
                     enabled={enabled}
                     setEnabled={setEnabled}
                     paymentMethod='mollie'

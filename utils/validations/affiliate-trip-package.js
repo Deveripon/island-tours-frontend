@@ -65,7 +65,7 @@ export const basicInfoSchema = z.object({
         .min(1, 'Destination is required')
         .default('')
         .describe('UUID reference to the destination where this trip takes place. Links to a destination object containing details like name (e.g., "Hotel Grand Palace eco lodge"), country (e.g., "Bangladesh"), city (e.g., "Nalitabari"), region, and embedded map. This helps categorize and filter trips by location. Note: You will ignore this field during AI generation - users may manually select the destination after creating the package.'),
-    affiliateId: z
+    partnerId: z
         .string()
         .min(1, 'Tour operator (Affiliate) is required')
         .default(''),

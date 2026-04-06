@@ -4,7 +4,7 @@ import VideoBackground from './components/video-background';
 
 const HomePage = async () => {
     const session = await auth();
-    console.log(session);
+    console.log(`session`, session);
 
     return (
         <VideoBackground

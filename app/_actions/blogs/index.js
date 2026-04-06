@@ -15,14 +15,14 @@ export {
 } from './update';
 
 export {
-    findAllBlogs,
-    findAllBlogsByUser,
-    findRelatedBlogs,
+    getAllBlogs,
+    getBlogsByUserId,
+    getRelatedBlogs,
     searchBlogs,
-    findBlogById,
-    findBlogBySlug,
+    getBlogById,
+    getBlogBySlug,
     getBlogAnalytics,
-    findAllComments,
-    findOneComment,
-    findAllCommentReports
+    getAllComments,
+    getCommentById,
+    getAllCommentReports
 } from './read';

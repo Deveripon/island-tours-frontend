@@ -1,10 +1,8 @@
-import { getUploadedMediaofTenant } from '@/app/_actions/mediaActions';
+import { getAllMedia } from '@/app/_actions/mediaActions';
 import MediaGalleryManager from './components/media-gallery-manager';
 
-const FilesAndMediaPage = async ({ params }) => {
-    const { tenant } = await params;
-    const res = await getUploadedMediaofTenant(
-        tenant,
+const FilesAndMediaPage = async () => {
+    const res = await getAllMedia(
         'limit=200 &sortBy=uploadedAt&sortOrder=desc'
     );
     const mediaItems = res?.result?.media || [];

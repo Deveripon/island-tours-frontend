@@ -1,6 +1,6 @@
 'use client';
 import { Permission } from '@/RBAC.config';
-import { deleteBulkMedia, deleteMediaById } from '@/app/_actions/mediaActions';
+import { bulkDeleteMedia, deleteMedia } from '@/app/_actions/mediaActions';
 import Spinner from '@/components/svg/spinner';
 import { Button } from '@/components/ui/button';
 import { useRolePermission } from '@/hooks/useRolePermission';
@@ -139,7 +139,7 @@ export default function MediaGallery({
                 );
 
                 const mediaIds = bulkSelectedItems.map(item => item.id);
-                const res = await deleteBulkMedia(mediaIds);
+                const res = await bulkDeleteMedia(mediaIds);
 
                 if (res?.success) {
                     setbulkSelectedItems([]);
@@ -157,7 +157,7 @@ export default function MediaGallery({
                     prevItems.filter(item => item.id !== itemToDelete)
                 );
 
-                const result = await deleteMediaById(itemToDelete);
+                const result = await deleteMedia(itemToDelete);
                 if (result?.success) {
                     toast.success('Media deleted successfully');
                 }

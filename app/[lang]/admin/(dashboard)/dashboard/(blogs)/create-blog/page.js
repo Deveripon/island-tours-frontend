@@ -1,10 +1,10 @@
 'use client';
 import {
-    createNewBlog,
-    getSingleBlog,
-    updateBlogById,
+    createBlog,
+    getBlogById,
+    updateBlog,
 } from '@/app/_actions/blogs';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -21,7 +21,6 @@ export default function PostCreationPage() {
     const params = useSearchParams();
     const blogId = params.get('id');
     const mode = params.get('mode');
-    const { tenant } = useParams();
 
     const form = useForm({
         defaultValues: {
@@ -45,7 +44,8 @@ export default function PostCreationPage() {
                 robots: 'index,follow',
                 schemaType: 'Article',
             },
-        } });
+        },
+    });
     const {
         control,
         handleSubmit,
@@ -60,8 +60,7 @@ export default function PostCreationPage() {
             async function getBlogData() {
                 try {
                     setLoading(true);
-                    const data = await getSingleBlog(blogId);
-
+                    const data = await getBlogById(blogId);
 
                     setLoading(false);
                     if (data?.success) {
@@ -75,8 +74,9 @@ export default function PostCreationPage() {
                         toast.error('Failed to load blog data for editing');
                     }
                 } catch (error) {
-
-                    toast.error('There was an error while fetching data to edit');
+                    toast.error(
+                        'There was an error while fetching data to edit'
+                    );
                 }
             }
             getBlogData();
@@ -94,14 +94,13 @@ export default function PostCreationPage() {
             seo: watch('seo'),
         };
 
-
         try {
             if (mode !== 'update') {
-                const res = await createNewBlog(formData);
+                const res = await createBlog(formData);
 
                 toast.success('Blog Saved successfully');
             } else {
-                const res = await updateBlogById(blogId, formData);
+                const res = await updateBlog(blogId, formData);
 
                 toast.success('Blog Updated successfully');
             }
@@ -118,13 +117,13 @@ export default function PostCreationPage() {
         };
         try {
             if (mode !== 'update') {
-                const res = await createNewBlog(formData);
+                const res = await createBlog(formData);
                 toast.success('Blog created successfully');
             } else {
-                const res = await updateBlogById(blogId, formData);
+                const res = await updateBlog(blogId, formData);
                 toast.success('Blog Updated successfully');
             }
-            router.push(`/${tenant}/dashboard/blogs`);
+            router.push(`/admin/dashboard/blogs`);
         } catch (error) {
             throw error;
         }
@@ -139,10 +138,14 @@ export default function PostCreationPage() {
                         <div className='flex mb-5 items-center justify-between'>
                             <div className='space-y-1'>
                                 <h1 className='text-2xl font-semibold tracking-tight'>
-                                    {mode === 'update' ? 'Update' : 'Create New'} Post
+                                    {mode === 'update'
+                                        ? 'Update'
+                                        : 'Create New'}{' '}
+                                    Post
                                 </h1>
                                 <p className='text-sm text-muted-foreground'>
-                                    Share your travel stories and experiences with the world
+                                    Share your travel stories and experiences
+                                    with the world
                                 </p>
                             </div>
                         </div>
@@ -162,6 +165,7 @@ export default function PostCreationPage() {
                     </div>
                 </form>
             </FormProvider>
-        </div >
+        </div>
     );
 }
+

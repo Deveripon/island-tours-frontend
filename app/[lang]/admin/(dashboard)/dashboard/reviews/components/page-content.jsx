@@ -4,8 +4,8 @@ import { reviewColumns } from './columns';
 import { DataTable } from './data-table';
 
 import {
+    bulkDeleteReviews,
     bulkUpdateReviewStatus,
-    deleteMultipleReviewsById,
     updateReviewStatus,
 } from '@/app/_actions/reviewActions';
 import {
@@ -18,31 +18,22 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-} from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 import {
     Calendar,
     CheckCircle2,
-    Mail,
     MapPin,
-    MessageSquare,
     Star,
     Trash2,
-    User,
     XCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
 
-const PageContent = ({ tenant, reviews }) => {
+const PageContent = ({ reviews }) => {
     const [isShowConfirm, setIsShowConfirm] = useState(false);
     const [reviewsToDelete, setReviewsToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -55,7 +46,7 @@ const PageContent = ({ tenant, reviews }) => {
         async (id, status) => {
             setIsUpdating(true);
             try {
-                const result = await updateReviewStatus(id, status, tenant);
+                const result = await updateReviewStatus(id, status);
                 if (result?.success) {
                     toast.success(
                         `Review ${status.toLowerCase()} successfully`
@@ -75,18 +66,14 @@ const PageContent = ({ tenant, reviews }) => {
                 setIsUpdating(false);
             }
         },
-        [tenant, activeReview]
+        [activeReview]
     );
 
     const handleBulkUpdateStatus = useCallback(
         async (ids, status) => {
             setIsUpdating(true);
             try {
-                const result = await bulkUpdateReviewStatus(
-                    ids,
-                    status,
-                    tenant
-                );
+                const result = await bulkUpdateReviewStatus(ids, status);
                 if (result?.success) {
                     toast.success(`${ids.length} reviews updated successfully`);
                 } else {
@@ -101,7 +88,7 @@ const PageContent = ({ tenant, reviews }) => {
                 setIsUpdating(false);
             }
         },
-        [tenant]
+        []
     );
 
     const handleDeleteConfirm = async () => {
@@ -110,10 +97,7 @@ const PageContent = ({ tenant, reviews }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteMultipleReviewsById(
-                reviewsToDelete.ids,
-                tenant
-            );
+            const result = await bulkDeleteReviews(reviewsToDelete.ids);
 
             if (result?.success) {
                 toast.success('Reviews deleted successfully');
@@ -213,17 +197,24 @@ const PageContent = ({ tenant, reviews }) => {
                                 variant='outline'
                                 className={cn(
                                     'capitalize border-0 font-medium px-2.5 py-0.5 rounded-full text-xs',
-                                    activeReview?.status === 'APPROVED' && 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
-                                    activeReview?.status === 'REJECTED' && 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-                                    activeReview?.status === 'PENDING' && 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
-                                    (!activeReview?.status || activeReview?.status === 'SECONDARY') && 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300'
+                                    activeReview?.status === 'APPROVED' &&
+                                        'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
+                                    activeReview?.status === 'REJECTED' &&
+                                        'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
+                                    activeReview?.status === 'PENDING' &&
+                                        'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
+                                    (!activeReview?.status ||
+                                        activeReview?.status === 'SECONDARY') &&
+                                        'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300'
                                 )}>
                                 {activeReview?.status?.toLowerCase()}
                             </Badge>
                             <span className='text-[11px] font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 uppercase tracking-wider'>
                                 <Calendar className='h-3 w-3' />
                                 {activeReview?.createdAt &&
-                                    new Date(activeReview.createdAt).toLocaleDateString('en-US', {
+                                    new Date(
+                                        activeReview.createdAt
+                                    ).toLocaleDateString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
                                         year: 'numeric',
@@ -241,14 +232,19 @@ const PageContent = ({ tenant, reviews }) => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex items-center gap-4'>
                                     <Avatar className='h-10 w-10 ring-1 ring-zinc-200 dark:ring-zinc-800 rounded-full'>
-                                        <AvatarImage src={activeReview.reviewerAvatar} />
+                                        <AvatarImage
+                                            src={activeReview.reviewerAvatar}
+                                        />
                                         <AvatarFallback className='bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-medium text-sm'>
-                                            {activeReview.reviewerName?.charAt(0).toUpperCase() || 'R'}
+                                            {activeReview.reviewerName
+                                                ?.charAt(0)
+                                                .toUpperCase() || 'R'}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className='flex flex-col'>
                                         <span className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                                            {activeReview.reviewerName || 'Anonymous'}
+                                            {activeReview.reviewerName ||
+                                                'Anonymous'}
                                         </span>
                                         <span className='text-[13px] text-zinc-500 dark:text-zinc-400'>
                                             {activeReview.reviewerEmail}
@@ -290,21 +286,26 @@ const PageContent = ({ tenant, reviews }) => {
                             </div>
 
                             {/* Attachments */}
-                            {(activeReview.images?.length > 0 || activeReview.videos?.length > 0) && (
+                            {(activeReview.images?.length > 0 ||
+                                activeReview.videos?.length > 0) && (
                                 <div className='space-y-3 pt-6 border-t border-zinc-100 dark:border-zinc-800/50'>
                                     <span className='text-[11px] font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide'>
                                         Attachments
                                     </span>
                                     <div className='grid grid-cols-2 gap-3'>
-                                        {activeReview.images?.map((img, idx) => (
-                                            <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                                                <img
-                                                    src={img}
-                                                    alt={`Review ${idx}`}
-                                                    className='object-cover w-full h-full hover:scale-105 transition-transform duration-300'
-                                                />
-                                            </div>
-                                        ))}
+                                        {activeReview.images?.map(
+                                            (img, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className='relative aspect-video rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm'>
+                                                    <img
+                                                        src={img}
+                                                        alt={`Review ${idx}`}
+                                                        className='object-cover w-full h-full hover:scale-105 transition-transform duration-300'
+                                                    />
+                                                </div>
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             )}
@@ -313,7 +314,12 @@ const PageContent = ({ tenant, reviews }) => {
                             <div className='pt-8 space-y-3'>
                                 {activeReview.status !== 'APPROVED' && (
                                     <Button
-                                        onClick={() => handleUpdateStatus(activeReview.id, 'APPROVED')}
+                                        onClick={() =>
+                                            handleUpdateStatus(
+                                                activeReview.id,
+                                                'APPROVED'
+                                            )
+                                        }
                                         disabled={isUpdating}
                                         className='w-full h-10 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 font-medium transition-colors gap-2'>
                                         <CheckCircle2 className='h-4 w-4' />
@@ -323,7 +329,12 @@ const PageContent = ({ tenant, reviews }) => {
                                 {activeReview.status !== 'REJECTED' && (
                                     <Button
                                         variant='outline'
-                                        onClick={() => handleUpdateStatus(activeReview.id, 'REJECTED')}
+                                        onClick={() =>
+                                            handleUpdateStatus(
+                                                activeReview.id,
+                                                'REJECTED'
+                                            )
+                                        }
                                         disabled={isUpdating}
                                         className='w-full h-10 rounded-xl border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-medium transition-colors gap-2'>
                                         <XCircle className='h-4 w-4' />
@@ -333,7 +344,9 @@ const PageContent = ({ tenant, reviews }) => {
                                 <Button
                                     variant='ghost'
                                     onClick={() => {
-                                        setReviewsToDelete({ ids: [activeReview.id] });
+                                        setReviewsToDelete({
+                                            ids: [activeReview.id],
+                                        });
                                         setIsShowConfirm(true);
                                     }}
                                     disabled={isDeleting}

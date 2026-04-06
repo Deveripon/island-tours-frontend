@@ -1,4 +1,5 @@
 'use client';
+import { logout } from '@/app/_actions/authActions';
 import { cn } from '@/lib/utils';
 import {
     ArrowDown01Icon,
@@ -70,13 +71,10 @@ export default function ProfileDropdown({ loggedInUser, className }) {
         switch (clickOn) {
             case 'signOut':
                 async function handleLogOut() {
-                    await fetch(
-                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`
-                    );
+                    await logout();
                 }
                 handleLogOut();
-                signOut({
-                    redirectTo: '/' });
+                signOut();
 
             default:
                 break;
@@ -130,8 +128,7 @@ export default function ProfileDropdown({ loggedInUser, className }) {
                                     linkTo={
                                         !pathname.includes(
                                             `/admin/dashboard/profile`
-                                        ) &&
-                                        `/admin/dashboard/profile`
+                                        ) && `/admin/dashboard/profile`
                                     }
                                     shortcut='⌘ + /'
                                     onClick={() =>
@@ -183,7 +180,8 @@ function DropdownItem({
     active = false,
     red = false,
     onClick,
-    linkTo }) {
+    linkTo,
+}) {
     const className = `flex justify-between items-center cursor-pointer w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-left ${
         active
             ? 'bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400'
@@ -208,3 +206,4 @@ function DropdownItem({
 
     return linkTo ? <Link href={linkTo}>{content}</Link> : content;
 }
+

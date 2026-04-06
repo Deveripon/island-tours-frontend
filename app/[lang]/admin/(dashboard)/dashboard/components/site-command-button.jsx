@@ -1,7 +1,7 @@
 import { ChevronUp, ExternalLink, Globe, Shield, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export default function SiteCommandDropdown({ tenant, content }) {
+export default function SiteCommandDropdown({ preferences, content }) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -28,7 +28,7 @@ export default function SiteCommandDropdown({ tenant, content }) {
             if (e.metaKey && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
                 window.open(
-                    `${process.env.NEXT_PUBLIC_STAGING_APP_URL}/site/${tenant}`,
+                    `${process.env.NEXT_PUBLIC_STAGING_APP_URL}`,
                     '_blank'
                 );
             }
@@ -36,7 +36,7 @@ export default function SiteCommandDropdown({ tenant, content }) {
                 setOpen(false);
             }
         },
-        [tenant]
+        [preferences]
     );
 
     useEffect(() => {
@@ -52,7 +52,7 @@ export default function SiteCommandDropdown({ tenant, content }) {
         switch (clickOn) {
             case 'visitWebsite':
                 window.open(
-                    `${process.env.NEXT_PUBLIC_STAGING_APP_URL}/site/${tenant}`,
+                    `${process.env.NEXT_PUBLIC_STAGING_APP_URL}`,
                     '_blank'
                 );
                 break;
@@ -87,7 +87,7 @@ export default function SiteCommandDropdown({ tenant, content }) {
                         {/* Header Section */}
                         <div className='p-4'>
                             <p className='font-semibold text-gray-900'>
-                                {tenant}
+                                {preferences?.siteName || 'Your Website'}
                             </p>
                             <p className='text-gray-500 text-sm'>
                                 {content?.manageSite}

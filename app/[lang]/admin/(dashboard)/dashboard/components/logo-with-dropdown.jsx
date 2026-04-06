@@ -8,10 +8,10 @@ export const LogoWithDropdown = ({ preferences }) => {
         <div className='relative'>
             {/* Logo */}
             <Link
-                href="/admin/dashboard"
+                href='/admin/dashboard'
                 className='flex items-center space-x-2'>
                 <span className={cn(`text-md font-bold`)}>
-                    {preferences?.business_name || 'TripWheel'}
+                    {preferences?.siteName || 'Island Tours'}
                 </span>
             </Link>
         </div>

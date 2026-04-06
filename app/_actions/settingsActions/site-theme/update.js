@@ -6,7 +6,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
- * Update Tenant Site Theme
+ * Update  Site Theme
  */
 export async function updateSiteTheme(data) {
     if (!data) return { success: false, error: { message: 'Nothing to update' } };

@@ -103,7 +103,7 @@ export function ActionDropdown({
                     <DropdownMenuItem className='gap-2 cursor-pointer p-0'>
                         <Link
                             target='_blank'
-                            href={`/site/${params.tenant}/trips/${tripPackages.slug}?preview=true`}
+                            href={`/trips/${tripPackages.slug}?preview=true`}
                             className='flex items-center gap-2 w-full px-2 py-1.5'>
                             <HugeiconsIcon icon={ViewIcon} size={16} />
                             <span>View Trip</span>

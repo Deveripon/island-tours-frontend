@@ -6,7 +6,7 @@ export const fieldToTabMapping = {
     destinationId: 'basic',
     duration: 'basic',
     durationNights: 'basic',
-    affiliateId: 'basic',
+    partnerId: 'basic',
     startingPrice: 'basic',
     currency: 'basic',
     mainImage: 'basic',

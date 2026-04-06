@@ -1,6 +1,6 @@
 'use client';
 
-import { deletepaymentsById } from '@/app/_actions/paymentActions';
+import { deletePaymentById } from '@/app/_actions/paymentActions';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -65,7 +65,7 @@ const PageContent = ({ groupedPayments, Payments }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deletepaymentsById(PaymentsIdToDelete);
+            const result = await deletePaymentById(PaymentsIdToDelete);
 
             if (result?.success === true) {
                 toast.success('Payments deleted successfully');

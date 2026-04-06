@@ -9,7 +9,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-export function DashboardLogo({ tenant, preferences }) {
+export function DashboardLogo({ preferences }) {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -20,7 +20,7 @@ export function DashboardLogo({ tenant, preferences }) {
                             className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
                             {' '}
                             <Logo
-                                link={`/${tenant}/dashboard`}
+                                link={`/admin/dashboard`}
                                 preferences={preferences}
                             />
                         </SidebarMenuButton>

@@ -1,14 +1,14 @@
 'use server';
 
 import { fetchWithAuth } from '@/utils/fetch-with-auth';
-import { updateTag, revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
  * Create a new affiliate trip
  */
-export async function createAffiliateTrip(data) {
+export async function createTrip(data) {
     if (!data) return { success: false, error: { message: 'Trip data is required' } };
 
     try {
@@ -35,7 +35,7 @@ export async function createAffiliateTrip(data) {
 /**
  * Update affiliate trip
  */
-export async function updateAffiliateTrip(id, data) {
+export async function updateTrip(id, data) {
     if (!id || !data) return { success: false, error: { message: 'ID and data are required' } };
 
     try {
@@ -63,7 +63,7 @@ export async function updateAffiliateTrip(id, data) {
 /**
  * Delete affiliate trip
  */
-export async function removeAffiliateTrip(id) {
+export async function deleteTrip(id) {
     if (!id) return { success: false, error: { message: 'ID is required' } };
 
     try {

@@ -3,7 +3,7 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
- * Get Tenant Site Info
+ * Get  Site Info
  */
 export async function getSiteInfo() {
 

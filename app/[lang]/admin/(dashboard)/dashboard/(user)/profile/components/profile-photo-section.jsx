@@ -2,7 +2,7 @@
 
 import {
     removeProfilePhoto,
-    updateUserInformationById,
+    updateUserById,
 } from '@/app/_actions/userActions';
 
 import { AnimatedProgress } from '@/components/common/animate-progress';
@@ -110,7 +110,7 @@ const ProfilePhotoSection = ({ user }) => {
                         await removeProfilePhoto(publicId);
                     }
 
-                    await updateUserInformationById(session.user.id, {
+                    await updateUserById(session.user.id, {
                         image: {
                             url: uploadData.url,
                             public_id: uploadData.publicId,

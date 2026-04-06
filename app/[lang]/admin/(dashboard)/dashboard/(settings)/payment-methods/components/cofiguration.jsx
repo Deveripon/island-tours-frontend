@@ -8,12 +8,12 @@ import { BiCheckboxSquare } from 'react-icons/bi';
 import { FaStripe } from 'react-icons/fa6';
 import ComingSoonWrapper from './coming-soon-wrapper';
 import Mollie from './sections/Mollie';
-import Paypal from './sections/paypal';
 import Square from './sections/Square';
 import Stripe from './sections/Stripe';
+import Paypal from './sections/paypal';
 import SectionTabs from './tabs';
 
-const Configuration = ({ configuration, enabledMethod, tenant }) => {
+const Configuration = ({ configuration, enabledMethod }) => {
     const [enabled, setEnabled] = useState(enabledMethod || '');
     const [activeTab, setActiveTab] = useState(enabledMethod || 'stripe');
 
@@ -51,7 +51,6 @@ const Configuration = ({ configuration, enabledMethod, tenant }) => {
         () => ({
             stripe: (
                 <Stripe
-                    tenant={tenant}
                     enabled={enabled}
                     setEnabled={setEnabled}
                     stripeConfiguration={configuration?.stripe}
@@ -59,7 +58,6 @@ const Configuration = ({ configuration, enabledMethod, tenant }) => {
             ),
             mollie: (
                 <Mollie
-                    tenant={tenant}
                     enabled={enabled}
                     setEnabled={setEnabled}
                     mollieConfiguration={configuration?.mollie}
@@ -78,7 +76,6 @@ const Configuration = ({ configuration, enabledMethod, tenant }) => {
                         'Advanced fraud protection',
                     ]}>
                     <Paypal
-                        tenant={tenant}
                         enabled={enabled}
                         setEnabled={setEnabled}
                         paypalConfiguration={configuration?.paypal}
@@ -98,20 +95,19 @@ const Configuration = ({ configuration, enabledMethod, tenant }) => {
                         'Advanced fraud protection',
                     ]}>
                     <Square
-                        tenant={tenant}
                         enabled={enabled}
                         setEnabled={setEnabled}
                         squareConfiguration={configuration?.square}
                     />
                 </ComingSoonWrapper>
-            ) }),
+            ),
+        }),
         [
             configuration?.mollie,
             configuration?.paypal,
             configuration?.square,
             configuration?.stripe,
             enabled,
-            tenant,
         ]
     );
     // Render current form section

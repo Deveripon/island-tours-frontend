@@ -1,5 +1,4 @@
 import { Permission } from '@/RBAC.config';
-import { StarAwardIcon } from '@hugeicons/core-free-icons';
 import {
     Activity02Icon,
     AddSquareIcon, AiMagicIcon, Airplane01Icon,
@@ -9,13 +8,10 @@ import {
     FoldersIcon,
     Invoice02Icon,
     InvoiceIcon,
-    LicenseDraftIcon,
-    LockKeyIcon,
-    Mail02Icon,
+    LicenseDraftIcon, Mail02Icon,
     MapPinpoint01Icon,
     NewsIcon,
-    Settings05Icon,
-    UserAccountIcon,
+    Settings05Icon, StarAwardIcon, UserAccountIcon,
     UserCircleIcon,
     UserGroupIcon,
     UserSharingIcon,
@@ -129,7 +125,7 @@ export const NlNavigations = {
         },
         {
             title: 'Aanvragen',
-            url: 'enquires',
+            url: 'inquiries',
             icon: Mail02Icon,
             requiredPermissions: [Permission.VIEW_ENQUIRIES],
             items: [],
@@ -235,13 +231,6 @@ export const NlNavigations = {
                     icon: InvoiceIcon,
                     requiredPermissions: [Permission.MANAGE_SETTINGS],
                     items: [],
-                },
-
-                {
-                    title: 'API en referenties',
-                    url: 'credentials',
-                    icon: LockKeyIcon,
-                    requiredPermissions: [Permission.MANAGE_SETTINGS],
                 },
                 {
                     title: 'Integrations',

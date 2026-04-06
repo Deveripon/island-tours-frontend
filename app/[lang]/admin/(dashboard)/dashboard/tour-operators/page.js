@@ -1,9 +1,8 @@
-import { getAllAffiliatesOfTenant } from '@/app/_actions/partnerActions';
+import { getAllPartners } from '@/app/_actions/partnerActions';
 import PageContent from './components/page-content';
 
-export default async function TourOperatorPage({ params }) {
-    const { tenant } = await params;
-    const res = await getAllAffiliatesOfTenant(tenant);
+export default async function TourOperatorPage() {
+    const res = await getAllPartners();
 
     // Make sure both categories passed are of the same type
     const tourOperatorsData = res?.result?.data;

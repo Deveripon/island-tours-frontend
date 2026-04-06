@@ -14,8 +14,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-    createNewDestination,
-    updateDestinationById,
+    createDestination,
+    updateDestination,
 } from '@/app/_actions/trips/destinations';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,7 +38,8 @@ export function DestinationForm({
     open,
     editDestination,
     setEditDestination,
-    onOpenChange }) {
+    onOpenChange,
+}) {
     const [isPending, setIsPending] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -56,7 +57,8 @@ export function DestinationForm({
             longitude: '',
             images: [],
             embededMap: '',
-        } });
+        },
+    });
 
     useEffect(() => {
         if (editDestination) {
@@ -75,12 +77,19 @@ export function DestinationForm({
     async function onSubmit(values) {
         try {
             setIsPending(true);
+            
+            // Format payload to strictly match the backend's CreateDestinationDto/UpdateDestinationDto
+            const payload = {
+                ...values,
+                name: values.name.trim(),
+                imageIds: values.images?.map(img => img.imageId || img.id) || [],
+            };
+            
+            // Remove the frontend 'images' array to avoid backend validation errors (forbidNonWhitelisted)
+            delete payload.images;
+
             if (editDestination) {
-                const result = await updateDestinationById(
-                    editDestination?.id,
-                    {
-                        ...values,
-                        name: values.name.trim() });
+                const result = await updateDestination(editDestination?.id, payload);
                 if (result?.success === true) {
                     toast.success('Destination updated successfully');
                     form.reset();
@@ -98,7 +107,8 @@ export function DestinationForm({
                     );
                 }
             } else {
-                const result = await createNewDestination(values);
+                const result = await createDestination(payload);
+                console.log(`payload`, payload);
 
                 if (result?.success === true) {
                     toast.success('Destination created successfully');

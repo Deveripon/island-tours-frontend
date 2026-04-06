@@ -7,7 +7,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 /**
  * Get all affiliate trips with filtering
  */
-export async function findAllTrips(query = '') {
+export async function getAllTrips(query = '') {
     try {
         const responsePromise = fetch(`${baseUrl}/affiliate-trips${query ? `?${query}` : ''}`, {
             method: 'GET',
@@ -29,7 +29,7 @@ export async function findAllTrips(query = '') {
 /**
  * Get all affiliate trips by destination
  */
-export async function findAllTripsByDestination(destinationId, query = '') {
+export async function getTripsByDestination(destinationId, query = '') {
     if (!destinationId) return { success: false, error: { message: 'Destination ID is required' } };
 
     try {
@@ -52,7 +52,7 @@ export async function findAllTripsByDestination(destinationId, query = '') {
 /**
  * Get all affiliate trips by activity
  */
-export async function findAllTripsByActivity(activityId, query = '') {
+export async function getTripsByActivity(activityId, query = '') {
     if (!activityId) return { success: false, error: { message: 'Activity ID is required' } };
 
     try {
@@ -118,7 +118,7 @@ export async function getAllAvailableFilterOperations() {
 /**
  * Get affiliate trip by ID
  */
-export async function getAffiliateTripById(id) {
+export async function getTripById(id) {
     if (!id) return { success: false, error: { message: 'Trip ID is required' } };
 
     try {
@@ -141,7 +141,7 @@ export async function getAffiliateTripById(id) {
 /**
  * Get affiliate trip by slug
  */
-export async function getAffiliateTripBySlug(slug) {
+export async function getTripBySlug(slug) {
     if (!slug) return { success: false, error: { message: 'Slug is required' } };
 
     try {

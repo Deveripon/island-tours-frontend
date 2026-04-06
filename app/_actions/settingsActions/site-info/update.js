@@ -6,7 +6,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
- * Update Tenant Site Info
+ * Update  Site Info
  */
 export async function updateSiteInfo(data) {
     if (!data) return { success: false, error: { message: 'Nothing to update' } };
@@ -26,7 +26,7 @@ export async function updateSiteInfo(data) {
         if (!response.ok) return { success: false, error: { message: result?.message || 'Update failed' } };
 
         updateTag(`site-info`);
-        revalidatePath(`/dashboard/site-settings`); // Site info like navbar/footer logo/name
+        revalidatePath(`/admin/dashboard/site-settings`); // Site info like navbar/footer logo/name
 
         return result;
     } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { updateTenantMailchimpConfig } from '@/app/_actions/settingsActions';
+import { updateMailchimpConfig } from '@/app/_actions/settingsActions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,10 +19,7 @@ const mailchimpSchema = z.object({
     audienceId: z.string().min(1, 'Audience ID is required'),
 });
 
-export default function MailchimpCredentialsSaveForm({
-    tenant,
-    mailchimpConfig,
-}) {
+export default function MailchimpCredentialsSaveForm({ mailchimpConfig }) {
     const [showApiKey, setShowApiKey] = useState(false);
 
     const {
@@ -32,15 +29,15 @@ export default function MailchimpCredentialsSaveForm({
     } = useForm({
         resolver: zodResolver(mailchimpSchema),
         defaultValues: {
-            apiKey: mailchimpConfig?.tenantMailchimp?.apiKey || '',
-            serverPrefix: mailchimpConfig?.tenantMailchimp?.serverPrefix || '',
-            audienceId: mailchimpConfig?.tenantMailchimp?.audienceId || '',
+            apiKey: mailchimpConfig?.mailchimp?.apiKey || '',
+            serverPrefix: mailchimpConfig?.mailchimp?.serverPrefix || '',
+            audienceId: mailchimpConfig?.mailchimp?.audienceId || '',
         },
     });
 
     const onSubmit = async data => {
         try {
-            const response = await updateTenantMailchimpConfig(tenant, data);
+            const response = await updateMailchimpConfig(data);
             console.log(`response`, response);
 
             if (response.success) {

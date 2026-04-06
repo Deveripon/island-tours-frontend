@@ -1,9 +1,9 @@
 'use client';
 
 import {
-    updateBillingInformationBytenantId,
-    updateCompanyInformationBytenantId,
-    updateNotificationPreferencesBytenantId,
+    updateBillingInformation,
+    updateCompanyInfo,
+    updateNotificationPreferences,
 } from '@/app/_actions/settingsActions';
 import {
     Building03Icon,
@@ -19,7 +19,7 @@ import LanguageSettings from './sections/language-settings';
 import NotificationPreference from './sections/notification-preference';
 import SectionTabs from './tabs';
 
-const SettingsAndBilling = ({ tenant }) => {
+const SettingsAndBilling = ({ data }) => {
     const [isSaving, setIsSaving] = useState(false);
     const [editingField, setEditingField] = useState(null);
     const [activeTab, setActiveTab] = useState('company');
@@ -31,9 +31,9 @@ const SettingsAndBilling = ({ tenant }) => {
         }
     }, []);
 
-    const company = tenant?.companyInformations;
-    const billing = tenant?.billingInformations;
-    const notifications = tenant?.notificationPreferences;
+    const company = data?.companyInformations;
+    const billing = data?.billingInformations;
+    const notifications = data?.notificationPreferences;
 
     const { control, getValues, trigger, resetField, reset } = useForm({
         defaultValues: {
@@ -159,43 +159,32 @@ const SettingsAndBilling = ({ tenant }) => {
 
                 setEditingField(null);
 
-                if (tenant?.tenantId) {
-                    let result;
+                let result;
 
-                    if (notificationFields.includes(fieldId)) {
-                        result = await updateNotificationPreferencesBytenantId(
-                            tenant.tenantId,
-                            {
-                                [fieldId]: value,
-                            }
-                        );
-                    } else if (companyFields.includes(fieldId)) {
-                        result = await updateCompanyInformationBytenantId(
-                            tenant.tenantId,
-                            {
-                                [fieldId]: value,
-                            }
-                        );
-                    } else if (billingFields.includes(fieldId)) {
-                        result = await updateBillingInformationBytenantId(
-                            tenant.tenantId,
-                            {
-                                [fieldId]: value,
-                            }
-                        );
-                    }
+                if (notificationFields.includes(fieldId)) {
+                    result = await updateNotificationPreferences({
+                        [fieldId]: value,
+                    });
+                } else if (companyFields.includes(fieldId)) {
+                    result = await updateCompanyInfo({
+                        [fieldId]: value,
+                    });
+                } else if (billingFields.includes(fieldId)) {
+                    result = await updateBillingInformation({
+                        [fieldId]: value,
+                    });
+                }
 
-                    if (result && !result.success) {
-                        return;
-                    }
+                if (result && !result.success) {
+                    return;
                 }
             } catch (err) {
-                // Optional: Show error message to tenant
+                // Optional: Show error message to user
             } finally {
                 setIsSaving(false);
             }
         },
-        [getValues, setIsSaving, setEditingField, tenant]
+        [getValues, setIsSaving, setEditingField]
     );
 
     const handleSaveField = useCallback(
@@ -216,10 +205,10 @@ const SettingsAndBilling = ({ tenant }) => {
     );
 
     const syncResponseWithFormData = useCallback(
-        tenant => {
-            const company = tenant?.companyInformations;
-            const billing = tenant?.billingInformations;
-            const notifications = tenant?.notificationPreferences;
+        data => {
+            const company = data?.companyInformations;
+            const billing = data?.billingInformations;
+            const notifications = data?.notificationPreferences;
 
             reset({
                 companyName: company?.companyName || '',
@@ -332,10 +321,10 @@ const SettingsAndBilling = ({ tenant }) => {
     }, []);
 
     useEffect(() => {
-        if (tenant) {
-            syncResponseWithFormData(tenant);
+        if (data) {
+            syncResponseWithFormData(data);
         }
-    }, [tenant, syncResponseWithFormData]);
+    }, [data, syncResponseWithFormData]);
 
     return (
         <div className='flex flex-auto'>

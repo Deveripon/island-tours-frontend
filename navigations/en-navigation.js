@@ -126,8 +126,8 @@ export const enNavigations = {
             requiredPermissions: [Permission.VIEW_USERS],
         },
         {
-            title: 'Enquires',
-            url: 'enquires',
+            title: 'Inquiries',
+            url: 'inquiries',
             icon: Mail02Icon,
             requiredPermissions: [Permission.VIEW_ENQUIRIES],
             items: [],
@@ -310,12 +310,6 @@ export const enNavigations = {
                     url: 'language-settings',
                     icon: Globe,
                     requiredPermissions: [Permission.VIEW_PROFILE],
-                },
-                {
-                    title: 'API & Credentials',
-                    url: 'credentials',
-                    icon: KeyRound,
-                    requiredPermissions: [Permission.MANAGE_SETTINGS],
                 },
                 {
                     title: 'Change Password',

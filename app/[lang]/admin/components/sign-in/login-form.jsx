@@ -1,5 +1,6 @@
 'use client';
-import { handleSignInWithCredentials } from '@/app/_actions/authActions';
+
+import { signInWithCredentials } from '@/app/_actions/authActions/update';
 import {
     Form,
     FormControl,
@@ -136,7 +137,7 @@ const LoginForm = ({ className }) => {
             clearErrors('global');
             setIsLoading(true);
 
-            const response = await handleSignInWithCredentials({
+            const response = await signInWithCredentials({
                 email,
                 password,
             });

@@ -8,7 +8,7 @@ import {
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-export const SetupGuide = ({ tenant, loggedInUser }) => {
+export const SetupGuide = ({ loggedInUser }) => {
     const setupSteps = [
         {
             number: 1,
@@ -16,7 +16,7 @@ export const SetupGuide = ({ tenant, loggedInUser }) => {
             description:
                 'Build your first tour package with itinerary, dates, pricing, and other details.',
             buttonText: 'Create a Tour',
-            linkTo: `/${tenant}/dashboard/create-affiliate-trips`,
+            linkTo: `/admin/dashboard/create-affiliate-trips`,
         },
         {
             number: 2,
@@ -24,7 +24,7 @@ export const SetupGuide = ({ tenant, loggedInUser }) => {
             description:
                 'Tailor your site to match your brand and attract more customers.',
             buttonText: 'Website Settings',
-            linkTo: `/${tenant}/dashboard/site-settings`,
+            linkTo: `/admin/dashboard/site-settings`,
         },
         {
             number: 3,
@@ -32,26 +32,19 @@ export const SetupGuide = ({ tenant, loggedInUser }) => {
             description:
                 'Enable secure payments to start accepting bookings online.',
             buttonText: 'Set Up Payment',
-            linkTo: `/${tenant}/dashboard/payment-methods`,
+            linkTo: `/admin/dashboard/payment-methods`,
         },
         {
             number: 4,
             title: 'Set Up Your Email Settings',
             description:
-                'Configure your SMTP in Tripcart to ensure emails are sent from your own domain.',
+                'Configure your SMTP in Island Tours to ensure emails are sent from your own domain.',
             buttonText: 'Email Configuration',
-            linkTo: `/${tenant}/dashboard/site-settings`,
+            linkTo: `/admin/dashboard/site-settings`,
         },
-        /*         {
-            number: 5,
-            title: 'Set Up Your Custom Domain',
-            description: 'Use your own domain to give your site a professional look.',
-            buttonText: 'Domain Configuration',
-            linkTo: `/${tenant}/dashboard/`,
-        }, */
     ];
 
-    const stagingUrl = `${process.env.NEXT_PUBLIC_STAGING_APP_URL}/site/${tenant}`;
+    const stagingUrl = `${process.env.NEXT_PUBLIC_STAGING_APP_URL}`;
 
     return (
         <div className='w-full'>
@@ -71,7 +64,7 @@ export const SetupGuide = ({ tenant, loggedInUser }) => {
                         target='_blank'
                         rel='noopener noreferrer'
                         className='text-primary hover:underline font-medium transition-colors'>
-                        {`${process.env.NEXT_PUBLIC_STAGING_APP_URL}/site/${tenant}`}
+                        {`${process.env.NEXT_PUBLIC_STAGING_APP_URL}`}
                     </Link>
                     .
                 </p>

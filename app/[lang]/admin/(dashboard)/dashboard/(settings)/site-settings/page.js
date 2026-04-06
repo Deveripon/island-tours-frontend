@@ -1,51 +1,61 @@
-import { getTenantById } from '@/app/_actions/settingsActions';
+import {
+    getSMTPConfig,
+    getSiteInfo,
+    getSiteSeo,
+    getSiteTheme,
+    getSocialMedia,
+} from '@/app/_actions/settingsActions';
+import { logout } from '@/app/_actions/authActions';
 import { auth } from '@/auth';
 import { signOut } from 'next-auth/react';
 import SiteManagement from './components/site-management';
 
-async function SettingsAndBillingPageForDashboard({ params }) {
-    const { tenant } = await params;
+async function SettingsAndBillingPageForDashboard() {
     const session = await auth();
 
     if (session && session?.error === 'RefreshAccessTokenError') {
-        await handleLogOut();
+        await logout();
         signOut({
-            redirectTo: '/'
+            redirectTo: '/',
         });
     }
-    const res = await getTenantById(tenant);
-    const data = res?.result?.data
-        ? {
-            tenantSiteInfo: res?.result?.data?.tenantSiteInfo,
-            tenantSMTP: res?.result?.data?.tenantSMTP,
-            tenantSiteSEO: res?.result?.data?.tenantSiteSEO,
-            tenantSiteTheme: {
-                ...res?.result?.data?.tenantSiteTheme,
-                primaryColor:
-                    res?.result?.data?.tenantSiteTheme?.primaryColor ||
-                    res?.result?.data?.preferences?.primary_color ||
-                    '#FF0000',
-            },
-            tenantSocialMedia: res?.result?.data?.tenantSocialMedia,
-        }
-        : {};
-    console.log(`site info`, data?.tenantSiteInfo);
+    const [siteInfoRes, smtpRes, seoRes, themeRes, socialRes] =
+        await Promise.all([
+            getSiteInfo(),
+            getSMTPConfig(),
+            getSiteSeo(),
+            getSiteTheme(),
+            getSocialMedia(),
+        ]);
 
+    const data = {
+        siteInfo: siteInfoRes?.result?.data,
+        smtp: smtpRes?.result?.data,
+        siteSEO: seoRes?.result?.data,
+        siteTheme: {
+            ...themeRes?.result?.data,
+            primaryColor: themeRes?.result?.data?.primaryColor || '#FF0000',
+        },
+        socialMedia: socialRes?.result?.data,
+    };
 
     return (
         <div className='container '>
             <div className='flex  items-center justify-between'>
                 <div>
-                    <h1 className='text-2xl font-semibold tracking-tight'>Site Settings</h1>
+                    <h1 className='text-2xl font-semibold tracking-tight'>
+                        Site Settings
+                    </h1>
                     <p className='text-sm text-muted-foreground'>
-                        Set up your site information, branding, and SEO information to
-                        make your website stand out.
+                        Set up your site information, branding, and SEO
+                        information to make your website stand out.
                     </p>
                 </div>
             </div>
-            <SiteManagement data={data} tenant={tenant} />
+            <SiteManagement data={data} />
         </div>
     );
 }
 
 export default SettingsAndBillingPageForDashboard;
+

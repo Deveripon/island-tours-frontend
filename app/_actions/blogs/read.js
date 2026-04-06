@@ -7,7 +7,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 /**
  * Get all blogs with filtering
  */
-export async function findAllBlogs(query = '') {
+export async function getAllBlogs(query = '') {
     try {
         const responsePromise = fetch(`${baseUrl}/blogs${query ? `?${query}` : ''}`, {
             method: 'GET',
@@ -29,7 +29,7 @@ export async function findAllBlogs(query = '') {
 /**
  * Get blogs by user ID
  */
-export async function findAllBlogsByUser(userId, query = '') {
+export async function getBlogsByUserId(userId, query = '') {
     if (!userId) return { success: false, error: { message: 'User ID is required' } };
 
     try {
@@ -52,7 +52,7 @@ export async function findAllBlogsByUser(userId, query = '') {
 /**
  * Get related blogs by slug
  */
-export async function findRelatedBlogs(slug) {
+export async function getRelatedBlogs(slug) {
     if (!slug) return { success: false, error: { message: 'Slug is required' } };
 
     try {
@@ -97,7 +97,7 @@ export async function searchBlogs(query = '', params = {}) {
 /**
  * Get blog by ID
  */
-export async function findBlogById(id) {
+export async function getBlogById(id) {
     if (!id) return { success: false, error: { message: 'Blog ID is required' } };
 
     try {
@@ -120,7 +120,7 @@ export async function findBlogById(id) {
 /**
  * Get blog by slug
  */
-export async function findBlogBySlug(slug) {
+export async function getBlogBySlug(slug) {
     if (!slug) return { success: false, error: { message: 'Slug is required' } };
 
     try {
@@ -164,7 +164,7 @@ export async function getBlogAnalytics(id) {
 /**
  * Get all comments for a blog
  */
-export async function findAllComments(blogId, query = '') {
+export async function getAllComments(blogId, query = '') {
     try {
         const responsePromise = fetch(`${baseUrl}/blogs/${blogId}/comments${query ? `?${query}` : ''}`, {
             method: 'GET',
@@ -185,7 +185,7 @@ export async function findAllComments(blogId, query = '') {
 /**
  * Get single comment
  */
-export async function findOneComment(commentId) {
+export async function getCommentById(commentId) {
     try {
         const responsePromise = fetch(`${baseUrl}/blogs/comments/${commentId}`, {
             method: 'GET',
@@ -206,7 +206,7 @@ export async function findOneComment(commentId) {
 /**
  * Get all comment reports
  */
-export async function findAllCommentReports(query = '') {
+export async function getAllCommentReports(query = '') {
     try {
         const responsePromise = fetchWithAuth(`${baseUrl}/blogs/comments/reports${query ? `?${query}` : ''}`, {
             method: 'GET',

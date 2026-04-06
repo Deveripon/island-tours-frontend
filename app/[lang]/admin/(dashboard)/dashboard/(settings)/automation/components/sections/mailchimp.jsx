@@ -4,15 +4,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import Instruction from './instruction';
 import MailchimpCredentialsSaveForm from './mailchimp-credentials-save-form';
 
-const Mailchimp = ({ instruction, tenant, mailchimpConfig }) => {
+const Mailchimp = ({ instruction, mailchimpConfig }) => {
     return (
         <div className='space-y-8'>
             <Instruction instruction={instruction} type='mailchimp' />
 
-            <MailchimpCredentialsSaveForm
-                tenant={tenant}
-                mailchimpConfig={mailchimpConfig}
-            />
+            <MailchimpCredentialsSaveForm mailchimpConfig={mailchimpConfig} />
 
             <Alert className='mt-8 border-border bg-muted/50'>
                 <AlertDescription className='text-sm text-muted-foreground'>

@@ -1,19 +1,33 @@
-import { getTenantById } from '@/app/_actions/settingsActions';
+import {
+    getBillingInformation,
+    getCompanyInfo,
+    getNotificationPreferences,
+} from '@/app/_actions/settingsActions';
+import { logout } from '@/app/_actions/authActions';
 import { auth } from '@/auth';
 import { signOut } from 'next-auth/react';
 import SettingsAndBilling from './components/settings-billing';
 
-async function SettingsAndBillingPageForDashboard({ params }) {
+async function SettingsAndBillingPageForDashboard() {
     const session = await auth();
-    const { tenant } = await params;
     if (session && session?.error === 'RefreshAccessTokenError') {
-        await handleLogOut();
+        await logout();
         signOut({
-            redirectTo: '/'
+            redirectTo: '/',
         });
     }
 
-    const res = await getTenantById(tenant);
+    const [companyRes, billingRes, notificationsRes] = await Promise.all([
+        getCompanyInfo(),
+        getBillingInformation(),
+        getNotificationPreferences(),
+    ]);
+
+    const data = {
+        companyInformations: companyRes?.result?.data,
+        billingInformations: billingRes?.result?.data,
+        notificationPreferences: notificationsRes?.result?.data,
+    };
 
     return (
         <div className='container'>
@@ -24,16 +38,15 @@ async function SettingsAndBillingPageForDashboard({ params }) {
                     </h1>
 
                     <p className='text-sm text-muted-foreground'>
-                        Set up your company information, billing information, notification
-                        preferences and language preferences.
+                        Set up your company information, billing information,
+                        notification preferences and language preferences.
                     </p>
                 </div>
             </div>
-            <SettingsAndBilling
-                tenant={res?.result?.success === true ? res?.result?.data : null}
-            />
+            <SettingsAndBilling data={data} />
         </div>
     );
 }
 
 export default SettingsAndBillingPageForDashboard;
+

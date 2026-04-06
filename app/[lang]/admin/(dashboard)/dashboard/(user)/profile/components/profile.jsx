@@ -1,5 +1,5 @@
 'use client';
-import { updateUserInformationById } from '@/app/_actions/userActions';
+import { updateUserById } from '@/app/_actions/userActions';
 import DashboardUserProfileSkeliton from '@/components/skelitons/dashboard-user-profile-skeliton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,7 +47,8 @@ const Profile = ({ user }) => {
             location: '',
             website: '',
             company: '',
-        } });
+        },
+    });
 
     // Form Validation rules
     const formValidationRules = {
@@ -157,16 +158,18 @@ const Profile = ({ user }) => {
             setEditingField(null);
             if (user?.id) {
                 if (fieldId === 'email' && explicitValue) {
-                    const response = await updateUserInformationById(user.id, {
+                    const response = await updateUserById(user.id, {
                         email: explicitValue,
-                        isVerified: false });
+                        isVerified: false,
+                    });
 
                     if (response?.success === true) {
                         setIsVerified(false);
                     }
                 } else {
-                    const response = await updateUserInformationById(user.id, {
-                        [apiFieldName]: value });
+                    const response = await updateUserById(user.id, {
+                        [apiFieldName]: value,
+                    });
 
                     if (response?.success === true) {
                     }
@@ -190,7 +193,8 @@ const Profile = ({ user }) => {
                 gender: user.gender || 'male',
                 location: user.location || '',
                 website: user.website || '',
-                company: user.company || '' });
+                company: user.company || '',
+            });
 
             setOriginalEmail(user.email || '');
         },

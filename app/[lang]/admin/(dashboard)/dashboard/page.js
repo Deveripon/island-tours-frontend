@@ -1,43 +1,19 @@
-import { getStatsofTenant } from '@/app/_actions/settingsActions';
+
+import { getDashboardStats } from '@/app/_actions/dashboardActions';
 import { getUserById } from '@/app/_actions/userActions';
-import { auth, signOut } from '@/auth';
-import { getTrialExpirationInfo } from '@/lib/utils';
-import NotificationWithOTPModal from './components/notification-with-otp-modal';
+import { auth } from '@/auth';
 import PageComponents from './components/page-componets';
 
-export default async function Page({ params }) {
+export default async function Page() {
     const session = await auth();
-    const { tenant } = await params;
-    // Early return for authentication failures - prevents any content rendering
-    if (!session?.user?.id || session?.error === 'RefreshAccessTokenError') {
-        signOut();
-        redirect('/');
-    }
-
-    const loggedInUser = await getUserById(session.user.id);
-
-    const trialInfo = getTrialExpirationInfo(loggedInUser?.user?.createdAt, 30);
-    const res = getStatsofTenant(tenant);
-
+    const userRes = session?.user?.id ? await getUserById(session.user.id) : null;
+    const loggedInUser = userRes?.result || null;
+    const statsPromise = getDashboardStats();
 
     return (
-        <div className='flex flex-1 flex-col gap-4 pt-0 overflow-scroll hide-scrollbar'>
-            {loggedInUser?.user.isVerified === false && (
-                <NotificationWithOTPModal
-                    className='mt-5 '
-                    loggedInUser={loggedInUser}
-                />
-            )}
-            {/*
-            <TrialPeriodAlert
-                expirationDate={trialInfo.expirationDate}
-                state='warning'
-                upgradeUrl='/#pricing'
-            />*/}
-
+        <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
             <PageComponents
-                statsPromise={res}
-                tenant={tenant}
+                statsPromise={statsPromise}
                 loggedInUser={loggedInUser}
             />
         </div>

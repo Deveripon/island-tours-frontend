@@ -12,10 +12,10 @@ export function FormContent({
     currentTabIndex,
     mode,
     className,
-    tenant,
     destinations,
     tourOperators,
-    isFetchingOptions }) {
+    isFetchingOptions,
+}) {
     const formSectionsWithOutSEO = formSections.filter(
         section => section.id !== 'seo'
     );
@@ -42,7 +42,6 @@ export function FormContent({
                         value={section.id}
                         className='mt-0 overflow-visible'>
                         <section.Component
-                            tenant={tenant}
                             destinations={destinations}
                             tourOperators={tourOperators}
                             isFetchingOptions={isFetchingOptions}

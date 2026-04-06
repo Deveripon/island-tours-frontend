@@ -1,13 +1,13 @@
 'use client';
 
-import { updateWebhooksBytenantId } from '@/app/_actions/settingsActions';
+import { updateWebhooks } from '@/app/_actions/settingsActions';
 import { Button } from '@/components/ui/button';
 import { Upload01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export default function N8nWebhookSetup({ tenant, existingN8nCatchUrl }) {
+export default function N8nWebhookSetup({ existingN8nCatchUrl }) {
     const [n8nUrl, setn8nUrl] = useState(existingN8nCatchUrl || '');
     const [isSaving, setIsSaving] = useState(false);
     const [saveStatus, setSaveStatus] = useState(null);
@@ -34,7 +34,7 @@ export default function N8nWebhookSetup({ tenant, existingN8nCatchUrl }) {
         setSaveStatus(null);
 
         try {
-            const response = await updateWebhooksBytenantId(tenant, {
+            const response = await updateWebhooks({
                 type: 'n8n_leads_catch_url',
                 url: n8nUrl.trim(),
             });

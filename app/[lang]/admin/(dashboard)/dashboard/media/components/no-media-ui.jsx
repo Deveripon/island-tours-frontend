@@ -3,9 +3,15 @@ import { useRolePermission } from '@/hooks/useRolePermission';
 import { Permission } from '@/RBAC.config';
 import { Upload02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
+import { useSession } from 'next-auth/react';
 
 const NoMediaUi = ({ searchTerm, setIsFormOpen, isDeleting }) => {
     const hasUploadPermission = useRolePermission(Permission.UPLOAD_MEDIA);
+    console.log(hasUploadPermission);
+
+    const session = useSession();
+    console.log(session);
+
     return (
         <div className='min-h-[60vh] mx-auto flex justify-center items-center p-6'>
             <div className='text-center  flex justify-center items-center'>
@@ -23,7 +29,11 @@ const NoMediaUi = ({ searchTerm, setIsFormOpen, isDeleting }) => {
                             variant='outline'
                             onClick={() => setIsFormOpen(true)}
                             disabled={isDeleting}>
-                            <HugeiconsIcon icon={Upload02Icon} size={16} className='mr-2' />
+                            <HugeiconsIcon
+                                icon={Upload02Icon}
+                                size={16}
+                                className='mr-2'
+                            />
                             Upload Media
                         </Button>
                     )}

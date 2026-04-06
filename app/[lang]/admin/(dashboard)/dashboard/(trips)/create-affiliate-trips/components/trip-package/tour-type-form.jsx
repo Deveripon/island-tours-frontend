@@ -18,12 +18,11 @@ import { useEffect, useState } from 'react';
 import AddMoreButton from '@/app/[lang]/admin/(dashboard)/dashboard/components/common/add-more-button';
 import CheckboxOptions from '@/app/[lang]/admin/(dashboard)/dashboard/components/common/checkbox-options';
 import SelectOptions from '@/app/[lang]/admin/(dashboard)/dashboard/components/common/select-options';
-import { getAllCategoriesOfTenant } from '@/app/_actions/trips/category';
+import { getAllCategories } from '@/app/_actions/trips/category';
 import { tripPackageOptions } from '@/data/trip-options';
 import { useRolePermission } from '@/hooks/useRolePermission';
 import { getGroupedDataOfCategories } from '@/lib/utils';
 import { Permission } from '@/RBAC.config';
-import { useParams } from 'next/navigation';
 import { useFormContext } from 'react-hook-form';
 
 export function TourTypeForm() {
@@ -33,23 +32,20 @@ export function TourTypeForm() {
     const defaultOptions = tripPackageOptions;
 
     const { control } = useFormContext();
-    const { tenant } = useParams();
 
     useEffect(() => {
-        if (tenant) {
-            async function fetchCategories() {
-                const res = await getAllCategoriesOfTenant(tenant);
-                if (res?.success) {
-                    const groupedData = getGroupedDataOfCategories(
-                        res?.result?.data
-                    );
-                    setCategories(groupedData);
-                }
+        async function fetchCategories() {
+            const res = await getAllCategories();
+            if (res?.success) {
+                const groupedData = getGroupedDataOfCategories(
+                    res?.result?.data
+                );
+                setCategories(groupedData);
             }
-
-            fetchCategories();
         }
-    }, [tenant]);
+
+        fetchCategories();
+    }, []);
 
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -62,7 +58,7 @@ export function TourTypeForm() {
                                 <AddMoreButton
                                     text=''
                                     ButtonText='Add More Types and Categories'
-                                    goToUrl={`/${tenant}/dashboard/categories?open=true`}
+                                    goToUrl={`/admin/dashboard/categories?open=true`}
                                     className='p-0 border-0 place-content-end'
                                 />
                             )}
@@ -117,7 +113,7 @@ export function TourTypeForm() {
                                         field={field}
                                         dataArray={categories?.DIFFICULTY_LEVEL}
                                         placeholder='Select Difficulty Level'
-                                        goToUrl={`/${tenant}/dashboard/categories?open=true`}
+                                        goToUrl={`/admin/dashboard/categories?open=true`}
                                     />
                                     <FormMessage />
                                 </FormItem>
@@ -158,7 +154,7 @@ export function TourTypeForm() {
                                         showAddMore={false}
                                         dataArray={categories?.TOUR_STYLE}
                                         placeholder='Select tour style'
-                                        goToUrl={`/${tenant}/dashboard/categories?open=true`}
+                                        goToUrl={`/admin/dashboard/categories?open=true`}
                                     />
 
                                     <FormMessage />

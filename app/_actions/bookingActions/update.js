@@ -8,7 +8,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 /**
  * Creates a new booking.
  */
-export async function createNewBooking(data) {
+export async function createBooking(data) {
     if (!data) return { success: false, error: { message: 'Invalid booking data provided' } };
 
     try {
@@ -36,7 +36,7 @@ export async function createNewBooking(data) {
 /**
  * Update Booking by ID
  */
-export async function updateBookingById(id, data) {
+export async function updateBooking(id, data) {
     if (!id || !data) return { success: false, error: { message: 'Booking ID and data are required' } };
 
     try {
@@ -65,7 +65,7 @@ export async function updateBookingById(id, data) {
 /**
  * Update Booking Status by ID
  */
-export async function updateBookingStatusById(id, data) {
+export async function updateBookingStatus(id, data) {
     if (!id || !data) return { success: false, error: { message: 'Booking ID and status data are required' } };
 
     try {
@@ -94,7 +94,7 @@ export async function updateBookingStatusById(id, data) {
 /**
  * Delete Booking by ID
  */
-export async function deleteBookingById(id) {
+export async function deleteBooking(id) {
     if (!id) return { success: false, error: { message: 'Booking ID is required' } };
 
     try {

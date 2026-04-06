@@ -1,7 +1,7 @@
 'use server';
 
 import { fetchWithAuth } from '@/utils/fetch-with-auth';
-import { updateTag, revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -20,6 +20,7 @@ export async function createDestination(data) {
 
         const response = await responsePromise;
         const result = await response.json();
+        console.log(`result`, result);
 
         if (!response.ok) return { success: false, error: { message: result?.message || 'Creation failed' } };
 

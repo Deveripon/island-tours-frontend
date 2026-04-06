@@ -1,9 +1,8 @@
-import { getAllRecivedAffiliatePaymentsOfTenant } from '@/app/_actions/paymentActions';
+import { getAllPayments } from '@/app/_actions/paymentActions';
 import PageContent from './components/page-content';
 
-export default async function MyPaymentsPage({ params }) {
-    const { tenant } = await params;
-    const payments = await getAllRecivedAffiliatePaymentsOfTenant(tenant);
+export default async function MyPaymentsPage() {
+    const payments = await getAllPayments();
     console.log('Payments:', payments);
     const paymentsData = payments?.result?.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)

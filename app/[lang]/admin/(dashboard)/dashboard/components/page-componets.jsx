@@ -3,8 +3,9 @@ import { useVisibleSections } from '../../../../../../hooks/use-visible-section'
 import SectionToggler from './section-toggler';
 import { SetupGuide } from './setup-guide';
 import Statistics from './states/statistics';
+// import Statistics from './states/statistics';
 
-export default function PageComponents({ statsPromise, tenant, loggedInUser }) {
+export default function PageComponents({ statsPromise, loggedInUser }) {
     const [visibleSections, setVisibleSections] = useVisibleSections();
     return (
         <>
@@ -13,7 +14,7 @@ export default function PageComponents({ statsPromise, tenant, loggedInUser }) {
                 setVisibleSections={setVisibleSections}
             />
             {visibleSections['quick-setup'] && (
-                <SetupGuide tenant={tenant} loggedInUser={loggedInUser} />
+                <SetupGuide loggedInUser={loggedInUser} />
             )}
 
             <Statistics

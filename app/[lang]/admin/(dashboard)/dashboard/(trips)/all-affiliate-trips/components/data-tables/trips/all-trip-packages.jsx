@@ -2,7 +2,7 @@
 import { columns } from './trip-package-column';
 import { TripPackages } from './trip-package-table';
 
-export function AllTripPackages({ trips, tenantId }) {
+export function AllTripPackages({ trips }) {
     return (
         <div className='space-y-6'>
             <div className='space-y-1'>
@@ -16,7 +16,6 @@ export function AllTripPackages({ trips, tenantId }) {
 
             <TripPackages
                 data={trips || []}
-                tenantId={tenantId}
                 enableExports={false}
                 columns={columns}
             />

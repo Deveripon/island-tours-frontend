@@ -1,7 +1,7 @@
 'use client';
 
 import { Permission } from '@/RBAC.config';
-import { deleteCategoryById } from '@/app/_actions/trips/category';
+import { deleteCategory } from '@/app/_actions/trips/category';
 import { Button } from '@/components/ui/button';
 import { useRolePermission } from '@/hooks/useRolePermission';
 import { Plus } from 'lucide-react';
@@ -68,7 +68,7 @@ const PageContent = ({ groupedCategories, categories }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteCategoryById(categoryIdToDelete);
+            const result = await deleteCategory(categoryIdToDelete);
 
             if (result?.success === true) {
                 toast.success('Category deleted successfully');

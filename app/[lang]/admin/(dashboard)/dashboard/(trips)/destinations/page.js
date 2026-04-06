@@ -1,16 +1,15 @@
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllDestinations } from '@/app/_actions/trips/destinations/read';
 import PageContent from './components/page-content';
 
-export default async function DestinationPage({ params }) {
-    const { tenant } = await params;
-    const res = await getAllDestinationOfTenant(tenant);
+export default async function DestinationPage() {
+    const res = await getAllDestinations();
 
-    // Make sure both categories passed are of the same type
-    const destnationsData = res?.data;
+    const destinationsData = res?.result?.data || [];
+    console.log(destinationsData);
 
     return (
         <div className='container space-y-6'>
-            <PageContent destinations={destnationsData ?? []} />
+            <PageContent destinations={destinationsData} />
         </div>
     );
 }

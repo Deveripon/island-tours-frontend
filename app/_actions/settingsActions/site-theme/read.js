@@ -3,7 +3,7 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
- * Get Tenant Site Theme
+ * Get  Site Theme
  */
 export async function getSiteTheme() {
     try {

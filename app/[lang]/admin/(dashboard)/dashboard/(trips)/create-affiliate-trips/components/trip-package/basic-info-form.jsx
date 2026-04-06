@@ -73,7 +73,7 @@ const TourOperatorField = ({
     return (
         <FormField
             control={control}
-            name='affiliateId'
+            name='partnerId'
             render={({ field }) => (
                 <FormItem>
                     <FormLabel>
@@ -101,7 +101,6 @@ export function BasicInfoForm({
     destinations,
     tourOperators,
     isFetchingOptions,
-    tenant,
 }) {
     const { control } = useFormContext();
     const [isOpen, setIsOpen] = useState(true);

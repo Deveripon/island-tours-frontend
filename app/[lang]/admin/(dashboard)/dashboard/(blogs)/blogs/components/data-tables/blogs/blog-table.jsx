@@ -3,10 +3,10 @@
 import { Permission } from '@/RBAC.config';
 import DeleteConfirmationDialog from '@/app/[lang]/admin/(dashboard)/dashboard/components/common/delete-confirmation-dialog';
 import {
-    createNewBlog,
-    deleteBlogById,
-    getSingleBlog,
-    updateBlogById,
+    createBlog,
+    deleteBlog,
+    getBlogById,
+    updateBlog,
 } from '@/app/_actions/blogs';
 import { Button } from '@/components/ui/button';
 import {
@@ -40,7 +40,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-export function Blogs({ tenantId, columns, data }) {
+export function Blogs({ columns, data }) {
     const [sorting, setSorting] = useState([]);
     const [loading, setLoading] = useState(null);
     const [columnFilters, setColumnFilters] = useState([]);
@@ -74,7 +74,7 @@ export function Blogs({ tenantId, columns, data }) {
         setIsDeleting(true);
 
         try {
-            const result = await deleteBlogById(blogToDelete);
+            const result = await deleteBlog(blogToDelete);
 
             if (result?.success === true) {
                 toast.success('Blog deleted successfully');
@@ -101,7 +101,7 @@ export function Blogs({ tenantId, columns, data }) {
     useEffect(() => {
         const handleDuplicate = async e => {
             const blogId = e.detail;
-            const detailsOfBlog = await getSingleBlog(blogId);
+            const detailsOfBlog = await getBlogById(blogId);
 
             if (detailsOfBlog?.success) {
                 const blogData = {
@@ -113,7 +113,7 @@ export function Blogs({ tenantId, columns, data }) {
                 };
 
                 if (blogData) {
-                    const res = await createNewBlog(blogData);
+                    const res = await createBlog(blogData);
                     if (res?.success) {
                         toast.success('Blog duplicated successfully');
                     }
@@ -157,7 +157,7 @@ export function Blogs({ tenantId, columns, data }) {
                 try {
                     setLoading(id);
 
-                    const result = await updateBlogById(id, {
+                    const result = await updateBlog(id, {
                         status,
                     });
 
@@ -187,7 +187,7 @@ export function Blogs({ tenantId, columns, data }) {
 
             editBlog: id => {
                 const params = `edit&mode=update&id=${id}`;
-                router.push(`/${tenantId}/dashboard/create-blog?${params}`);
+                router.push(`/admin/dashboard/create-blog?${params}`);
             },
             loading,
         },
@@ -261,7 +261,7 @@ export function Blogs({ tenantId, columns, data }) {
                 </div>
 
                 {hasCreatePermission && (
-                    <Link href={`/${tenantId}/dashboard/create-blog`}>
+                    <Link href={`/admin/dashboard/create-blog`}>
                         <Button size='sm'>
                             <Plus className='mr-2 h-4 w-4' />
                             Create Blog

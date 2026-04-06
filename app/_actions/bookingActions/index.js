@@ -1,17 +1,16 @@
 export {
-    createNewBooking,
-    updateBookingById,
-    updateBookingStatusById,
-    deleteBookingById
+    createBooking,
+    updateBooking,
+    updateBookingStatus,
+    deleteBooking
 } from './update';
 
 export {
     getAllBookings,
-    getAllBookingsofUser,
+    getBookingsByUserId,
     getBookingById,
     getBookingByReference,
     getBookingByStripeSessionId,
-    getAffiliateBookingBySessionId,
-    getAllRecivedBookingsOfUser,
+    getReceivedBookingsByUserId,
     downloadReceipt
 } from './read';

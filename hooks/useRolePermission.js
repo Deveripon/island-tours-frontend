@@ -24,6 +24,7 @@ export const hasAllPermissions = (userRole, permissions) => {
 
 export function useRolePermission(permission) {
     const { data: session } = useSession();
+
     return useMemo(() => {
         const userRole = session?.user?.role;
         const userPermissions = ROLE_PERMISSIONS[userRole] || [];

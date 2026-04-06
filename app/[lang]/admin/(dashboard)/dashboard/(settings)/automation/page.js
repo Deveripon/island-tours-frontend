@@ -1,9 +1,8 @@
 
-import { getTenantById, getTenantsMailchimp } from '@/app/_actions/settingsActions';
+import { getMailchimpConfig } from '@/app/_actions/settingsActions';
 import AutomationSetup from './components/automation-setup';
 
-export default async function AutomationPage({ params }) {
-    const { tenant } = await params;
+export default async function AutomationPage() {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_APP_URL;
     const endpoints = {
         leads: {
@@ -39,16 +38,13 @@ export default async function AutomationPage({ params }) {
                 ],
 
                 payload: {
-                    tenantId: `${tenant} (required)`,
-                    email: "Lead' Email             => eg. john@example.com (required)",
-
+                    email: "Lead's Email             => eg. john@example.com (required)",
                     name: "Lead's Name              => eg. John Doe  (optional)",
-                    image: "Lead' Image url         => eg. https://example.com/image.jpg  (optional)",
-                    phone: "Lead' Phone             => eg. +1234567890  (optional)",
-                    company: "Lead' Cpmany          => eg. Island Tours  (optional)",
+                    image: "Lead's Image url         => eg. https://example.com/image.jpg  (optional)",
+                    phone: "Lead's Phone             => eg. +1234567890  (optional)",
+                    company: "Lead's Company          => eg. Island Tours  (optional)",
                     source: 'Collecting Source      => eg. Google Form  (optional)',
-                    message:
-                        'Any Message           => eg. Interested in your services (optional)',
+                    message: 'Any Message           => eg. Interested in your services (optional)',
                 },
             },
             n8n: {
@@ -67,22 +63,19 @@ export default async function AutomationPage({ params }) {
                 ],
 
                 payload: {
-                    tenantId: `${tenant} (required)`,
-                    email: "Lead' Email             => eg. john@example.com (required)",
-
+                    email: "Lead's Email             => eg. john@example.com (required)",
                     name: "Lead's Name              => eg. John Doe  (optional)",
-                    image: "Lead' Image url         => eg. https://example.com/image.jpg  (optional)",
-                    phone: "Lead' Phone             => eg. +1234567890  (optional)",
-                    company: "Lead' Cpmany          => eg. Island Tours  (optional)",
+                    image: "Lead's Image url         => eg. https://example.com/image.jpg  (optional)",
+                    phone: "Lead's Phone             => eg. +1234567890  (optional)",
+                    company: "Lead's Company          => eg. Island Tours  (optional)",
                     source: 'Collecting Source      => eg. Google Form  (optional)',
-                    message:
-                        'Any Message           => eg. Interested in your services (optional)',
+                    message: 'Any Message           => eg. Interested in your services (optional)',
                 },
             },
         },
     };
-    const [tenantConfig, mailchimpConfig] = await Promise.all([getTenantById(tenant), getTenantsMailchimp(tenant)]);
-    const webhookUrlConfig = tenantConfig?.result?.data?.webhooks?.webhookUrls || [];
+    const mailchimpConfig = await getMailchimpConfig();
+    const webhookUrlConfig = mailchimpConfig?.result?.data?.webhookUrls || [];
     const existingZapierCatchUrl = webhookUrlConfig.find(
         config => config.type === 'zapier_leads_catch_url'
     )?.url;
@@ -90,7 +83,7 @@ export default async function AutomationPage({ params }) {
     const existingN8nCatchUrl = webhookUrlConfig.find(
         config => config.type === 'n8n_leads_catch_url'
     )?.url;
-    const mailchimpConfigData = mailchimpConfig?.result;
+    const mailchimpConfigData = mailchimpConfig?.result?.data;
     return (
         <div className='container'>
             <div className='flex items-center justify-between'>
@@ -104,7 +97,6 @@ export default async function AutomationPage({ params }) {
                 </div>
             </div>
             <AutomationSetup
-                tenant={tenant}
                 instructions={endpoints?.leads}
                 existingZapierCatchUrl={existingZapierCatchUrl}
                 existingN8nCatchUrl={existingN8nCatchUrl}

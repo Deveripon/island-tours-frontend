@@ -89,9 +89,7 @@ export function TripSeoForm() {
         twitterDescription: false,
         twitterCard: false });
 
-    const params = useParams();
-    const tenantUrl =
-        process.env.NEXT_PUBLIC_APP_URL + '/site/' + params?.tenant;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
 
     // Watch form values
     const title = watch('title');
@@ -345,7 +343,7 @@ export function TripSeoForm() {
                                     <FormControl>
                                         <Input
                                             type='url'
-                                            placeholder={`e.g. ${tenantUrl}/trips/bali-luxury-adventure`}
+                                            placeholder={`e.g. ${appUrl}/trips/bali-luxury-adventure`}
                                             {...field}
                                         />
                                     </FormControl>
@@ -832,7 +830,7 @@ export function TripSeoForm() {
                                         className='space-y-4'>
                                         <div className='border border-border rounded-lg p-4 bg-card'>
                                             <div className='text-xs text-muted-foreground mb-1'>
-                                                {` ${tenantUrl}/trips/converted-slug-of-trip-title`}
+                                                {` ${appUrl}/trips/converted-slug-of-trip-title`}
                                             </div>
                                             <div className='text-md text-primary mb-1 hover:underline cursor-pointer'>
                                                 {seoTitle ||

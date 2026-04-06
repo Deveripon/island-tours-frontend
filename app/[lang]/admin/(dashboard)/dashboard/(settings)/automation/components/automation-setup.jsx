@@ -10,7 +10,6 @@ import LeadsByZapier from './sections/zapier';
 import SectionTabs from './tabs';
 
 const AutomationSetup = ({
-    tenant,
     instructions,
     existingZapierCatchUrl,
     existingN8nCatchUrl,
@@ -44,21 +43,18 @@ const AutomationSetup = ({
         () => ({
             mailchimp: (
                 <Mailchimp
-                    tenant={tenant}
                     instruction={instructions.mailchimp}
                     mailchimpConfig={mailchimpConfig}
                 />
             ),
             zapier: (
                 <LeadsByZapier
-                    tenant={tenant}
                     instruction={instructions.zapier}
                     existingZapierCatchUrl={existingZapierCatchUrl}
                 />
             ),
             n8n: (
                 <LeadsByn8n
-                    tenant={tenant}
                     instruction={instructions.n8n}
                     existingN8nCatchUrl={existingN8nCatchUrl}
                 />
@@ -69,7 +65,6 @@ const AutomationSetup = ({
             existingZapierCatchUrl,
             instructions.n8n,
             instructions.zapier,
-            tenant,
         ]
     );
 

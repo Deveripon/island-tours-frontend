@@ -1,5 +1,5 @@
 export {
-    signIn,
+    signInWithCredentials,
     sendOtp,
     resendOtp,
     verifyOtp,

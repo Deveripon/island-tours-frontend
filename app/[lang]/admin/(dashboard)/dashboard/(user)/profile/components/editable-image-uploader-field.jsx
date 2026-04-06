@@ -3,7 +3,7 @@ import {
     deleteImages,
     uploadMultipleImage,
     uploadSingleImage,
-} from '@/app/_actions/imagesActions';
+} from '@/app/_actions/mediaActions';
 import { AlertCircle, Cloud, Upload, X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';

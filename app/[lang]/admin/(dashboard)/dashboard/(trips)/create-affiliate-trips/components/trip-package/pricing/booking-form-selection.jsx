@@ -1,4 +1,4 @@
-import { getTenantsSiteInfo } from '@/app/_actions/settingsActions';
+import { getSiteInfo } from '@/app/_actions/settingsActions';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import {
     Collapsible,
@@ -34,22 +34,21 @@ const BookingFormSelection = () => {
 
     const bookingForm = watch('bookingForm');
     useEffect(() => {
-        const getSiteInfo = async () => {
+        const getSiteInfoData = async () => {
             try {
-                const siteInfo = await getTenantsSiteInfo(params.tenant);
+                const siteInfo = await getSiteInfo();
                 setValue(
                     'bookingForm',
                     bookingForm || siteInfo?.result?.data?.bookingForm || 'v2'
                 );
             } catch (error) {
                 console.error('Error fetching site info:', error);
-                // Set default value on error
                 setValue('bookingForm', 'v2');
             }
         };
 
-        getSiteInfo();
-    }, [params.tenant, setValue]);
+        getSiteInfoData();
+    }, [setValue]);
 
     return (
         <Card className='p-0'>

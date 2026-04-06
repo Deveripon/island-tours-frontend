@@ -32,15 +32,15 @@ export async function getAllBookings(query = '') {
 /**
  * Get All Bookings of a specific User
  */
-export async function getAllBookingsofUser(customerId) {
-    if (!customerId) return { success: false, error: { message: 'Customer ID is required' } };
+export async function getBookingsByUserId(userId) {
+    if (!userId) return { success: false, error: { message: 'User ID is required' } };
 
     try {
-        const responsePromise = fetchWithAuth(`${baseUrl}/bookings/customer/${customerId}`, {
+        const responsePromise = fetchWithAuth(`${baseUrl}/bookings/customer/${userId}`, {
             method: 'GET',
             next: {
                 revalidate: 3600,
-                tags: ['Bookings', `user-bookings-${customerId}`],
+                tags: ['Bookings', `user-bookings-${userId}`],
             }
         });
 
@@ -130,7 +130,7 @@ export async function getBookingByStripeSessionId(sessionId) {
 /**
  * Get all received bookings of trip creator
  */
-export async function getAllRecivedBookingsOfUser(userId) {
+export async function getReceivedBookingsByUserId(userId) {
     if (!userId) return { success: false, error: { message: 'User ID is required' } };
 
     try {

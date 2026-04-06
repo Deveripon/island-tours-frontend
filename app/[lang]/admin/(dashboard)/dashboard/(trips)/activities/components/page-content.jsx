@@ -1,7 +1,7 @@
 'use client';
 
 import { Permission } from '@/RBAC.config';
-import { deleteActivitiesById } from '@/app/_actions/trips/activityActions';
+import { deleteActivity } from '@/app/_actions/trips/activityActions';
 import { Button } from '@/components/ui/button';
 import { useRolePermission } from '@/hooks/useRolePermission';
 import { Plus } from 'lucide-react';
@@ -60,7 +60,7 @@ const PageContent = ({ activities, destinations }) => {
         setIsDeleting(true);
 
         try {
-            const result = await deleteActivitiesById(activitiesToDelete);
+            const result = await deleteActivity(activitiesToDelete);
 
             if (result?.success === true) {
                 toast.success('Activity deleted successfully');

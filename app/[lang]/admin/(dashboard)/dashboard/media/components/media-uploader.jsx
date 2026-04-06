@@ -9,7 +9,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // Import your actual server actions and toast
-import { uploadMultipleImage } from '@/app/_actions/imagesActions';
+import { uploadMultipleImage } from '@/app/_actions/mediaActions';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import Image from 'next/image';

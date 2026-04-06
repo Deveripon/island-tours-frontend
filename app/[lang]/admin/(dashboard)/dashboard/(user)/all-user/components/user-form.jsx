@@ -21,7 +21,10 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { CreateUser, updateUserById } from '@/app/_actions/membersActions';
+import {
+    createUser,
+    updateUser,
+} from '@/app/_actions/userActions';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -79,13 +82,7 @@ const generateSecurePassword = (length = 19) => {
         .join('');
 };
 
-export function UserForm({
-    open,
-    editUser,
-    setEditUser,
-    onOpenChange,
-    tenantId,
-    tenantUser }) {
+export function UserForm({ open, editUser, setEditUser, onOpenChange, owner }) {
     const [isPending, setIsPending] = useState(false);
     const [showPassword, setShowPassword] = useState(true);
     const [generating, setGenerating] = useState(false);
@@ -97,7 +94,8 @@ export function UserForm({
 
     const form = useForm({
         resolver: zodResolver(userSchema),
-        defaultValues: defaultFormValues });
+        defaultValues: defaultFormValues,
+    });
 
     // Reset form when editUser changes or when modal opens/closes
     useEffect(() => {
@@ -109,7 +107,8 @@ export function UserForm({
                     email: editUser.email || '',
                     role: editUser.role || 'USER',
                     password: '', // Don't populate password for editing
-                    image: editUser.image || '' });
+                    image: editUser.image || '',
+                });
                 // Hide password field by default for editing
                 setShowPasswordField(false);
             } else {
@@ -165,7 +164,7 @@ export function UserForm({
                     delete updateData.password;
                 }
 
-                let result = await updateUserById(editUser?.id, updateData);
+                let result = await updateUser(editUser?.id, updateData);
 
                 if (result?.success === true) {
                     toast.success('User Updated Successfully');
@@ -189,12 +188,12 @@ export function UserForm({
         [editUser, handleSheetClose, showPasswordField]
     );
 
-    // Check if this is a tenant admin trying to change their own role from ADMIN
+    // Check if this is an owner trying to change their own role from ADMIN
     const isChangingOwnAdminRole = values => {
         return (
             editUser &&
-            tenantUser &&
-            tenantUser.id === editUser.id &&
+            owner &&
+            owner.id === editUser.id &&
             editUser.role === 'ADMIN' &&
             values.role !== 'ADMIN'
         );
@@ -218,10 +217,9 @@ export function UserForm({
 
     // Handle form submission
     async function onSubmit(values) {
-
         try {
             if (editUser) {
-                // Check if this is a tenant admin changing their own role
+                // Check if this is an owner trying to change their own role
                 if (isChangingOwnAdminRole(values)) {
                     // Show confirmation dialog
                     setPendingFormData(values);
@@ -235,7 +233,7 @@ export function UserForm({
                 setIsPending(true);
 
                 // Create new user
-                let result = await CreateUser(values);
+                let result = await createUser(values);
 
                 if (result?.success === true) {
                     toast.success('User Added Successfully');

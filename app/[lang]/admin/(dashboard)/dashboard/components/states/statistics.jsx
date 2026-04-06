@@ -819,7 +819,9 @@ export default function Statistics({ statsPromise, visibleSections }) {
                                                                             style: 'currency',
                                                                             currency:
                                                                                 payment.currency ||
-                                                                                'USD' }).format(
+                                                                                'USD',
+                                                                        }
+                                                                    ).format(
                                                                         payment.amount
                                                                     )}
                                                                 </p>
@@ -1110,3 +1112,4 @@ export default function Statistics({ statsPromise, visibleSections }) {
         </div>
     );
 }
+

@@ -2,10 +2,14 @@ export {
     createLead,
     updateLead,
     deleteLead,
-    deleteMultipleLeads,
+    bulkDeleteLeads,
     pushLeadToZapier,
+    pushBulkLeadsToZapier,
     pushLeadTon8n,
-    pushLeadToMailchimp
+    pushBulkLeadsTon8n,
+    pushLeadToMailchimp,
+    pushBulkLeadsToMailchimp,
+    pushAllLeadsToMailchimp
 } from './update';
 
 export {

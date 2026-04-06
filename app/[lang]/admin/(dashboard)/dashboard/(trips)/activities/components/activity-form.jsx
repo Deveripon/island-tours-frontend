@@ -14,8 +14,8 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { CATEGORY_TYPES } from '@/app/[lang]/admin/(dashboard)/dashboard/(trips)/categories/constants/category-types';
 import {
-    createNewActivities,
-    updateActivitiesById,
+    createActivity,
+    updateActivity,
 } from '@/app/_actions/trips/activityActions';
 import { tripPackageOptions } from '@/data/trip-options';
 import { activitySchema } from '@/utils/validations/trip-package';
@@ -101,7 +101,7 @@ export default function ActivityForm({
         try {
             setIsPending(true);
             if (editactivities) {
-                const result = await updateActivitiesById(editactivities?.id, {
+                const result = await updateActivity(editactivities?.id, {
                     ...values,
                     name: values.name.trim(),
                 });
@@ -118,7 +118,7 @@ export default function ActivityForm({
                     );
                 }
             } else {
-                const result = await createNewActivities(values);
+                const result = await createActivity(values);
                 if (result?.success === true) {
                     toast.success('Added Successfully');
                     handleSheetClose(true); // Pass true to refresh the list

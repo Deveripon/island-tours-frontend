@@ -1,5 +1,5 @@
 import { Permission } from '@/RBAC.config';
-import { getAllActivityOfTenant } from '@/app/_actions/trips/activityActions';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -30,7 +30,6 @@ import {
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import AddMoreButton from '../../../../components/common/add-more-button';
@@ -42,20 +41,18 @@ export function TripActivities() {
     const hasCreatePermission = useRolePermission(Permission.CREATE_CATEGORY);
 
     const { control, watch } = useFormContext();
-    const { tenant } = useParams();
     const locationId = watch('destinationId');
 
     useEffect(() => {
-        if (tenant && locationId) {
+        if (locationId) {
             async function getActivities() {
                 setLoading(true);
                 try {
-                    const res = await getAllActivityOfTenant(
-                        tenant,
+                    const res = await getAllActivities(
                         `limit=100&locationId=${locationId}`
                     );
                     if (res?.success) {
-                        setActivities(res?.data || []);
+                        setActivities(res?.result?.data || []);
                     }
                 } catch (error) {
                     console.error('Error fetching activities:', error);
@@ -67,10 +64,10 @@ export function TripActivities() {
         } else {
             setActivities([]);
         }
-    }, [locationId, tenant]);
+    }, [locationId]);
 
     const handleAddActivity = () => {
-        window.location.href = `/${tenant}/dashboard/activities?open=true`;
+        window.location.href = `/admin/dashboard/activities?open=true`;
     };
 
     return (
@@ -101,7 +98,7 @@ export function TripActivities() {
                                 <AddMoreButton
                                     text=''
                                     ButtonText='Add More Activities for This Trip'
-                                    goToUrl={`/${tenant}/dashboard/activities?open=true`}
+                                    goToUrl={`/admin/dashboard/activities?open=true`}
                                     className='p-0 border-0 place-content-end'
                                 />
                             )}

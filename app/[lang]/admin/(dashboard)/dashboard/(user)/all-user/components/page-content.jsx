@@ -1,7 +1,7 @@
 'use client';
 
 import { Permission } from '@/RBAC.config';
-import { deleteUser } from '@/app/_actions/membersActions';
+import { deleteUser } from '@/app/_actions/userActions';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -21,7 +21,7 @@ import { columns } from './columns';
 import { DataTable } from './data-table';
 import { UserForm } from './user-form';
 
-const PageContent = ({ users, tenantId }) => {
+const PageContent = ({ users }) => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [isShowConfirm, setIsShowConfirm] = useState(false);
@@ -172,8 +172,7 @@ const PageContent = ({ users, tenantId }) => {
                 onOpenChange={handleFormClose}
                 editUser={editUser}
                 setEditUser={setEditUser}
-                tenantId={tenantId}
-                tenantUser={owner}
+                owner={owner}
             />
 
             {/* Delete Confirmation Dialog */}

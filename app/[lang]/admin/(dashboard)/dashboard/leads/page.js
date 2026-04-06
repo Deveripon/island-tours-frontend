@@ -1,15 +1,14 @@
-import { getAllLeadsOfaTenant } from '@/app/_actions/leadsActions';
+import { getAllLeads } from '@/app/_actions/leadsActions';
 import PageContent from './components/page-content';
 
-export default async function leadsPage({ params }) {
-    const { tenant } = await params;
-    const res = await getAllLeadsOfaTenant(tenant);
+export default async function leadsPage() {
+    const res = await getAllLeads();
 
-    const leads = res?.data?.data;
+    const leads = res?.result?.data;
 
     return (
         <div className='container space-y-6'>
-            <PageContent tenant={tenant} leads={leads ?? []} />
+            <PageContent leads={leads ?? []} />
         </div>
     );
 }

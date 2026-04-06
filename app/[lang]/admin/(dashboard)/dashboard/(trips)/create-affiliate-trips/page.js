@@ -6,7 +6,6 @@ import { CreateTripPackageForm } from './components/trip-package/create-trip-pac
 
 export default async function CreateTripPackage({ params }) {
     const session = await auth();
-    const { tenant } = await params;
     return (
         <div className=' flex flex-col rounded-xl overflow-visible'>
             <main className=''>
@@ -24,7 +23,6 @@ export default async function CreateTripPackage({ params }) {
                 <Suspense fallback='Loading....'>
                     <CreateTripPackageForm
                         userId={session?.user?.id || 'anonymous'}
-                        tenant={tenant}
                     />
                 </Suspense>
             </main>

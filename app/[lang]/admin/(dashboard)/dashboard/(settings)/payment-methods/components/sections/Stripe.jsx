@@ -1,5 +1,5 @@
 'use client';
-import { updateStripeConfigurationOfTennat } from '@/app/_actions/settingsActions';
+import { updateStripeConfiguration } from '@/app/_actions/settingsActions';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -40,12 +40,7 @@ const stripeConfigSchema = z.object({
         .min(1, 'Select at least one payment method'),
 });
 
-export default function Stripe({
-    stripeConfiguration,
-    enabled,
-    setEnabled,
-    tenant,
-}) {
+export default function Stripe({ stripeConfiguration, enabled, setEnabled }) {
     const [showPublishableKey, setShowPublishableKey] = useState(false);
     const [showSecretKey, setShowSecretKey] = useState(false);
     const [showWebhookSecret, setShowWebhookSecret] = useState(false);
@@ -99,10 +94,7 @@ export default function Stripe({
         setError(null);
 
         try {
-            const response = await updateStripeConfigurationOfTennat(
-                tenant,
-                data
-            );
+            const response = await updateStripeConfiguration(data);
 
             if (response.success) {
                 toast.success('Configuration saved successfully');
@@ -187,7 +179,6 @@ export default function Stripe({
                     to obtain the necessary keys.
                 </p>
                 <PaymentSwitcher
-                    tenant={tenant}
                     enabled={enabled}
                     setEnabled={setEnabled}
                     paymentMethod='stripe'

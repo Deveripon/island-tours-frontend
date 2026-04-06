@@ -33,16 +33,16 @@ export {
 } from './activityActions';
 
 export {
-    createAffiliateTrip,
-    updateAffiliateTrip,
-    removeAffiliateTrip,
-    findAllTrips,
-    findAllTripsByDestination,
-    findAllTripsByActivity,
+    createTrip,
+    updateTrip,
+    deleteTrip,
+    getAllTrips,
+    getTripsByDestination,
+    getTripsByActivity,
     searchTrips,
     getAllAvailableFilterOperations,
-    getAffiliateTripById,
-    getAffiliateTripBySlug
+    getTripById,
+    getTripBySlug
 } from './affiliateTripsAction';
 
 export {

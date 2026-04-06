@@ -1,16 +1,15 @@
-import { getAllAffiliateTripsByTenant } from '@/app/_actions/trips/affiliateTripsAction';
+import { getAllTrips } from '@/app/_actions/trips/affiliateTripsAction';
 import { AllTripPackages } from './components/data-tables/trips/all-trip-packages';
 
 const AllTripsListingPage = async ({ params }) => {
-    const { tenant } = await params;
 
-    const response = await getAllAffiliateTripsByTenant(tenant, 'limit=100');
+    const response = await getAllTrips('limit=100');
 
-    const allTrips = response?.data?.data || [];
+    const tripsData = response?.result?.data?.data || [];
 
     return (
         <div className='wrapper '>
-            <AllTripPackages tenantId={tenant} trips={allTrips} />
+            <AllTripPackages trips={tripsData} />
         </div>
     );
 };

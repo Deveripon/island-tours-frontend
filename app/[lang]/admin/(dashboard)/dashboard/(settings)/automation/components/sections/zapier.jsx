@@ -3,12 +3,11 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import Instruction from './instruction';
 import ZapierWebhookSetup from './zapier-endpoint-save-form';
 
-const LeadsByZapier = ({ instruction, tenant, existingZapierCatchUrl }) => {
+const LeadsByZapier = ({ instruction, existingZapierCatchUrl }) => {
     return (
         <div className='space-y-8'>
             <Instruction instruction={instruction} type='zapier' />
             <ZapierWebhookSetup
-                tenant={tenant}
                 existingZapierCatchUrl={existingZapierCatchUrl}
             />
             <Alert className='mt-8 border-border bg-muted/50'>

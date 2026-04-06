@@ -45,10 +45,9 @@ export default function Page({
     children,
     preferences,
     animationType,
-    tenant,
     lang,
     content,
-    pendingInquries,
+    pendingInquiries,
     pendingReviewsCount,
 }) {
     // Get the animation variant based on the prop
@@ -63,18 +62,17 @@ export default function Page({
                 '--header-height': 'calc(var(--spacing) * 12)',
             }}>
             <AppSidebar
-                pendingInquries={pendingInquries}
+                pendingInquiries={pendingInquiries}
                 pendingReviewsCount={pendingReviewsCount}
                 variant='inset'
                 lang={lang}
-                tenant={tenant}
                 preferences={preferences}
                 menuItems='dashboardB2B' 
+                userRole={loggedInUser?.role}
             />
             <SidebarInset className='bg-white dark:bg-sidebar !shadow-none'>
                 <SiteHeader
                     preferences={preferences}
-                    tenant={tenant}
                     loggedInUser={loggedInUser}
                 />
                 <div className='flex flex-1 flex-col p-5 rounded-2xl bg-[#F4F7FB] dark:bg-[#1E2A3D]'>
@@ -98,7 +96,7 @@ export default function Page({
                     </div>
                 </div>
             </SidebarInset>
-            <AiSupportAgent tenant={tenant} />
+            <AiSupportAgent />
         </SidebarProvider>
     );
 }

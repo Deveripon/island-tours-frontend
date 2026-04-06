@@ -1,15 +1,15 @@
 export {
-    createAffiliateTrip,
-    updateAffiliateTrip,
-    removeAffiliateTrip
+    createTrip,
+    updateTrip,
+    deleteTrip
 } from './update';
 
 export {
-    findAllTrips,
-    findAllTripsByDestination,
-    findAllTripsByActivity,
+    getAllTrips,
+    getTripsByDestination,
+    getTripsByActivity,
     searchTrips,
     getAllAvailableFilterOperations,
-    getAffiliateTripById,
-    getAffiliateTripBySlug
+    getTripById,
+    getTripBySlug
 } from './read';

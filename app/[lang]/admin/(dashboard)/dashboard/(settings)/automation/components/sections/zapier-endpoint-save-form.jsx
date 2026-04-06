@@ -1,12 +1,12 @@
 'use client';
-import { updateWebhooksBytenantId } from '@/app/_actions/settingsActions';
+import { updateWebhooks } from '@/app/_actions/settingsActions';
 import { Button } from '@/components/ui/button';
 import { Upload01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export default function ZapierWebhookSetup({ tenant, existingZapierCatchUrl }) {
+export default function ZapierWebhookSetup({ existingZapierCatchUrl }) {
     const [zapierUrl, setZapierUrl] = useState(existingZapierCatchUrl || '');
     const [isSaving, setIsSaving] = useState(false);
     const [saveStatus, setSaveStatus] = useState(null);
@@ -32,7 +32,7 @@ export default function ZapierWebhookSetup({ tenant, existingZapierCatchUrl }) {
         setSaveStatus(null);
 
         try {
-            const response = await updateWebhooksBytenantId(tenant, {
+            const response = await updateWebhooks({
                 type: 'zapier_leads_catch_url',
                 url: zapierUrl.trim(),
             });

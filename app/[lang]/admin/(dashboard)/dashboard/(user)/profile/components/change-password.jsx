@@ -1,7 +1,7 @@
 'use client';
 
-import PasswordFiled from '@/app/[lang]/(frontend)/(auth)/components/FormInputFields/password-field';
-import { changeUserPassword } from '@/app/_actions/userActions';
+import { Input } from '@/components/ui/input';
+import { resetUserPassword } from '@/app/_actions/userActions';
 import Spinner from '@/components/svg/spinner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,10 +28,10 @@ const ChangePassword = () => {
         clearErrors('global');
         setIsLoading(true);
         try {
-            const result = await changeUserPassword(
-                data.old_password,
-                data.new_password
-            );
+            const result = await resetUserPassword({
+                old_password: data.old_password,
+                new_password: data.new_password
+            });
 
             if (result?.success === true) {
                 reset();
@@ -93,9 +93,10 @@ const ChangePassword = () => {
                             <label className='text-sm font-semibold text-foreground block'>
                                 Old Password
                             </label>
-                            <PasswordFiled
+                            <Input
+                                type='password'
                                 placeholder='Enter your old password'
-                                register={register('old_password', {
+                                {...register('old_password', {
                                     required: 'Old password is required',
                                     minLength: {
                                         value: 8,
@@ -107,7 +108,7 @@ const ChangePassword = () => {
                                         message:
                                             'Password must contain at least 1 uppercase, 1 lowercase, and 1 number',
                                     } })}
-                                error={errors?.old_password}
+                                className={errors?.old_password ? 'border-destructive focus-visible:ring-destructive' : ''}
                             />
                             {errors?.old_password && (
                                 <p className='text-xs font-medium text-destructive'>
@@ -121,9 +122,10 @@ const ChangePassword = () => {
                             <label className='text-sm font-semibold text-foreground block'>
                                 New Password
                             </label>
-                            <PasswordFiled
+                            <Input
+                                type='password'
                                 placeholder='Enter your new password'
-                                register={register('new_password', {
+                                {...register('new_password', {
                                     required: 'New password is required',
                                     minLength: {
                                         value: 8,
@@ -135,7 +137,7 @@ const ChangePassword = () => {
                                         message:
                                             'Password must contain at least 1 uppercase, 1 lowercase, and 1 number',
                                     } })}
-                                error={errors?.new_password}
+                                className={errors?.new_password ? 'border-destructive focus-visible:ring-destructive' : ''}
                             />
                             {errors?.new_password && (
                                 <p className='text-xs font-medium text-destructive'>
@@ -149,9 +151,10 @@ const ChangePassword = () => {
                             <label className='text-sm font-semibold text-foreground block'>
                                 Confirm Password
                             </label>
-                            <PasswordFiled
+                            <Input
+                                type='password'
                                 placeholder='Confirm your new password'
-                                register={register('confirm_password', {
+                                {...register('confirm_password', {
                                     required: 'Please confirm your password',
                                     minLength: {
                                         value: 8,
@@ -166,7 +169,7 @@ const ChangePassword = () => {
                                     validate: value =>
                                         watch('new_password') === value ||
                                         'Passwords do not match' })}
-                                error={errors?.confirm_password}
+                                className={errors?.confirm_password ? 'border-destructive focus-visible:ring-destructive' : ''}
                             />
                             {errors?.confirm_password && (
                                 <p className='text-xs font-medium text-destructive'>

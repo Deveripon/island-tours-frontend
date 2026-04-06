@@ -1,6 +1,6 @@
 'use client';
-import { sendOtpInEmail, verifyOtp } from '@/app/_actions/otpActions';
-import { updateUserInformationById } from '@/app/_actions/userActions';
+import { sendOtp, verifyOtp } from '@/app/_actions/otpActions';
+import { updateUserById } from '@/app/_actions/userActions';
 import {
     Dialog,
     DialogContent,
@@ -50,7 +50,7 @@ function OtpInputForm({ showModal, setShowModal, showToast = true }) {
             const result = await verifyOtp(session.user.email, otp.join(''));
 
             if (result.success === true) {
-                const result = await updateUserInformationById(
+                const result = await updateUserById(
                     session?.user?.id,
                     {
                         isVerified: true });
@@ -78,7 +78,7 @@ function OtpInputForm({ showModal, setShowModal, showToast = true }) {
         setTimeLeft(120);
         setError(null);
         if (session?.user?.email) {
-            await sendOtpInEmail(session.user.email);
+            await sendOtp(session.user.email);
         }
     };
 
