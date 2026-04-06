@@ -1,4 +1,5 @@
-import { getSiteTheme } from '@/app/_actions/settingsActions';
+import { getSiteInfo, getSiteTheme, getSocialMedia } from '@/app/_actions/settingsActions';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import { SmoothScroll } from '@/components/smooth-scroll';
 import { ThemeProvider } from '@/components/theme-provider';
 import DynamicThemeProvider from '@/provider/dynamicThemeProvider';
@@ -8,30 +9,20 @@ import Header from '../components/common/header';
 import InstagramFeed from '../components/home/instagram-section';
 import AdminProvider from '../provider/admin-provider';
 
-/* export async function generateMetadata({ params }) {
-    const { tenantId } = await params;
-
-    if (tenantId === 'demo') {
-        return {
-            title: 'Demo Travel Site',
-            description: 'Demo travel website',
-        };
-    }
-
-    const { data: seo } = await getTenantsSiteSeo(tenantId);
-    const { result: siteInfo } = await getTenantsSiteInfo(tenantId);
+/* export async function generateMetadata() {
+    const { data: seo } = await getSiteSeo();
+    const { data: siteInfo } = await getSiteInfo();
 
     if (!seo) {
         return {
-            title: 'Travel Site',
-            description: 'Explore amazing destinations',
+            title: siteInfo?.siteName || 'Travel Site',
+            description: siteInfo?.siteDescription || 'Explore amazing destinations',
         };
     }
 
-    const faviconUrl = siteInfo?.data?.favicon?.image?.url;
-
-    const defaultTitle = 'Travel with Us';
-    const defaultDescription = 'Explore amazing destinations around the world';
+    const faviconUrl = siteInfo?.favicon?.image?.url;
+    const defaultTitle = siteInfo?.siteName || 'Travel with Us';
+    const defaultDescription = siteInfo?.siteDescription || 'Explore amazing destinations around the world';
 
     return {
         title: {
@@ -45,7 +36,6 @@ import AdminProvider from '../provider/admin-provider';
             index: seo?.robotsMeta?.includes('index') ?? true,
             follow: seo?.robotsMeta?.includes('follow') ?? true,
         },
-        // Favicon and app icons
         icons: {
             icon: [
                 { url: faviconUrl, sizes: '32x32', type: 'image/x-icon' },
@@ -77,19 +67,19 @@ import AdminProvider from '../provider/admin-provider';
                 seo?.ogDescription ||
                 seo?.metaDescription ||
                 defaultDescription,
-            siteName: seo?.metaTitle || defaultTitle,
-            images: seo?.ogImage?.image?.url
+            siteName: siteInfo?.siteName || defaultTitle,
+            images: seo?.ogImage?.url
                 ? [
-                      {
-                          url: seo.ogImage.image.url,
-                          width: seo.ogImage.image.width || 1200,
-                          height: seo.ogImage.image.height || 630,
-                          alt:
-                              seo.ogImage.altText ||
-                              seo.ogTitle ||
-                              defaultTitle,
-                      },
-                  ]
+                    {
+                        url: seo.ogImage.url,
+                        width: seo.ogImage.width || 1200,
+                        height: seo.ogImage.height || 630,
+                        alt:
+                            seo.ogImage.altText ||
+                            seo.ogTitle ||
+                            defaultTitle,
+                    },
+                ]
                 : [],
         },
 
@@ -100,15 +90,9 @@ import AdminProvider from '../provider/admin-provider';
                 seo?.twitterDescription ||
                 seo?.metaDescription ||
                 defaultDescription,
-            images: seo?.twitterImage?.image?.url
-                ? [seo.twitterImage.image.url]
+            images: seo?.twitterImage?.url
+                ? [seo.twitterImage.url]
                 : [],
-        },
-
-        alternates: {
-            canonical:
-                seo?.canonicalUrl ||
-                `${process.env.NEXT_PUBLIC_BASE_URL}/${tenantId}`,
         },
 
         verification: {
@@ -117,18 +101,20 @@ import AdminProvider from '../provider/admin-provider';
     };
 } */
 
-export default async function HomePageLayout({ children, params }) {
+export default async function HomePageLayout({ children }) {
+    const themeRes = await getSiteTheme();
+    const siteInfoRes = await getSiteInfo();
+    const socialMediaRes = await getSocialMedia();
+    const destinationsRes = await getAllDestinations();
 
-    const { data: theme } = await getSiteTheme();
-
-    // Generate Organization Schema
-    /*     const organizationSchema = !isDemo
-        ? generateOrganizationSchema(tenantData, seoData)
-        : null; */
+    const theme = themeRes?.data;
+    const siteInfo = siteInfoRes?.data;
+    const socialMedia = socialMediaRes?.data;
+    const destinations = destinationsRes?.result?.data;
 
     return (
         <>
-            {/* SEO Scripts - Only for non-demo tenants */}
+            {/* SEO Scripts */}
 
             <>
                 {/* Organization Schema */}
@@ -159,7 +145,7 @@ export default async function HomePageLayout({ children, params }) {
                                 strategy='afterInteractive'
                             />
                             <Script
-                                id={`ga-${tenantId}`}
+                                id='ga-site'
                                 strategy='afterInteractive'>
                                 {`
                                     window.dataLayer = window.dataLayer || [];
@@ -176,7 +162,7 @@ export default async function HomePageLayout({ children, params }) {
                 {/*    {seoData?.googleTagManagerId && (
                         <>
                             <Script
-                                id={`gtm-${tenantId}`}
+                                id='gtm-site'
                                 strategy='afterInteractive'>
                                 {`
                                     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -204,7 +190,7 @@ export default async function HomePageLayout({ children, params }) {
                 {/*    {seoData?.facebookPixelId && (
                         <>
                             <Script
-                                id={`fb-pixel-${tenantId}`}
+                                id='fb-pixel-site'
                                 strategy='afterInteractive'>
                                 {`
                                     !function(f,b,e,v,n,t,s)
@@ -237,28 +223,20 @@ export default async function HomePageLayout({ children, params }) {
                 defaultTheme='system'
                 enableSystem
                 disableTransitionOnChange>
-                <DynamicThemeProvider
-                    theme={theme?.data}>
+                <DynamicThemeProvider theme={theme}>
                     <AdminProvider>
                         <div className='bg-background'>
                             <AdminBar />
                             <Header
-                                tenantId={tenantId}
-                                preferences={tenantData?.preferences}
-                                logo={tenantData?.tenantSiteInfo?.logo}
+                                logo={siteInfo?.logo}
                             />
                             {children}
-                            <InstagramFeed tenantSiteInfo={tenantData?.tenantSiteInfo} />
-
+                            <InstagramFeed siteInfo={siteInfo} />
                             <Footer
-                                companyInformations={tenantData?.companyInformations}
-                                tenantId={tenantId}
-                                logo={tenantData?.tenantSiteInfo?.logo}
-                                preferences={tenantData?.preferences}
-                                tenantSocialMedia={tenantData?.tenantSocialMedia}
-                                destinations={destinations?.data}
+                                logo={siteInfo?.logo}
+                                socialMedia={socialMedia}
+                                destinations={destinations}
                             />
-
                         </div>
                     </AdminProvider>
                     <SmoothScroll />

@@ -1,6 +1,6 @@
 'use client';
-import { updateAffiliateTripById } from '@/app/_actions/trips/affiliateTripsAction';
-import { getAllCategoriesOfTenant } from '@/app/_actions/trips/category';
+import { updateAffiliateTrip } from '@/app/_actions/trips/affiliateTripsAction';
+import { getAllCategories } from '@/app/_actions/trips/category';
 import { tripPackageOptions } from '@/data/trip-options';
 import { getGroupedDataOfCategories } from '@/lib/utils';
 import {
@@ -20,7 +20,6 @@ import { TourInfoForm } from './tour-info-form';
 
 const TourTypeInformation = ({
     trip,
-    tenantId: tenantIdProp,
     data: blockData,
     id,
     isBlock = false,
@@ -29,9 +28,6 @@ const TourTypeInformation = ({
     // Use the hook for block edit state
     const { isEditing, setIsEditing, onUpdate } = useBlockEditState(id);
     const isEditMode = mode === MODES.edit;
-
-    const { tenantId: tenantIdParam } = useParams();
-    const tenantId = tenantIdProp || tenantIdParam;
 
     const [categories, setCategories] = useState({});
 
@@ -81,26 +77,24 @@ const TourTypeInformation = ({
     }, [trip, blockData, isBlock]);
 
     useEffect(() => {
-        if (tenantId) {
-            async function fetchCategories() {
-                try {
-                    const res = await getAllCategoriesOfTenant(tenantId);
-                    if (res?.success) {
-                        const groupedData = getGroupedDataOfCategories(
-                            res?.result?.data
-                        );
-                        setCategories(groupedData);
-                    }
-                } catch (error) {
-                    console.error('Error fetching categories:', error);
+        async function fetchCategories() {
+            try {
+                const res = await getAllCategories();
+                if (res?.success) {
+                    const groupedData = getGroupedDataOfCategories(
+                        res?.result?.data
+                    );
+                    setCategories(groupedData);
                 }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
             }
-            fetchCategories();
         }
-    }, [tenantId]);
+        fetchCategories();
+    }, []);
 
-    const getMergedOptions = (defaultItems, tenantItems) => {
-        const allOptions = [...(defaultItems || []), ...(tenantItems || [])];
+    const getMergedOptions = (defaultItems, customItems) => {
+        const allOptions = [...(defaultItems || []), ...(customItems || [])];
         return allOptions.filter(
             (option, index, self) =>
                 index ===
@@ -150,7 +144,7 @@ const TourTypeInformation = ({
             return;
         }
 
-        await updateAffiliateTripById(trip?.id, {
+        await updateAffiliateTrip(trip?.id, {
             userAddedOptions: {
                 ...trip?.userAddedOptions,
                 tourInformation: data,

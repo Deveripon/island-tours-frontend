@@ -1,5 +1,5 @@
 'use client';
-import { createNewInquery } from '@/app/_actions/inqueryActions';
+import { createInquery } from '@/app/_actions/inqueryActions';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,9 +33,10 @@ const contactSchema = z.object({
     message: z
         .string()
         .min(1, 'Message is required')
-        .min(10, 'Please Describe your message at least 10 characters') });
+        .min(10, 'Please Describe your message at least 10 characters'),
+});
 
-export const ContactForm = ({ tenantId }) => {
+export const ContactForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [serverError, setServerError] = useState('');
@@ -52,20 +53,20 @@ export const ContactForm = ({ tenantId }) => {
             email: '',
             subject: '',
             message: '',
-        } });
+        },
+    });
 
     const onSubmit = async data => {
         setIsSubmitting(true);
         setServerError('');
 
         try {
-            const res = await createNewInquery({
+            const res = await createInquery({
                 name: data.name,
                 email: data.email,
                 subject: data.subject,
                 message: data.message,
-                tenantId: tenantId });
-
+            });
 
             if (res?.success) {
                 setIsSubmitted(true);
@@ -226,3 +227,4 @@ export const ContactForm = ({ tenantId }) => {
         </Card>
     );
 };
+

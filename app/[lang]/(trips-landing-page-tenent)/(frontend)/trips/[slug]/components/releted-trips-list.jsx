@@ -1,13 +1,12 @@
-import { getAllAffiliateTripsByTenant } from '@/app/_actions/trips/affiliateTripsAction';
+import { findAllTrips } from '@/app/_actions/trips/affiliateTripsAction';
 import { Suspense } from 'react';
 import TripCard from '../../components/trip-card';
 import TripsLoadingSkeliton from '../../components/trips-loading-skelitons';
 
-const ReletedTrips = async ({ trip, tenantId }) => {
+const ReletedTrips = async ({ trip }) => {
     const destination = trip?.destination;
 
-    const trips = await getAllAffiliateTripsByTenant(
-        tenantId,
+    const trips = await findAllTrips(
         `destination=${
             destination.country ||
             destination.city ||
@@ -16,7 +15,7 @@ const ReletedTrips = async ({ trip, tenantId }) => {
         }&limit=6`
     );
 
-    const reletaedTrips = trips?.data?.data.filter(t => t.id !== trip?.id);
+    const reletaedTrips = trips?.result?.data.filter(t => t.id !== trip?.id);
 
     if (!reletaedTrips || reletaedTrips.length === 0) return null;
     return (
@@ -29,7 +28,6 @@ const ReletedTrips = async ({ trip, tenantId }) => {
                 <Suspense fallback={<TripsLoadingSkeliton />}>
                     {reletaedTrips.map(trip => (
                         <TripCard
-                            tenantId={tenantId}
                             key={trip.id}
                             trip={trip}
                         />

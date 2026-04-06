@@ -1,6 +1,6 @@
 import TripCard from '../../../trips/components/trip-card';
 
-const TripsList = ({ trips, tenantId, activityName }) => {
+const TripsList = ({ trips, activityName }) => {
     return (
         <section id='populer-trips' className=' py-24'>
             <div className=' mx-auto text-left px-4'>
@@ -15,7 +15,6 @@ const TripsList = ({ trips, tenantId, activityName }) => {
                 <div className='grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6'>
                     {trips?.map(trip => (
                         <TripCard
-                            tenantId={tenantId}
                             key={trip.id}
                             trip={trip}
                         />

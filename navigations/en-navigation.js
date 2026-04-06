@@ -416,7 +416,7 @@ export const enNavigations = {
         },
         {
             name: 'Demo',
-            url: `/site/demo`,
+            url: `/demo`,
             icon: Monitor,
         },
         {

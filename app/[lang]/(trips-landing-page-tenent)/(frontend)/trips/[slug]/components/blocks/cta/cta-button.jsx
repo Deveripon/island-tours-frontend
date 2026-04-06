@@ -7,7 +7,6 @@ import BookingCTAButton from './booking-cta-button';
 
 const CTAButton = ({
     trip,
-    tenantId,
     data: blockData,
     id,
     isBlock = false,

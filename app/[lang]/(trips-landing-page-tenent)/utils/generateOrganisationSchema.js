@@ -1,26 +1,26 @@
-export function generateOrganizationSchema(tenantData, seoData) {
-    if (!tenantData || !seoData) return null;
+export function generateOrganizationSchema(siteData, seoData) {
+    if (!siteData || !seoData) return null;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const tenantUrl = `${baseUrl}/${tenantData.tenantId}`;
+    const siteUrl = baseUrl;
 
     const schema = {
         '@context': 'https://schema.org',
         '@type': seoData.schemaType || 'Organization',
         name:
-            tenantData?.companyInformations?.name ||
+            siteData?.companyInformations?.name ||
             seoData?.metaTitle ||
             'Travel Company',
-        url: seoData?.canonicalUrl || tenantUrl,
+        url: seoData?.canonicalUrl || siteUrl,
         logo:
             seoData?.ogImage?.image?.url ||
-            tenantData?.tenantSiteInfo?.logo?.url,
+            siteData?.siteInfo?.logo?.url,
         description: seoData?.metaDescription,
     };
 
     // Contact Information
-    if (tenantData?.companyInformations) {
-        const contact = tenantData.companyInformations;
+    if (siteData?.companyInformations) {
+        const contact = siteData.companyInformations;
 
         if (contact.email || contact.phone) {
             schema.contactPoint = {
@@ -46,7 +46,7 @@ export function generateOrganizationSchema(tenantData, seoData) {
 
     // Social Media Links
     const socialLinks = [];
-    const prefs = tenantData?.preferences;
+    const prefs = siteData?.preferences;
 
     if (prefs?.social_facebook) socialLinks.push(prefs.social_facebook);
     if (prefs?.social_twitter) socialLinks.push(prefs.social_twitter);

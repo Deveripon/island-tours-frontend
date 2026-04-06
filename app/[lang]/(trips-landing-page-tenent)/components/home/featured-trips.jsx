@@ -1,15 +1,14 @@
-import { getAllAffiliateTripsByTenant } from '@/app/_actions/trips/affiliateTripsAction';
+import { findAllTrips } from '@/app/_actions/trips/affiliateTripsAction';
 import { Button } from '@/components/ui/button';
 import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import TripCard from '../../(frontend)/trips/components/trip-card';
-import { featuredTrips } from '../../data/data';
 import SectionTitle from './section-title';
 
-export default async function FeaturedTrips({ tenantId, content, isDemo }) {
-    const res =
-        !isDemo && (await getAllAffiliateTripsByTenant(tenantId, 'limit=8'));
-    const allFeaturedTrips = !isDemo ? res?.data?.data : featuredTrips;
+export default async function FeaturedTrips({ content }) {
+    const res = await findAllTrips('limit=8');
+    const allFeaturedTrips = res?.result?.data;
+    console.log(`allFeaturedTrips`, allFeaturedTrips);
 
     if (!allFeaturedTrips || allFeaturedTrips.length === 0) {
         return null;
@@ -28,12 +27,8 @@ export default async function FeaturedTrips({ tenantId, content, isDemo }) {
                 </div>
 
                 <div className='grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6'>
-                    {allFeaturedTrips?.map(trip => (
-                        <TripCard
-                            tenantId={tenantId}
-                            key={trip.id}
-                            trip={trip}
-                        />
+                    {allFeaturedTrips?.data?.map(trip => (
+                        <TripCard key={trip.id} trip={trip} />
                     ))}
                 </div>
 

@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-import PasswordFiled from '@/app/[lang]/(frontend)/(auth)/components/FormInputFields/password-field';
+
 import Spinner from '@/components/svg/spinner';
 import { Cancel01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -21,7 +21,6 @@ import { handleCustomerSignIn } from '@/app/_actions/customerActions';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 export function SignInForm({ className, ...props }) {
-    const tenantId = props.tenantid;
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
@@ -32,11 +31,11 @@ export function SignInForm({ className, ...props }) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <CustomerLoginForm tenantId={tenantId} />
+                    <CustomerLoginForm />
                     <div className='mt-4 text-center text-sm'>
                         Don&apos;t have an account?{' '}
                         <Link
-                            href={`/site/${tenantId}/sign-up`}
+                            href='/sign-up'
                             className='underline underline-offset-4'>
                             Sign Up
                         </Link>
@@ -47,7 +46,7 @@ export function SignInForm({ className, ...props }) {
     );
 }
 
-const CustomerLoginForm = ({ tenantId }) => {
+const CustomerLoginForm = () => {
     const {
         register,
         handleSubmit,
@@ -69,7 +68,7 @@ const CustomerLoginForm = ({ tenantId }) => {
             const response = await handleCustomerSignIn({
                 email,
                 password,
-                tenantId });
+            });
 
             if (!response?.success || response?.error) {
                 setIsLoading(false);
@@ -96,7 +95,7 @@ const CustomerLoginForm = ({ tenantId }) => {
 
             setIsLoading(false);
 
-            router.replace(`/site/${tenantId}/account`);
+            router.replace('/account');
         } catch (error) {
             setIsLoading(false);
             setError('global', {
@@ -158,11 +157,10 @@ const CustomerLoginForm = ({ tenantId }) => {
             <div>
                 <label className='text-sm font-medium'>Password</label>
 
-                <PasswordFiled
-                    placeholder='Password'
-                    clearError={() => clearErrors('global')}
-                    setAlert={() => setAlert(false)}
-                    register={register('password', {
+                <Input
+                    type="password"
+                    placeholder="Password"
+                    {...register('password', {
                         required: 'Password is required',
                         minLength: {
                             value: 8,
@@ -177,8 +175,16 @@ const CustomerLoginForm = ({ tenantId }) => {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,100}$/,
                             message:
                                 'Password must contain at least 1 uppercase, 1 lowercase, and 1 number',
-                        } })}
-                    error={errors?.password}
+                        }
+                    })}
+                    onChange={() => {
+                        clearErrors('global');
+                        setAlert(false);
+                    }}
+                    className={cn(
+                        'mt-1',
+                        errors.password ? 'focus-visible:ring-destructive border-destructive' : ''
+                    )}
                 />
 
                 {errors?.password && (
@@ -191,7 +197,7 @@ const CustomerLoginForm = ({ tenantId }) => {
             <div className='text-right'>
                 <p className='text-[12px] pt-2 '>
                     <Link
-                        href={`/site/${tenantId}/forgot-password`}
+                        href='/forgot-password'
                         className='text-primary hover:text-primary/50 cursor-pointer '>
                         <i>Forgot password ?</i>
                     </Link>

@@ -3,10 +3,9 @@ import { auth } from '@/auth';
 import { getGroupedDataOfStatus } from '@/lib/utils';
 import PageContent from './components/page-content';
 
-export default async function MyBookingsPage({ params }) {
-    const { tenantId } = await params;
+export default async function MyBookingsPage() {
     const session = await auth();
-    const bookings = await getAllBookingsofUser(session?.user?.id, tenantId);
+    const bookings = await getAllBookingsofUser(session?.user?.id);
 
     const bookingsData = bookings?.result?.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -16,7 +15,6 @@ export default async function MyBookingsPage({ params }) {
     return (
         <div className='container py-6 space-y-6'>
             <PageContent
-                tenant={tenantId}
                 groupedBookings={groupedData}
                 bookings={bookingsData ?? []}
             />

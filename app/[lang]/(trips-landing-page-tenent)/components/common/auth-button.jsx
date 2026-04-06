@@ -6,7 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { signOut, useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-export const AuthButton = ({ tenantId, variant, onClose, ...props }) => {
+export const AuthButton = ({ variant, onClose, ...props }) => {
     const router = useRouter();
     const { data: session, status } = useSession();
     const pathname = usePathname();
@@ -27,7 +27,7 @@ export const AuthButton = ({ tenantId, variant, onClose, ...props }) => {
                         variant={variant}
                         {...props}
                         onClick={() => {
-                            router.push(`/site/${tenantId}/account`);
+                            router.push('/account');
                             onClose && onClose();
                         }}
                         className={cn(
@@ -61,7 +61,7 @@ export const AuthButton = ({ tenantId, variant, onClose, ...props }) => {
                 variant={variant}
                 {...props}
                 onClick={() => {
-                    router.push(`/site/${tenantId}/sign-in`);
+                    router.push('/sign-in');
                     onClose && onClose();
                 }}
                 className={cn(
@@ -73,4 +73,5 @@ export const AuthButton = ({ tenantId, variant, onClose, ...props }) => {
         )
     );
 };
+
 

@@ -2,8 +2,7 @@ import { ContactForm } from '../../components/contact-form';
 import { ContactInfo } from '../../components/contatct-info';
 import PageHero from '../../components/page-hero';
 
-export const ContactPage = async ({ params }) => {
-    const { tenantId } = await params;
+export const ContactPage = async () => {
     return (
         <div className='min-h-screen bg-background'>
             <PageHero
@@ -17,15 +16,16 @@ export const ContactPage = async ({ params }) => {
             <div className='container mx-auto px-4 py-16'>
                 <div className='grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto'>
                     <div>
-                        <ContactInfo tenantId={tenantId} />
+                        <ContactInfo />
                     </div>
                     <div>
-                        <ContactForm tenantId={tenantId} />
+                        <ContactForm />
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
 
 export default ContactPage;

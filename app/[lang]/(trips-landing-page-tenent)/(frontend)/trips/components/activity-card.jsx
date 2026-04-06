@@ -8,12 +8,12 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Activity = ({ activity, tenantId }) => {
+const Activity = ({ activity }) => {
     // Get the first image from the images array
     const mainImage = activity?.images?.[0];
 
     return (
-        <Link href={`/site/${tenantId}/activities/${activity?.id}`}>
+        <Link href={`/activities/${activity?.id}`}>
             <article className='group flex flex-col overflow-hidden rounded-3xl bg-card text-card-foreground ring-1 ring-border shadow-lg dark:shadow-[0_22px_60px_rgba(15,23,42,0.85)] hover:-translate-y-1 hover:shadow-xl hover:ring-primary/60 dark:hover:bg-accent/10 dark:hover:shadow-[0_26px_80px_rgba(15,23,42,0.95)] transition-all duration-500 ease-out h-full'>
                 <div className='relative aspect-[4/3] overflow-hidden'>
                     <Image

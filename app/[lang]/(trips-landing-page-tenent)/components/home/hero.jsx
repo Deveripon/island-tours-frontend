@@ -1,8 +1,8 @@
-import heroBgImage from '@/app/[lang]/(trips-landing-page-tenent)/site/assets/images/bg.jpg';
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import HeroSearchBox from './hero-search-box';
-export default async function Hero({ preferences, tenantId, content }) {
-    const destinations = await getAllDestinationOfTenant(tenantId);
+export default async function Hero({ preferences, content }) {
+    const res = await getAllDestinations();
+    const destinations = res?.result?.data;
 
     return (
         <div
@@ -32,14 +32,14 @@ export default async function Hero({ preferences, tenantId, content }) {
                 {/* Search Box */}
                 <div className='absolute w-6xl max-lg:hidden top-[105%] left-1/2 transform -translate-x-1/2 translate-y-1/2 z-[999]'>
                     <HeroSearchBox
-                        destinations={destinations?.data}
+                        destinations={destinations}
                         content={content?.searchForm}
                         preferences={preferences}
-                        tenantId={tenantId}
                     />
                 </div>
             </div>
         </div>
     );
 }
+
 

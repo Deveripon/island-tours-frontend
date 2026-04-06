@@ -22,9 +22,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Badge } from './ui/badge';
 
-export function NavMain({ items, tenant, lang, pendingInquries, pendingReviewsCount }) {
+export function NavMain({ items, lang, pendingInquries, pendingReviewsCount }) {
     const pathname = usePathname();
-    const isHomeActive = pathname === `/${lang}/${tenant}/dashboard`;
+    const isHomeActive = pathname === `/${lang}/admin/dashboard`;
 
     return (
         <SidebarGroup>
@@ -41,7 +41,7 @@ export function NavMain({ items, tenant, lang, pendingInquries, pendingReviewsCo
                             )}>
                             <Link
                                 className='flex gap-2 justify-between items-center h-10'
-                                href={`/${tenant}/dashboard/`}>
+                                href={`/${lang}/admin/dashboard/`}>
                                 <HugeiconsIcon
                                     className='size-4'
                                     icon={Home03Icon}
@@ -146,7 +146,7 @@ export function NavMain({ items, tenant, lang, pendingInquries, pendingReviewsCo
                                                                             '!bg-primary dark:!bg-primary/50 font-medium !text-white'
                                                                     )}>
                                                                     <Link
-                                                                        href={`/${tenant}/dashboard/${subItem.url}`}>
+                                                                        href={`/${lang}/admin/dashboard/${subItem.url}`}>
                                                                         {subItem.icon && (
                                                                             <HugeiconsIcon
                                                                                 className={cn(
@@ -191,7 +191,7 @@ export function NavMain({ items, tenant, lang, pendingInquries, pendingReviewsCo
                                     )}>
                                     <Link
                                         className='flex items-center  gap-2 h-10'
-                                        href={`/${tenant}/dashboard/${item.url}`}>
+                                        href={`/${lang}/admin/dashboard/${item.url}`}>
                                         {item.icon && (
                                             <HugeiconsIcon
                                                 className='size-5'

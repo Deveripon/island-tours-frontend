@@ -185,7 +185,7 @@ const getPersistentUserId = () => {
 };
 
 export const TripProvider = ({ children }) => {
-    const { slug, tenantId } = useParams();
+    const { slug } = useParams();
 
     // Core state
     const [tripData, setTripData] = useState(null);
@@ -217,11 +217,6 @@ export const TripProvider = ({ children }) => {
             setLoading(true);
             setError(null);
 
-            if (tenantId === 'demo') {
-                setTripData(DummySingleTrip);
-                return;
-            }
-
             if (!slug) return;
 
             const res = await getSingleAffiliateTripBySlug(slug);
@@ -236,7 +231,7 @@ export const TripProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [slug, tenantId]);
+    }, [slug]);
 
     useEffect(() => {
         fetchTripData();

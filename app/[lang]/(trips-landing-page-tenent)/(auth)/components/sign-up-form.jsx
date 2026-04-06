@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-import PasswordFiled from '@/app/[lang]/(frontend)/(auth)/components/FormInputFields/password-field';
+
 import Spinner from '@/components/svg/spinner';
 import { Cancel01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -20,7 +20,6 @@ import { handleCustomerSignup } from '@/app/_actions/customerActions';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 export function SignUpForm({ className, ...props }) {
-    const tenantId = props.tenantid;
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
@@ -31,11 +30,11 @@ export function SignUpForm({ className, ...props }) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <RegisterForm tenantId={tenantId} />
+                    <RegisterForm />
                     <div className='mt-4 text-center text-sm'>
                         Already have an account?{' '}
                         <Link
-                            href={`/site/${tenantId}/sign-in`}
+                            href='/sign-in'
                             className='underline underline-offset-4'>
                             Sign In
                         </Link>
@@ -46,7 +45,7 @@ export function SignUpForm({ className, ...props }) {
     );
 }
 
-const RegisterForm = ({ tenantId }) => {
+const RegisterForm = () => {
     const {
         register,
         handleSubmit,
@@ -68,7 +67,6 @@ const RegisterForm = ({ tenantId }) => {
             const response = await handleCustomerSignup({
                 email,
                 password,
-                tenantId,
                 role: 'TRAVELLER' });
 
             if (response?.success === false || response?.error) {
@@ -81,7 +79,7 @@ const RegisterForm = ({ tenantId }) => {
 
             if (response.success === true) {
                 setIsLoading(false);
-                router.push(`/site/${tenantId}/sign-in`);
+                router.push('/sign-in');
             }
         } catch (error) {
             setIsLoading(false);
@@ -142,9 +140,10 @@ const RegisterForm = ({ tenantId }) => {
             <div>
                 <label className='text-sm font-medium'>Password</label>
 
-                <PasswordFiled
-                    placeholder='Password'
-                    register={register('password', {
+                <Input
+                    type="password"
+                    placeholder="Password"
+                    {...register('password', {
                         required: 'Password is required',
                         minLength: {
                             value: 8,
@@ -159,8 +158,12 @@ const RegisterForm = ({ tenantId }) => {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,100}$/,
                             message:
                                 'Password must contain at least 1 uppercase, 1 lowercase, and 1 number',
-                        } })}
-                    error={errors?.password}
+                        }
+                    })}
+                    className={cn(
+                        'mt-1',
+                        errors.password ? 'focus-visible:ring-destructive border-destructive' : ''
+                    )}
                 />
 
                 {errors?.password && (
@@ -174,9 +177,10 @@ const RegisterForm = ({ tenantId }) => {
             <div>
                 <label className='text-sm font-medium'>Confirm Password</label>
 
-                <PasswordFiled
-                    placeholder='Password'
-                    register={register('confirm_password', {
+                <Input
+                    type="password"
+                    placeholder="Password"
+                    {...register('confirm_password', {
                         required: 'Please confirm your password',
                         minLength: {
                             value: 8,
@@ -194,8 +198,12 @@ const RegisterForm = ({ tenantId }) => {
                         },
                         validate: value =>
                             watch('password') === value ||
-                            'Password not matched' })}
-                    error={errors?.confirm_password}
+                            'Password not matched'
+                    })}
+                    className={cn(
+                        'mt-1',
+                        errors.confirm_password ? 'focus-visible:ring-destructive border-destructive' : ''
+                    )}
                 />
 
                 {errors?.confirm_password && (

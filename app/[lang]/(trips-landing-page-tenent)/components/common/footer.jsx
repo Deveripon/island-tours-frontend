@@ -7,15 +7,15 @@ import {
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import Link from 'next/link';
-import { Logo } from './tenent-logo';
+import { Logo } from './logo';
 
 export default function Footer({
-    tenantId,
     preferences,
     companyInformations,
     logo,
-    tenantSocialMedia,
-    destinations }) {
+    socialMedia,
+    destinations,
+}) {
     return (
         <footer className='relative mt-24 mb-6 mx-4 overflow-hidden rounded-3xl'>
             {/* Gradient Background */}
@@ -33,7 +33,7 @@ export default function Footer({
                         <div className='flex items-center space-x-3 mb-6'>
                             <Logo
                                 className='text-foreground transition-all duration-300 hover:scale-105'
-                                link={`/site/${tenantId}`}
+                                link='/'
                                 preferences={preferences}
                                 logo={logo}
                             />
@@ -58,7 +58,7 @@ export default function Footer({
                             <div className='flex gap-2'>
                                 <Link
                                     target='_blank'
-                                    href={tenantSocialMedia?.facebookUrl || '#'}
+                                    href={socialMedia?.facebookUrl || '#'}
                                     className='group relative w-10 h-10 rounded-xl bg-muted/50 hover:bg-primary flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/20'>
                                     <HugeiconsIcon
                                         icon={FacebookIcon}
@@ -69,7 +69,7 @@ export default function Footer({
 
                                 <Link
                                     target='_blank'
-                                    href={tenantSocialMedia?.twitterUrl || '#'}
+                                    href={socialMedia?.twitterUrl || '#'}
                                     className='group relative w-10 h-10 rounded-xl bg-muted/50 hover:bg-primary flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/20'>
                                     <HugeiconsIcon
                                         icon={TwitterIcon}
@@ -80,9 +80,7 @@ export default function Footer({
 
                                 <Link
                                     target='_blank'
-                                    href={
-                                        tenantSocialMedia?.instagramUrl || '#'
-                                    }
+                                    href={socialMedia?.instagramUrl || '#'}
                                     className='group relative w-10 h-10 rounded-xl bg-muted/50 hover:bg-primary flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/20'>
                                     <HugeiconsIcon
                                         icon={InstagramIcon}
@@ -93,7 +91,7 @@ export default function Footer({
 
                                 <Link
                                     target='_blank'
-                                    href={tenantSocialMedia?.linkedinUrl || '#'}
+                                    href={socialMedia?.linkedinUrl || '#'}
                                     className='group relative w-10 h-10 rounded-xl bg-muted/50 hover:bg-primary flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/20'>
                                     <HugeiconsIcon
                                         icon={LinkedinIcon}
@@ -129,7 +127,7 @@ export default function Footer({
                                     {destinations.slice(0, 5).map(dest => (
                                         <li key={dest.id || dest.name}>
                                             <Link
-                                                href={`/site/${tenantId}/destinations/${generateSlug(
+                                                href={`/destinations/${generateSlug(
                                                     dest.name
                                                 )}`}
                                                 className='group flex items-center text-muted-foreground hover:text-primary transition-all duration-200'>
@@ -143,7 +141,7 @@ export default function Footer({
                                     {destinations.slice(5, 10).map(dest => (
                                         <li key={dest.id || dest.name}>
                                             <Link
-                                                href={`/site/${tenantId}/destinations/${generateSlug(
+                                                href={`/destinations/${generateSlug(
                                                     dest.name
                                                 )}`}
                                                 className='group flex items-center text-muted-foreground hover:text-primary transition-all duration-200'>
@@ -159,7 +157,7 @@ export default function Footer({
                                 {destinations?.slice(0, 5).map(dest => (
                                     <li key={dest.id || dest.name}>
                                         <Link
-                                            href={`/site/${tenantId}/destinations/${generateSlug(
+                                            href={`/destinations/${generateSlug(
                                                 dest.name
                                             )}`}
                                             className='group flex items-center text-muted-foreground hover:text-primary transition-all duration-200'>
@@ -181,23 +179,23 @@ export default function Footer({
                             {[
                                 {
                                     label: 'About Us',
-                                    href: `/site/${tenantId}/#about`,
+                                    href: '/#about',
                                 },
                                 {
                                     label: 'Contact',
-                                    href: `/site/${tenantId}/contact`,
+                                    href: '/contact',
                                 },
                                 {
                                     label: 'FAQ',
-                                    href: `/site/${tenantId}/#faq`,
+                                    href: '/#faq',
                                 },
                                 {
                                     label: 'Terms & Conditions',
-                                    href: `/site/${tenantId}/#terms`,
+                                    href: '/#terms',
                                 },
                                 {
                                     label: 'Privacy Policy',
-                                    href: `/site/${tenantId}/#privacy`,
+                                    href: '/#privacy',
                                 },
                             ].map(link => (
                                 <li key={link.label}>

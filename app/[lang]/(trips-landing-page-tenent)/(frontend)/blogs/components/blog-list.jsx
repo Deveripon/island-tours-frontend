@@ -1,18 +1,18 @@
-import { getBlogsByTenant } from '@/app/_actions/blogs';
+import { findAllBlogs } from '@/app/_actions/blogs';
 import { FaceIdIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import BlogCard from './blog-card';
 import SearchClearButton from './clear-search-button';
 import LoadMoreButton from './load-more-button';
 
-const BlogList = async ({ tenantId, searchParams }) => {
+const BlogList = async ({ searchParams }) => {
     const query = await searchParams;
     const url_search_params = new URLSearchParams(query);
-    const searchQuery = `${url_search_params.toString()}&status=PUBLISHED&tenantId=${tenantId}`;
-    const res = await getBlogsByTenant(tenantId, searchQuery);
-    const allPosts = res?.data?.data?.blogs;
+    const searchQuery = `${url_search_params.toString()}&status=PUBLISHED`;
+    const res = await findAllBlogs(searchQuery);
+    const allPosts = res?.result?.blogs;
 
-    const { blogs, ...aggregation } = res?.data?.data;
+    const { blogs, ...aggregation } = res?.result || {};
     const searchTerm = url_search_params.get('search');
     const hasResults = allPosts && allPosts.length > 0;
 
@@ -68,7 +68,6 @@ const BlogList = async ({ tenantId, searchParams }) => {
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
                     {allPosts.map(post => (
                         <BlogCard
-                            tenantId={tenantId}
                             key={post.id}
                             post={post}
                         />
@@ -83,3 +82,4 @@ const BlogList = async ({ tenantId, searchParams }) => {
 };
 
 export default BlogList;
+

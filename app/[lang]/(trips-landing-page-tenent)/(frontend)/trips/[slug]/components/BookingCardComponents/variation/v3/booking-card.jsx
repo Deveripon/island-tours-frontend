@@ -49,7 +49,7 @@ const steps = [
     { number: 3, label: 'Your Info', icon: User },
 ];
 
-export default function ElegantBookingCard({ tenantId, paymentMethod }) {
+export default function ElegantBookingCard({ paymentMethod }) {
     const {
         tripData,
         selectedDate,
@@ -151,8 +151,8 @@ export default function ElegantBookingCard({ tenantId, paymentMethod }) {
     async function handlePayWithStripe(bookingData) {
         try {
             setIsLoading(true);
-            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/site/${tenantId}/trips/${tripData?.slug}/payment/success?method=stripe`;
-            const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/site/${tenantId}/trips/${tripData?.slug}/booking?checkout=${tripData?.id}&payment_cancelled=true`;
+            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/trips/${tripData?.slug}/payment/success?method=stripe`;
+            const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/trips/${tripData?.slug}/booking?checkout=${tripData?.id}&payment_cancelled=true`;
             const data = {
                 booking_data: {
                     ...bookingData,
@@ -177,7 +177,7 @@ export default function ElegantBookingCard({ tenantId, paymentMethod }) {
     async function handlePayWithMollie(bookingData) {
         try {
             setIsLoading(true);
-            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/site/${tenantId}/trips/${tripData?.slug}/payment/success?method=mollie`;
+            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/trips/${tripData?.slug}/payment/success?method=mollie`;
             const data = {
                 success_url: successUrl,
                 booking_data: {
@@ -557,7 +557,6 @@ export default function ElegantBookingCard({ tenantId, paymentMethod }) {
                         {step === 3 && (
                             <div className='animate-in fade-in duration-300'>
                                 <TravelarContactInformation
-                                    tenantId={tenantId}
                                     isRequest={false}
                                 />
                             </div>

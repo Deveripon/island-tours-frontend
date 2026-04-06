@@ -1,6 +1,6 @@
 import BlogCard from '../../components/blog-card';
 
-const RelatedPosts = async ({ relatedPosts, tenantId }) => {
+const RelatedPosts = async ({ relatedPosts }) => {
     const res = await relatedPosts;
     const posts = res?.data?.data?.relatedBlogs;
     if (!posts || posts.length === 0) {
@@ -15,7 +15,6 @@ const RelatedPosts = async ({ relatedPosts, tenantId }) => {
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
                     {posts.map(post => (
                         <BlogCard
-                            tenantId={tenantId}
                             key={post.id}
                             post={post}
                         />

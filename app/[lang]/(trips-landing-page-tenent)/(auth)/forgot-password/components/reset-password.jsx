@@ -1,5 +1,6 @@
 'use client';
-import PasswordFiled from '@/app/[lang]/(frontend)/(auth)/components/FormInputFields/password-field';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { updateForgottenPasswordOfCustomer } from '@/app/_actions/customerActions';
 import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -50,9 +51,10 @@ const ResetPassword = ({ email }) => {
                             New password
                         </label>
 
-                        <PasswordFiled
-                            placeholder='New password'
-                            register={register('password', {
+                        <Input
+                            type="password"
+                            placeholder="New password"
+                            {...register('password', {
                                 required: 'Password is required',
                                 minLength: {
                                     value: 8,
@@ -68,8 +70,12 @@ const ResetPassword = ({ email }) => {
                                     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,100}$/,
                                     message:
                                         'Password must contain at least 1 uppercase, 1 lowercase, and 1 number',
-                                } })}
-                            error={errors?.password}
+                                }
+                            })}
+                            className={cn(
+                                'mt-1',
+                                errors.password ? 'focus-visible:ring-destructive border-destructive' : ''
+                            )}
                         />
 
                         {errors?.password && (
@@ -85,9 +91,10 @@ const ResetPassword = ({ email }) => {
                             Confirm Password
                         </label>
 
-                        <PasswordFiled
-                            placeholder='Confirm Password'
-                            register={register('confirm_password', {
+                        <Input
+                            type="password"
+                            placeholder="Confirm Password"
+                            {...register('confirm_password', {
                                 required: 'Please confirm your password',
                                 minLength: {
                                     value: 8,
@@ -106,8 +113,12 @@ const ResetPassword = ({ email }) => {
                                 },
                                 validate: value =>
                                     watch('password') === value ||
-                                    'Password not matched' })}
-                            error={errors?.confirm_password}
+                                    'Password not matched'
+                            })}
+                            className={cn(
+                                'mt-1',
+                                errors.confirm_password ? 'focus-visible:ring-destructive border-destructive' : ''
+                            )}
                         />
 
                         {errors?.confirm_password && (

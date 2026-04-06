@@ -30,7 +30,6 @@ export default function AdminBar() {
         isAdmin,
         handleLogout,
         user,
-        tenantId,
         lang,
     } = useAdmin();
 
@@ -102,7 +101,7 @@ export default function AdminBar() {
 
                         <div className='hidden sm:flex items-center gap-1'>
                             <Link
-                                href={`/${lang}/${tenantId}/dashboard`}
+                                href={`/${lang}/admin/dashboard`}
                                 className='flex items-center gap-2 px-3 py-1.5 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all text-xs font-medium group'>
                                 <HugeiconsIcon
                                     icon={DashboardSquare01Icon}
@@ -323,7 +322,7 @@ export default function AdminBar() {
 
                                         <Link
                                             target='_blank'
-                                            href={`/${lang}/${tenantId}/dashboard/profile`}
+                                            href={`/${lang}/admin/dashboard/profile`}
                                             className='w-full flex items-center gap-3 px-4 py-2.5 text-xs text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left group'>
                                             <HugeiconsIcon
                                                 icon={UserCircleIcon}
@@ -339,7 +338,7 @@ export default function AdminBar() {
 
                                         <Link
                                             target='_blank'
-                                            href={`/${lang}/${tenantId}/dashboard/site-settings`}
+                                            href={`/${lang}/admin/dashboard/site-settings`}
                                             className='w-full flex items-center gap-3 px-4 py-2.5 text-xs text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left group'>
                                             <HugeiconsIcon
                                                 icon={Settings02Icon}

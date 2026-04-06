@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import TripCard from '../../../trips/components/trip-card';
 
-export default function PopulerTrips({ populertrips, tenantId, destination }) {
+export default function PopulerTrips({ populertrips, destination }) {
     return (
         <section
             id='populer-trips'
@@ -24,7 +24,6 @@ export default function PopulerTrips({ populertrips, tenantId, destination }) {
                     )}
                     {populertrips?.slice(0, 12).map(trip => (
                         <TripCard
-                            tenantId={tenantId}
                             key={trip.id}
                             trip={trip}
                         />

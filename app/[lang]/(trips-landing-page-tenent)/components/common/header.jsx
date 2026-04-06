@@ -8,11 +8,11 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { useEffect, useState } from 'react';
 import { useAdmin } from '../../hooks/useAdmin';
 import { AuthButton } from './auth-button';
+import { Logo } from './logo';
 import MobileMenu from './mobile-menu';
 import Navigation from './navigation';
-import { Logo } from './tenent-logo';
 
-export default function Header({ preferences, tenantId, logo }) {
+export default function Header({ logo }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -54,9 +54,8 @@ export default function Header({ preferences, tenantId, logo }) {
                         {/* Logo Area */}
                         <div className='flex-shrink-0 z-50'>
                             <Logo
-                                link={`/site/${tenantId}`}
-                                preferences={preferences}
-                                logo={logo}
+                                link='/'
+                                logo={logo || '/tripwheel-logo.png'}
                                 className={cn(
                                     'transition-all duration-500',
                                     isScrolled ? 'scale-95' : 'scale-110'
@@ -68,7 +67,6 @@ export default function Header({ preferences, tenantId, logo }) {
                         <div className='hidden lg:flex items-center justify-center flex-1'>
                             <Navigation
                                 className='liquid-glass'
-                                tenantId={tenantId}
                                 isScrolled={isScrolled}
                                 isMobile={false}
                                 isTripDetailsPage={isTripDetailsPage}
@@ -87,7 +85,6 @@ export default function Header({ preferences, tenantId, logo }) {
 
                             <div className='hidden lg:flex'>
                                 <AuthButton
-                                    tenantId={tenantId}
                                     variant='default'
                                     size='sm'
                                     className='h-10 px-6 rounded-full font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95'
@@ -119,7 +116,6 @@ export default function Header({ preferences, tenantId, logo }) {
             <MobileMenu isOpen={isMobileMenuOpen} onClose={closeMobileMenu}>
                 <Navigation
                     className='liquid-glass'
-                    tenantId={tenantId}
                     onClose={closeMobileMenu}
                     isMobileMenu={true}
                     isScrolled={isScrolled}

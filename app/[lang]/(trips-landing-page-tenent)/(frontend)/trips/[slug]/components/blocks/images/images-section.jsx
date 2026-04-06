@@ -1,6 +1,6 @@
 'use client';
 
-import { updateAffiliateTripById } from '@/app/_actions/trips/affiliateTripsAction';
+import { updateAffiliateTrip } from '@/app/_actions/trips/affiliateTripsAction';
 import {
     ArrowLeft01Icon,
     ArrowRight01Icon,
@@ -18,7 +18,6 @@ import { ImagesForm } from './images-form';
 
 const ImagesSection = ({
     trip,
-    tenantId,
     data: blockData,
     id,
     isBlock = false,
@@ -183,7 +182,7 @@ const ImagesSection = ({
                 return;
             }
 
-            await updateAffiliateTripById(trip?.id, {
+            await updateAffiliateTrip(trip?.id, {
                 userAddedOptions: {
                     ...trip?.userAddedOptions,
                     memories: updatedMemoriesData,

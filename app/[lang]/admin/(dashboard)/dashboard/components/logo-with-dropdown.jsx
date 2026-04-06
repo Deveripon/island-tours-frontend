@@ -3,17 +3,15 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 // Logo component with hover dropdown
-export const LogoWithDropdown = ({ preferences, tenant }) => {
+export const LogoWithDropdown = ({ preferences }) => {
     return (
         <div className='relative'>
             {/* Logo */}
             <Link
-                href={`/${tenant}/dashboard`}
+                href="/admin/dashboard"
                 className='flex items-center space-x-2'>
                 <span className={cn(`text-md font-bold`)}>
-                    {tenant === 'i-am-admin'
-                        ? 'TripWheel'
-                        : preferences?.business_name || 'TravelEase'}
+                    {preferences?.business_name || 'TripWheel'}
                 </span>
             </Link>
         </div>

@@ -2,7 +2,6 @@ import Activity from '../../../trips/components/activity-card';
 
 export default function PopulerActivities({
     popularActivities,
-    tenantId,
     destination }) {
     return (
         <section
@@ -25,7 +24,6 @@ export default function PopulerActivities({
                 <div className='grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6'>
                     {popularActivities?.slice(0, 12).map(activity => (
                         <Activity
-                            tenantId={tenantId}
                             key={activity.id}
                             activity={activity}
                         />

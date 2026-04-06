@@ -14,7 +14,6 @@ import { AuthButton } from './auth-button';
 const Navigation = ({
     isMobileMenu = false,
     onClose,
-    tenantId,
     isScrolled = false,
     isMobile = false,
     className,
@@ -33,8 +32,7 @@ const Navigation = ({
     }, []);
 
     const isPaymentPage = /\/payment$/.test(pathname);
-    const isHomePage =
-        pathname === `/site/${tenantId}/` || pathname === `/site/${tenantId}`;
+    const isHomePage = pathname === '/' || pathname.endsWith('/') || pathname.split('/').pop() === '';
 
     const isLiquidGlass = className?.includes('liquid-glass');
     const [scrollPast80vh, setScrollPast80vh] = useState(false);
@@ -66,11 +64,11 @@ const Navigation = ({
         return () => {
             if (onClose) onClose();
             const currentPath = window.location.pathname;
-            const targetPath = `/site/${tenantId}/`;
+            const targetPath = '/';
 
             if (
                 currentPath === targetPath ||
-                currentPath === `/site/${tenantId}`
+                currentPath.endsWith('/')
             ) {
                 setTimeout(() => {
                     const element = document.getElementById(sectionId);
@@ -84,7 +82,7 @@ const Navigation = ({
                     }
                 }, 100);
             } else {
-                router.push(`/site/${tenantId}/#${sectionId}`);
+                router.push(`/#${sectionId}`);
             }
         };
     };
@@ -92,57 +90,50 @@ const Navigation = ({
     const menuItems = [
         {
             label: 'Explore',
-            href: `/site/${tenantId}/trips`,
+            href: '/trips',
             icon: 'explore',
         },
         {
             label: 'Destinations',
-            href: `/site/${tenantId}/#destinations`,
+            href: '/#destinations',
             action: scrollToSection('destinations'),
             icon: 'location',
         },
         {
             label: 'Blogs & News',
-            href: `/site/${tenantId}/blogs`,
+            href: '/blogs',
             icon: 'article',
         },
         {
             label: 'Contact',
-            href: `/site/${tenantId}/contact`,
+            href: '/contact',
             icon: 'mail',
         },
     ];
 
     const getIsActive = item => {
-        // Handle hash routes (e.g., #destinations)
         if (item.href.includes('#')) {
             const [path, hash] = item.href.split('#');
-            // Normalize both the path from href and the current pathname
-            const normalizedItemPath = path.endsWith('/')
+            const normalizedItemPath = path.endsWith('/') && path !== '/'
                 ? path.slice(0, -1)
                 : path;
-            const normalizedCurrentPath = pathname.endsWith('/')
+            const normalizedCurrentPath = pathname.endsWith('/') && pathname !== '/'
                 ? pathname.slice(0, -1)
                 : pathname;
 
-            // Check if current page is the base page for the hash
-            const isOnBasePage =
-                normalizedCurrentPath.endsWith(normalizedItemPath);
+            const isOnBasePage = normalizedCurrentPath.endsWith(normalizedItemPath) || (normalizedItemPath === '/' && (normalizedCurrentPath === '' || normalizedCurrentPath.length <= 3));
             return isOnBasePage && currentHash === `#${hash}`;
         }
 
-        // Precise matching for regular links
-        // We use endsWith to ignore the [lang] prefix in the pathname
-        const normalizedItemPath = item.href.endsWith('/')
+        const normalizedItemPath = item.href.endsWith('/') && item.href !== '/'
             ? item.href.slice(0, -1)
             : item.href;
-        const normalizedCurrentPath = pathname.endsWith('/')
+        const normalizedCurrentPath = pathname.endsWith('/') && pathname !== '/'
             ? pathname.slice(0, -1)
             : pathname;
 
         const isActivePath = normalizedCurrentPath.endsWith(normalizedItemPath);
 
-        // Special case for Explore: should be active on /trips and its sub-pages
         if (item.label === 'Explore') {
             return (
                 isActivePath ||
@@ -212,7 +203,6 @@ const Navigation = ({
                         <ModeToggle className='h-10 w-10' />
                     </div>
                     <AuthButton
-                        tenantId={tenantId}
                         onClose={() => onClose()}
                         variant='default'
                         size='lg'
@@ -274,6 +264,7 @@ const Navigation = ({
         </nav>
     );
 };
+
 
 export default Navigation;
 

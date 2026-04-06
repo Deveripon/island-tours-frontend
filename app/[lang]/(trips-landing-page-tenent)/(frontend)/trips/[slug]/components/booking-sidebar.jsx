@@ -25,7 +25,7 @@ import ElegantBookingCard from './BookingCardComponents/variation/v3/booking-car
 import SidebarBookingCard from './BookingCardComponents/variation/v4/booking-card';
 import { EditingSheetRight } from './editing-forms/editing-sheet-right';
 
-const BookingSidebar = ({ paymentMethod, tenantId, bookingForm, trip }) => {
+const BookingSidebar = ({ paymentMethod, bookingForm, trip }) => {
     const { mode, MODES, isAdmin } = useAdmin();
     const isEditMode = mode === MODES.edit;
     const [isEditing, setIsEditing] = useState(false);
@@ -71,31 +71,27 @@ const BookingSidebar = ({ paymentMethod, tenantId, bookingForm, trip }) => {
                     'sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-scroll'
                 )}>
                 {trip?.datesAvailability?.onlyUponRequest ? (
-                    <RequestForm tenantId={tenantId} />
+                    <RequestForm />
                 ) : (
                     <>
                         {bookingForm === 'v1' && (
                             <BookingCard
                                 paymentMethod={paymentMethod}
-                                tenantId={tenantId}
                             />
                         )}
                         {bookingForm === 'v2' && (
                             <MinimalBookingCard
                                 paymentMethod={paymentMethod}
-                                tenantId={tenantId}
                             />
                         )}
                         {bookingForm === 'v3' && (
                             <ElegantBookingCard
                                 paymentMethod={paymentMethod}
-                                tenantId={tenantId}
                             />
                         )}{' '}
                         {bookingForm === 'v4' && (
                             <SidebarBookingCard
                                 paymentMethod={paymentMethod}
-                                tenantId={tenantId}
                             />
                         )}
                     </>

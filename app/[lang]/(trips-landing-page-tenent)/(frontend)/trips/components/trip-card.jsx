@@ -10,10 +10,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { formatDaysOfWeek } from '../../../utils';
 
-const TripCard = ({ trip, tenantId, query }) => {
+const TripCard = ({ trip, query }) => {
     console.log(trip);
     return (
-        <Link href={`/site/${tenantId}/trips/${trip.slug}?${query}`}>
+        <Link href={`/trips/${trip.slug}?${query}`}>
             <article className='group flex flex-col overflow-hidden rounded-3xl bg-card text-card-foreground ring-1 ring-border shadow-lg dark:shadow-[0_22px_60px_rgba(15,23,42,0.85)] hover:-translate-y-1 hover:shadow-xl hover:ring-primary/60 dark:hover:bg-accent/5 hover:bg-accent/5 dark:hover:shadow-[0_26px_80px_rgba(15,23,42,0.95)] transition-all duration-500 ease-out h-full'>
                 <div className='relative aspect-[4/3] overflow-hidden'>
                     <Image

@@ -3,9 +3,9 @@ import {
     DummypopularDestinations,
     featuredTrips,
 } from '@/app/[lang]/(trips-landing-page-tenent)/data/data';
-import { getAllActivityOfTenant } from '@/app/_actions/trips/activityActions';
-import { getTripsByDestinationOfATenant } from '@/app/_actions/trips/affiliateTripsAction';
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
+import { findAllTripsByDestination } from '@/app/_actions/trips/affiliateTripsAction';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import { generateSlug } from '@/lib/utils';
 import { transformDestinationData } from '../../../components/home/populer-destinations';
 import PageHero from '../../../components/page-hero';
@@ -13,56 +13,33 @@ import PopulerActivities from './components/populer-activities';
 import PopulerTrips from './components/populer-trips';
 
 const DestinationPage = async ({ params }) => {
-    const { tenantId, slug } = await params;
-    const isDemo = tenantId === 'demo';
+    const { slug } = await params;
 
-    let destination, popularActivities, populertrips;
+    const allDestinations = await getAllDestinations();
+    const allDestinationsData = transformDestinationData(
+        allDestinations?.result?.data
+    );
 
-    if (isDemo) {
-        // Demo mode - use dummy data
-        destination = DummypopularDestinations.find(
-            destination => generateSlug(destination.name) === slug
+    const destination = allDestinationsData?.find(
+        destination => generateSlug(destination.name) === slug
+    );
+
+    let popularActivities = [];
+    let populertrips = [];
+
+    if (destination) {
+        const activitiesRes = await getAllActivities(
+            `location=${destination.country ||
+            destination.city ||
+            destination.region ||
+            destination.name
+            }`
         );
-        popularActivities = DummypopularActivities;
-        populertrips = featuredTrips;
-    } else {
-        // Get destinations
-        const allDestinations = await getAllDestinationOfTenant(tenantId);
-        const allDestinationsData = transformDestinationData(
-            allDestinations?.data
-        );
 
-        destination = allDestinationsData?.find(
-            destination => generateSlug(destination.name) === slug
-        );
+        popularActivities = activitiesRes?.result?.data || [];
 
-        if (destination) {
-            // Get activities for this destination
-            const activities = await getAllActivityOfTenant(
-                tenantId,
-                `location=${destination.country ||
-                destination.city ||
-                destination.region ||
-                destination.name
-                }`
-            );
-
-            popularActivities =
-                activities?.data && activities.data.length > 0
-                    ? activities.data
-                    : [];
-
-            // Get trips for this destination
-            const response = await getTripsByDestinationOfATenant(
-                tenantId,
-                destination.id
-            );
-
-            populertrips =
-                response?.data && response.data.length > 0
-                    ? response?.data
-                    : [];
-        }
+        const tripsRes = await findAllTripsByDestination(destination.id);
+        populertrips = tripsRes?.result?.data || [];
     }
 
     return (
@@ -77,7 +54,6 @@ const DestinationPage = async ({ params }) => {
             {populertrips?.length > 0 && (
                 <PopulerTrips
                     populertrips={populertrips}
-                    tenantId={tenantId}
                     destination={destination}
                 />
             )}
@@ -85,7 +61,6 @@ const DestinationPage = async ({ params }) => {
             {popularActivities?.length > 0 && (
                 <PopulerActivities
                     popularActivities={popularActivities}
-                    tenantId={tenantId}
                     destination={destination}
                 />
             )}
@@ -94,4 +69,5 @@ const DestinationPage = async ({ params }) => {
 };
 
 export default DestinationPage;
+
 

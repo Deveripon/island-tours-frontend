@@ -7,7 +7,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import LanguageSwitcher from './language-switcher';
 import { ModeToggle } from './theme-switcher';
 
-export function SiteHeader({ preferences, tenant, loggedInUser }) {
+export function SiteHeader({ preferences, loggedInUser }) {
     return (
         <header
             className='flex h-[70px] bg-white    dark:bg-sidebar shadow-none
@@ -21,7 +21,6 @@ export function SiteHeader({ preferences, tenant, loggedInUser }) {
                     />
                     <div className='w-28 sm:w-56 overflow-hidden transition-all duration-300'>
                         <WeatherSlide
-                            tenant={tenant}
                             loggedInUser={loggedInUser}
                         />
                     </div>
@@ -38,7 +37,6 @@ export function SiteHeader({ preferences, tenant, loggedInUser }) {
                     <ProfileDropdown
                         className='items-end'
                         loggedInUser={loggedInUser}
-                        tenant={tenant}
                     />
                 </div>
             </div>

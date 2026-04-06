@@ -20,8 +20,6 @@ const AdminProvider = ({ children }) => {
     const pathname = usePathname();
     const params = useParams();
     const fetchUserData = useCallback(async () => {
-        if (!params.tenantId) return; // Guard clause
-
         try {
             setLoading(true);
             setError(null);
@@ -36,7 +34,7 @@ const AdminProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [params.tenantId, session?.user?.id]);
+    }, [session?.user?.id]);
 
     useEffect(() => {
         fetchUserData();
@@ -64,7 +62,6 @@ const AdminProvider = ({ children }) => {
                 isAdmin,
                 user,
                 handleLogout,
-                tenantId: params.tenantId,
                 lang: params.lang,
                 loading,
                 error,

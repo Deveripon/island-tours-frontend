@@ -1,9 +1,9 @@
 import SectionTitle from './section-title';
 
-export default function InstagramFeed({ tenantSiteInfo }) {
+export default function InstagramFeed({ siteInfo }) {
     if (
-        !tenantSiteInfo?.enableInstagram ||
-        !tenantSiteInfo?.instagramWidgetId
+        !siteInfo?.enableInstagram ||
+        !siteInfo?.instagramWidgetId
     ) {
         return null;
     }
@@ -19,7 +19,7 @@ export default function InstagramFeed({ tenantSiteInfo }) {
 
                 <div className='max-w-7xl mx-auto'>
                     <div
-                        className={tenantSiteInfo?.instagramWidgetId}
+                        className={siteInfo?.instagramWidgetId}
                         data-elfsight-app-lazy></div>
                 </div>
             </div>

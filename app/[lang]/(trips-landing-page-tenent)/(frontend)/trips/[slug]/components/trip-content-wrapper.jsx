@@ -46,7 +46,6 @@ import BookingSidebar from './booking-sidebar';
 
 const TripContentWrapperInner = ({
     trip,
-    tenantId,
     paymentMethod,
     bookingForm,
 }) => {
@@ -173,7 +172,6 @@ const TripContentWrapperInner = ({
                     <div key={block.id || index} className='mb-20 last:mb-0'>
                         <Component
                             trip={trip}
-                            tenantId={tenantId}
                             data={block.data}
                             id={block.id}
                             isBlock={true}
@@ -190,7 +188,6 @@ const TripContentWrapperInner = ({
                     onDelete={() => actions.removeBlock(block.id)}>
                     <Component
                         trip={trip}
-                        tenantId={tenantId}
                         data={block.data}
                         id={block.id}
                         isBlock={true}
@@ -228,7 +225,6 @@ const TripContentWrapperInner = ({
                                 return (
                                     <Component
                                         trip={trip}
-                                        tenantId={tenantId}
                                         data={activeBlock.data}
                                         id={activeBlock.id}
                                         isBlock={true}
@@ -265,7 +261,6 @@ const TripContentWrapperInner = ({
                 onOpenChange={setShowSidebar}
                 onAddBlock={handleAddBlock}
                 trip={trip}
-                tenantId={tenantId}
             />
 
             <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12'>
@@ -305,7 +300,6 @@ const TripContentWrapperInner = ({
 
                 <BookingSidebar
                     trip={trip}
-                    tenantId={tenantId}
                     paymentMethod={paymentMethod}
                     bookingForm={bookingForm}
                 />

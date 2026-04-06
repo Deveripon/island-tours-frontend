@@ -15,7 +15,7 @@ import GuestSelection from './variation/guest/guest-selection';
 import BookingPageContent from './variation/v1/booking-page-content';
 import DateSelector from './variation/v1/date-selector';
 
-export default function RequestForm({ tenantId }) {
+export default function RequestForm() {
     const { tripData, selectedDate, guests, pricing } = useTrip();
     const [showExtra, setShowExtra] = useState(false);
     const [isNext, setIsNext] = useState(false);
@@ -24,7 +24,7 @@ export default function RequestForm({ tenantId }) {
     const goToCheckout = e => {
         e.preventDefault();
         router.push(
-            `/site/${tenantId}/trips/${tripData?.id}/booking?checkout=${tripData?.id}`
+            `/trips/${tripData?.id}/booking?checkout=${tripData?.id}`
         );
     };
 
@@ -52,7 +52,7 @@ export default function RequestForm({ tenantId }) {
             )}
 
             {isNext && (
-                <BookingPageContent tenantId={tenantId} isRequest={true} />
+                <BookingPageContent isRequest={true} />
             )}
 
             <CardFooter className='pt-0'>

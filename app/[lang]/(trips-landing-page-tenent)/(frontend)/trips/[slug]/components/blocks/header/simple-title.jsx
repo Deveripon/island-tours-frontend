@@ -6,7 +6,6 @@ import { useBlockEditState } from '../context/block-edit-context';
 import { HeaderForm } from './header-form';
 const SimpleTitle = ({
     trip,
-    tenantId,
     data: blockData,
     id,
     isBlock = false,

@@ -1,6 +1,6 @@
 'use client';
 
-import { updateAffiliateTripById } from '@/app/_actions/trips/affiliateTripsAction';
+import { updateAffiliateTrip } from '@/app/_actions/trips/affiliateTripsAction';
 import {
     ArrowLeft01Icon,
     ArrowRight01Icon,
@@ -18,7 +18,6 @@ import TripGallery from './trip-gallery';
 
 const EditableTripGallery = ({
     trip,
-    tenantId,
     data: blockData,
     id,
     isBlock = false,
@@ -188,7 +187,7 @@ const EditableTripGallery = ({
                 return;
             }
 
-            const result = await updateAffiliateTripById(trip?.id, {
+            const result = await updateAffiliateTrip(trip?.id, {
                 galleryImages: imageData,
             });
 

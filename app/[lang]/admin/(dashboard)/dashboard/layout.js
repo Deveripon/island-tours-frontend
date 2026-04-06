@@ -2,8 +2,6 @@ import { getUserById } from '@/app/_actions/userActions';
 import { auth } from '@/auth';
 
 import { getDictionary } from '@/app/[lang]/_dictionaries/dictionaries';
-import { getAllInquerysOfaTenant } from '@/app/_actions/inqueryActions';
-import { getPendingReviewsCount } from '@/app/_actions/reviewActions';
 import { getGroupedDataOfStatus } from '@/lib/utils';
 import { ThemeProvider } from 'next-themes';
 import { redirect } from 'next/navigation';
@@ -41,40 +39,28 @@ import ContentWrapper from './wrapper';
     };
 }
  */
+import { getAllInquiries } from '@/app/_actions/inqueryActions';
+import { getPendingReviewsCount } from '@/app/_actions/reviewActions';
+
 export default async function DashboardLayout({ children, params }) {
     const session = await auth();
-    const { tenant, lang } = await params;
+    const { lang } = await params;
     const language = await getDictionary(lang);
 
     const loggedInUser = await getUserById(session?.user?.id);
-
-
-    const inquries = await getAllInquerysOfaTenant(tenant);
-
-    const inquriesData = inquries?.data?.data;
-    const pendingInquries = getGroupedDataOfStatus(inquriesData)['PENDING']?.length || 0;
-
-    // Fetch pending reviews count
-    const pendingReviewsResponse = await getPendingReviewsCount(tenant);
-
-    const pendingReviewsCount = pendingReviewsResponse?.success ? pendingReviewsResponse?.count || 0 : 0;
-
 
     // Handle case where user doesn't exist in database
     if (!loggedInUser?.user) {
         redirect('/');
     }
 
+    const inquries = await getAllInquiries();
+    const inquriesData = inquries?.result?.data;
+    const pendingInquries = getGroupedDataOfStatus(inquriesData)['PENDING']?.length || 0;
 
-    const tenantId =
-        loggedInUser?.user?.tenant?.tenantId || loggedInUser?.user?.createdByTenantId;
-
-    if (!tenantId) {
-        redirect('/');
-    }
-    if (tenantId !== tenant) {
-        redirect('/');
-    }
+    // Fetch pending reviews count
+    const pendingReviewsResponse = await getPendingReviewsCount();
+    const pendingReviewsCount = pendingReviewsResponse?.success ? pendingReviewsResponse?.count || 0 : 0;
 
     return (
         <ThemeProvider
@@ -88,7 +74,6 @@ export default async function DashboardLayout({ children, params }) {
                 preferences={loggedInUser?.user?.preferences}
                 key={loggedInUser?.user?.id}
                 loggedInUser={loggedInUser.user}
-                tenant={tenant}
                 pendingInquries={pendingInquries}
                 pendingReviewsCount={pendingReviewsCount}
             >

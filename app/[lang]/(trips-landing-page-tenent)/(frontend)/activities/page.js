@@ -1,14 +1,12 @@
-import { getAllActivityOfTenant } from '@/app/_actions/trips/activityActions';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
 import PageHero from '../../components/page-hero';
 import Activity from '../trips/components/activity-card';
 
-const ActivitiesListPage = async ({ params }) => {
-    const { tenantId } = await params;
-
-    const response = await getAllActivityOfTenant(tenantId);
+const ActivitiesListPage = async () => {
+    const response = await getAllActivities();
 
     const activities =
-        response?.data.filter(
+        response?.result?.data?.filter(
             activity => activity?._count?.affiliateTrips > 0
         ) || [];
 
@@ -42,7 +40,6 @@ const ActivitiesListPage = async ({ params }) => {
                     <div className='grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6'>
                         {activities?.map(activity => (
                             <Activity
-                                tenantId={tenantId}
                                 key={activity.id}
                                 activity={activity}
                             />
@@ -55,4 +52,5 @@ const ActivitiesListPage = async ({ params }) => {
 };
 
 export default ActivitiesListPage;
+
 

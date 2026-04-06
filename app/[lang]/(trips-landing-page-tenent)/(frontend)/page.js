@@ -1,5 +1,6 @@
 import { getDictionary } from '@/app/[lang]/_dictionaries/dictionaries';
-import { getAllActivityOfTenant } from '@/app/_actions/trips/activityActions';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
+import { getSiteInfo } from '@/app/_actions/settingsActions';
 import ActivitiesSection from '../components/home/activities-section';
 import CTASection from '../components/home/cta-section';
 import FeaturedTrips from '../components/home/featured-trips';
@@ -11,18 +12,19 @@ import SupportSection from '../components/home/support-section';
 
 export default async function Home({ params }) {
     const { lang } = await params;
-
-
-
-
     const language = await getDictionary(lang);
 
-    const response = await getAllActivityOfTenant(tenantId);
+    const [activitiesRes, siteInfoRes] = await Promise.all([
+        getAllActivities(),
+        getSiteInfo()
+    ]);
 
     const activities =
-        response?.data.filter(activity => activity?._count?.affiliateTrips > 0) || [];
+        activitiesRes?.result?.data?.filter(activity => activity?._count?.affiliateTrips > 0) || [];
 
-    const faqs = res?.result?.data?.tenantSiteInfo?.faqs || [
+    const siteInfo = siteInfoRes?.data;
+
+    const faqs = siteInfo?.faqs || [
         {
             question: 'How does cancellation work?',
             answer: 'You can cancel free of charge up to 24 hours before the tour. Cancellations within 24 hours are not eligible for a refund.',
@@ -40,33 +42,25 @@ export default async function Home({ params }) {
             answer: 'Yes, you will receive a confirmation voucher by email immediately after booking.',
         },
     ];
-    const enableWhatsAppChat =
-        res?.result?.data?.tenantSiteInfo?.enableWhatsappChat || false;
-    const whatsappNumber = res?.result?.data?.tenantSiteInfo?.whatsappNumber || '';
 
-    const partnerImages = res?.result?.data?.tenantSiteInfo?.partners || [];
+    const enableWhatsAppChat = siteInfo?.enableWhatsappChat || false;
+    const whatsappNumber = siteInfo?.whatsappNumber || '';
+    const partnerImages = siteInfo?.partners || [];
 
     return (
         <main className='min-h-screen bg-background'>
             <HeroSection
                 content={language?.b2bSite?.homePage?.heroSection}
-                preferences={res.result?.data?.preferences}
-                tenantId={tenantId}
             />
             <Features content={language?.b2bSite?.homePage?.features} />
-            <ActivitiesSection tenantId={tenantId} activities={activities} />
+            <ActivitiesSection activities={activities} />
             <PopularDestinations
-                isDemo={isDemo}
-                tenantId={tenantId}
                 content={language?.b2bSite?.homePage?.popularDestinations}
             />
             <FeaturedTrips
-                isDemo={isDemo}
                 content={language?.b2bSite?.homePage?.populerTrips}
-                tenantId={tenantId}
             />
             <SupportSection
-                tenantId={tenantId}
                 faqs={faqs}
                 enableWhatsAppChat={enableWhatsAppChat}
                 whatsappNumber={whatsappNumber}
@@ -75,8 +69,8 @@ export default async function Home({ params }) {
                 partnerImages={partnerImages}
                 content={language?.b2bSite?.homePage?.partner}
             />
-            {/*   <Testimonials content={language?.b2bSite?.homePage?.testimonial} /> */}
             <CTASection />
         </main>
     );
 }
+

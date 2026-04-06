@@ -8,7 +8,7 @@ import { FormDatePicker } from '../ui/date-picker';
 import GuestSelecetionPopup from '../ui/guest-selection-popup';
 import DestinationSearch from './destination-search';
 
-const HeroSearchBox = ({ preferences, tenantId, content, destinations, className }) => {
+const HeroSearchBox = ({ preferences, content, destinations, className }) => {
     const [destination, setDestination] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [guests, setGuests] = useState({
@@ -56,9 +56,9 @@ const HeroSearchBox = ({ preferences, tenantId, content, destinations, className
     ]);
 
     const handleSearch = () => {
-
-        router.push(`/site/${tenantId}/trips?${createparamsString()}`);
+        router.push(`/trips?${createparamsString()}`);
     };
+
 
     const handleDateChange = value => {
         setStartDate(value);

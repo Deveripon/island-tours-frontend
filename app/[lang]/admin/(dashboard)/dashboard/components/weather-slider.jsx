@@ -3,7 +3,7 @@ import { getCurrentLocationWeather } from '@/utils/weather';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
-const WeatherSlide = ({ tenant, loggedInUser }) => {
+const WeatherSlide = ({ loggedInUser }) => {
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

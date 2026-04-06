@@ -14,7 +14,6 @@ export default function BlockLibrarySidebar({
     onOpenChange,
     onAddBlock,
     trip,
-    tenantId,
 }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedBlockType, setSelectedBlockType] = useState(null);

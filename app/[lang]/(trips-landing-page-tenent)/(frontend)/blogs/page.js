@@ -4,8 +4,7 @@ import BlogList from './components/blog-list';
 import BlogListSkeleton from './components/blog-list-loading-skeleton';
 import BlogSearch from './components/blog-search';
 
-export default async function BlogPage({ params, searchParams }) {
-    const { tenantId } = await params;
+export default async function BlogPage({ searchParams }) {
     return (
         <div className='min-h-screen bg-background'>
             {/* Header Section */}
@@ -21,9 +20,10 @@ export default async function BlogPage({ params, searchParams }) {
                 <BlogSearch />
                 {/* Blog Grid */}
                 <Suspense fallback={<BlogListSkeleton />}>
-                    <BlogList tenantId={tenantId} searchParams={searchParams} />
+                    <BlogList searchParams={searchParams} />
                 </Suspense>
             </div>
         </div>
     );
 }
+

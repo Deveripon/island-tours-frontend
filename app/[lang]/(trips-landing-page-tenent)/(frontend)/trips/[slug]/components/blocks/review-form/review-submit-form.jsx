@@ -13,7 +13,6 @@ import ReviewSubmitFormEdit from './review-submit-form-edit';
 
 const ReviewSubmitForm = ({
     trip,
-    tenantId,
     data: blockData,
     id,
     isBlock = false,
@@ -119,7 +118,7 @@ const ReviewSubmitForm = ({
                 setIsUploading(true);
                 const uploadRes = await uploadMultipleImage(files, {
                     folder: `reviews`,
-                    userId: tenantId || 'anonymous',
+                    userId: 'anonymous',
                 });
                 setIsUploading(false);
 

@@ -1,19 +1,19 @@
 import { getActivitiesById } from '@/app/_actions/trips/activityActions';
-import { getTripsByActivityId } from '@/app/_actions/trips/affiliateTripsAction';
+import { findAllTripsByActivity } from '@/app/_actions/trips/affiliateTripsAction';
 import { notFound } from 'next/navigation';
 
 import PageHero from '../../../components/page-hero';
 import TripsList from './components/trips-list';
 
 const ActivityDetailsPage = async ({ params }) => {
-    const { id, tenantId } = await params;
+    const { id } = await params;
     const res = await getActivitiesById(id);
 
     if (res?.success === false) {
         return notFound();
     }
     const activity = res?.result?.data;
-    const response = await getTripsByActivityId(tenantId, activity?.id);
+    const response = await findAllTripsByActivity(activity?.id);
 
     return (
         <>
@@ -30,14 +30,13 @@ const ActivityDetailsPage = async ({ params }) => {
                     </p>
                 </div>
 
-                {response?.data?.length === 0 ? (
+                {response?.result?.data?.length === 0 ? (
                     <div className='col-span-4'>
                         <p>No trips found.</p>
                     </div>
                 ) : (
                     <TripsList
-                        trips={response?.data}
-                        tenantId={tenantId}
+                        trips={response?.result?.data}
                         activityName={activity?.name}
                     />
                 )}

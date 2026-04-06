@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import BookingsSummery from './bookings-summery';
 import { columns } from './columns';
 import { DataTable } from './data-table';
-const PageContent = ({ groupedBookings, bookings, tenant }) => {
+const PageContent = ({ groupedBookings, bookings }) => {
     const [typeFilter, setTypeFilter] = useState('');
     const [isShowConfirm, setIsShowConfirm] = useState(false);
     const [BookingsIdToDelete, setBookingsIdToDelete] = useState(null);
@@ -36,8 +36,8 @@ const PageContent = ({ groupedBookings, bookings, tenant }) => {
             const booking = e.detail;
             // call stripe server action -> success: return to successpage -> failure: return to booking page
 
-            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/site/${tenant}/account/my-bookings`; //localhost:3000/site/trips/09cbe4c2-dc22-464e-a08b-fddf318c5776/payment/user_dfsdwrgsdfgsrtwrsgsdf/success
-            const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/site/${tenant}/account/my-bookings?payment_cancelled=true`; //localhost:3000/site/trips/09cbe4c2-dc22-464e-a08b-fddf318c5776/booking?checkout=09cbe4c2-dc22-464e-a08b-fddf318c5776&payment_cancelled=true&uid=user_35efgsdfgrgsdfgsdfg
+            const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/account/my-bookings`;
+            const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/account/my-bookings?payment_cancelled=true`;
             const data = {
                 customerId: booking?.customerId,
                 tripId: booking?.tripId,
@@ -72,7 +72,7 @@ const PageContent = ({ groupedBookings, bookings, tenant }) => {
             );
             document.removeEventListener('delete-Bookings', handleDelete);
         };
-    }, [bookings, tenant]);
+    }, [bookings]);
 
     // Handle clicking on type card to filter
     const handleTypeCardClick = type => {

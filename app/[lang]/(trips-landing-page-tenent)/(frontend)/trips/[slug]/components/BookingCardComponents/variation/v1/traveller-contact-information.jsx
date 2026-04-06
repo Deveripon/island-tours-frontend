@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useFormContext } from 'react-hook-form';
 
-const TravelarContactInformation = ({ tenantId, isRequest }) => {
+const TravelarContactInformation = ({ isRequest }) => {
     const { control } = useFormContext();
     return (
         <div className='px-6'>

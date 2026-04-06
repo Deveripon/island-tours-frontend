@@ -15,10 +15,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { saveAs } from 'file-saver';
 import { Calendar, Clock, Home, Mail, Phone } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-
 const SuccessPageContent = ({ bookingData }) => {
-    const { tenantId } = useParams();
     // Function to download receipt
     async function downloadReceipt(bookingId) {
         try {
@@ -426,7 +423,7 @@ const SuccessPageContent = ({ bookingData }) => {
                                     asChild
                                     variant='outline'
                                     className='w-full dark:hover:text-primary '>
-                                    <Link href={`/site/${tenantId}`}>
+                                    <Link href="/">
                                         <Home className='h-4 w-4 mr-2' />
                                         Back to Home
                                     </Link>

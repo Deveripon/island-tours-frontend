@@ -8,7 +8,7 @@ import DestinationSearch from '../../../../components/home/destination-search';
 import { FormDatePicker } from '../../../../components/ui/date-picker';
 import GuestSelecetionPopup from '../../../../components/ui/guest-selection-popup';
 
-const ExtendedSearch = ({ tenantId, destinations }) => {
+const ExtendedSearch = ({ destinations }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const debounceTimerRef = useRef(null);
@@ -171,7 +171,7 @@ const ExtendedSearch = ({ tenantId, destinations }) => {
             }
         });
 
-        router.push(`/site/${tenantId}/trips?${currentParams.toString()}`, {
+        router.push(`/trips?${currentParams.toString()}`, {
             scroll: false,
         });
     };

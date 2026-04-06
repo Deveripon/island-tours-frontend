@@ -19,7 +19,6 @@ import { useMemo } from 'react';
 
 export function AppSidebar({
     lang,
-    tenant,
     preferences,
     menuItems = 'dashboardB2B',
     pendingInquries,
@@ -71,7 +70,6 @@ export function AppSidebar({
                                 className='data-[slot=sidebar-menu-button]:!p-1.5'>
                                 <LogoWithDropdown
                                     preferences={preferences}
-                                    tenant={tenant}
                                 />
                             </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -80,7 +78,6 @@ export function AppSidebar({
             </div>
             <SidebarContent className='mb-16'>
                 <NavMain
-                    tenant={tenant}
                     items={filteredNavigations}
                     lang={lang}
                     pendingInquries={pendingInquries}

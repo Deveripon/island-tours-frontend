@@ -22,7 +22,7 @@ import BookingPageContent from './booking-page-content';
 import DateSelector from './date-selector';
 import NotAdditionalSelection from './not-additional-selection';
 
-export default function BookingCard({ tenantId, paymentMethod }) {
+export default function BookingCard({ paymentMethod }) {
     const {
         tripData,
         selectedDate,
@@ -59,7 +59,7 @@ export default function BookingCard({ tenantId, paymentMethod }) {
     const goToCheckout = e => {
         e.preventDefault();
         router.push(
-            `/site/${tenantId}/trips/${tripData?.slug}/booking?checkout=${tripData?.id}`
+            `/trips/${tripData?.slug}/booking?checkout=${tripData?.id}`
         );
     };
 
@@ -125,7 +125,6 @@ export default function BookingCard({ tenantId, paymentMethod }) {
                     {/* Guest Selection */}
                     <GuestSelection userSelectedGuests={userSelectedGuests} />
 
-                    {/*   <TransferSelection tenantId={tenantId} /> */}
                     <PickupSelectField
                         value={selectedPickup?.id || ''}
                         onValueChange={pickupObject => {
@@ -137,9 +136,9 @@ export default function BookingCard({ tenantId, paymentMethod }) {
                     />
                     <NotAdditionalSelection />
                     {additionals?.length > 0 && (
-                        <div className='flex items-center gap-3'>
+                        <div className='items-center flex gap-3'>
                             <Checkbox
-                                className='rounded h-4 w-4'
+                                className='h-4 w-4 rounded'
                                 id='extras'
                                 name='extras'
                                 onClick={() => setShowExtra(!showExtra)}
@@ -171,7 +170,6 @@ export default function BookingCard({ tenantId, paymentMethod }) {
             {isNext && (
                 <BookingPageContent
                     paymentMethod={paymentMethod}
-                    tenantId={tenantId}
                     setIsNext={setIsNext}
                 />
             )}

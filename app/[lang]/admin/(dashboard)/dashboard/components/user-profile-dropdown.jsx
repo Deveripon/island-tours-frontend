@@ -13,12 +13,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import UserAvaterImage from './avatar';
 
-export default function ProfileDropdown({ loggedInUser, tenant, className }) {
+export default function ProfileDropdown({ loggedInUser, className }) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
     const router = useRouter();
     const pathname = usePathname();
-    const tenantId = tenant;
     // Close on outside click
     useEffect(() => {
         const handleClickOutside = e => {
@@ -41,21 +40,21 @@ export default function ProfileDropdown({ loggedInUser, tenant, className }) {
         e => {
             if (e.metaKey && e.key.toLowerCase() === 'h') {
                 e.preventDefault();
-                router.push(`/site/${tenantId}`);
+                router.push(`/`);
             }
             if (e.metaKey && e.shiftKey && e.key.toLowerCase() === 'd') {
                 e.preventDefault();
             }
             if (e.metaKey && e.key.toLowerCase() === '/') {
                 if (!pathname.includes('/profile')) {
-                    router.push(`/${tenantId}/dashboard/profile`);
+                    router.push(`/admin/dashboard/profile`);
                 }
             }
             if (e.key === 'Escape') {
                 setOpen(false);
             }
         },
-        [pathname, router, tenantId]
+        [pathname, router]
     );
 
     useEffect(() => {
@@ -119,45 +118,43 @@ export default function ProfileDropdown({ loggedInUser, tenant, className }) {
                             </p>
                         </div>
                         <div className='divide-y divide-gray-200 dark:divide-gray-700'>
-                            {tenantId !== 'i-am-admin' && (
-                                <div className='py-1'>
-                                    <DropdownItem
-                                        icon={
-                                            <HugeiconsIcon
-                                                icon={UserListIcon}
-                                                size={16}
-                                            />
-                                        }
-                                        label='View Profile'
-                                        linkTo={
-                                            !pathname.includes(
-                                                `/${tenantId}/dashboard/profile`
-                                            ) &&
-                                            `/${tenantId}/dashboard/profile`
-                                        }
-                                        shortcut='⌘ + /'
-                                        onClick={() =>
-                                            handleItemClick('viewProfile')
-                                        }
-                                    />
-                                    <Link
-                                        className='flex bg-primary/10 text-primary justify-between items-center w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-left'
-                                        onClick={() => handleItemClick('home')}
-                                        href={`/site/${tenantId}`}
-                                        target='_blank'>
-                                        <div className='link flex items-center gap-2'>
-                                            <HugeiconsIcon
-                                                icon={CursorInWindowIcon}
-                                                size={16}
-                                            />{' '}
-                                            Go to Site{' '}
-                                        </div>
-                                        <span className='text-xs text-gray-400 dark:text-gray-500 font-mono'>
-                                            ⌘ + H
-                                        </span>
-                                    </Link>
-                                </div>
-                            )}
+                            <div className='py-1'>
+                                <DropdownItem
+                                    icon={
+                                        <HugeiconsIcon
+                                            icon={UserListIcon}
+                                            size={16}
+                                        />
+                                    }
+                                    label='View Profile'
+                                    linkTo={
+                                        !pathname.includes(
+                                            `/admin/dashboard/profile`
+                                        ) &&
+                                        `/admin/dashboard/profile`
+                                    }
+                                    shortcut='⌘ + /'
+                                    onClick={() =>
+                                        handleItemClick('viewProfile')
+                                    }
+                                />
+                                <Link
+                                    className='flex bg-primary/10 text-primary justify-between items-center w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-left'
+                                    onClick={() => handleItemClick('home')}
+                                    href={`/`}
+                                    target='_blank'>
+                                    <div className='link flex items-center gap-2'>
+                                        <HugeiconsIcon
+                                            icon={CursorInWindowIcon}
+                                            size={16}
+                                        />{' '}
+                                        Go to Site{' '}
+                                    </div>
+                                    <span className='text-xs text-gray-400 dark:text-gray-500 font-mono'>
+                                        ⌘ + H
+                                    </span>
+                                </Link>
+                            </div>
                             <div className='py-1'>
                                 <DropdownItem
                                     icon={

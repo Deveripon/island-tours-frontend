@@ -1,19 +1,18 @@
 import { featuredTrips } from '@/app/[lang]/(trips-landing-page-tenent)/data/data';
-import { getAllAffiliateTripsByTenant } from '@/app/_actions/trips/affiliateTripsAction';
+import { findAllTrips } from '@/app/_actions/trips/affiliateTripsAction';
 import { extractQueryParam, sortTrips } from '../../../utils';
 import Sorting from './filter/sorting';
 import NoResultsFound from './not-found';
 import Pagination from './pagination';
 import TripCard from './trip-card';
 
-const TripsListing = async ({ query, tenantId, isDemo }) => {
-    const res = await getAllAffiliateTripsByTenant(tenantId, query);
+const TripsListing = async ({ query, isDemo }) => {
+    const res = await findAllTrips(query);
 
     const sortValue = extractQueryParam(query, 'sort');
     const demoTrips = featuredTrips;
     // Filter active trips
-    const activeTrips =
-        res?.data?.data.filter(trip => trip.status === 'ACTIVE') || [];
+    const activeTrips = res?.result?.data?.data;
 
     // Sort trips based on sort parameter
     const sortedTrips = isDemo
@@ -32,8 +31,7 @@ const TripsListing = async ({ query, tenantId, isDemo }) => {
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
                 {sortedTrips?.map(trip => (
                     <TripCard
-                        query={query}
-                        tenantId={tenantId}
+                        query={`${query}&status=ACTIVE`}
                         trip={trip}
                         key={trip?.id}
                     />

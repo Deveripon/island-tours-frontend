@@ -1,7 +1,6 @@
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import { generateSlug } from '@/lib/utils';
 import Link from 'next/link';
-import { DummypopularDestinations } from '../../data/data';
 import DestinationCard from './destination-card';
 import SectionTitle from './section-title';
 
@@ -24,23 +23,15 @@ export function transformDestinationData(destinations) {
         }))
     );
 }
-export default async function PopularDestinations({
-    tenantId,
-    content,
-    isDemo,
-}) {
-    const destinations = isDemo
-        ? DummypopularDestinations
-        : await getAllDestinationOfTenant(tenantId);
+export default async function PopularDestinations({ content }) {
+    const res = await getAllDestinations();
+    const destinations = res?.result?.data;
 
-    const popularDestinations = !isDemo
-        ? destinations?.data &&
-          transformDestinationData(
-              destinations?.data.filter(
-                  destination => destination.affiliateTrips.length > 0
-              )
-          )
-        : DummypopularDestinations;
+    const popularDestinations = transformDestinationData(
+        destinations?.filter(
+            destination => destination.affiliateTrips?.length > 0
+        )
+    );
 
     if (!popularDestinations || popularDestinations.length === 0) {
         return null;
@@ -65,7 +56,7 @@ export default async function PopularDestinations({
                         .map(destination => (
                             <Link
                                 key={destination.id}
-                                href={`/site/${tenantId}/destinations/${generateSlug(
+                                href={`/destinations/${generateSlug(
                                     destination?.name
                                 )}`}>
                                 <DestinationCard destination={destination} />

@@ -1,10 +1,11 @@
-import { getAllDestinationOfTenant } from '@/app/_actions/trips/destinations';
+import { getAllDestinations } from '@/app/_actions/trips/destinations';
 import { ArrowDownDoubleIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import HeroSearchBox from './hero-search-box';
 
-export default async function HeroSection({ preferences, tenantId, content }) {
-    const destinations = await getAllDestinationOfTenant(tenantId);
+export default async function HeroSection({ preferences, content }) {
+    const res = await getAllDestinations();
+    const destinations = res?.result?.data;
 
     return (
         <section
@@ -42,10 +43,9 @@ export default async function HeroSection({ preferences, tenantId, content }) {
                     <div className='w-full max-w-5xl mx-auto'>
                         <HeroSearchBox
                             className='liquid-glass-enhanced'
-                            destinations={destinations?.data}
+                            destinations={destinations}
                             content={content?.searchForm}
                             preferences={preferences}
-                            tenantId={tenantId}
                         />
                     </div>
                 </div>

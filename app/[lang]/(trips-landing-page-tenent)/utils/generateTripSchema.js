@@ -1,9 +1,9 @@
-export function generateTripSchema(trip, tenant, slug) {
+export function generateTripSchema(trip, slug) {
     const seo = trip?.seo;
     const schemaType = seo?.schemaType || 'TouristTrip';
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    const tripUrl = `${baseUrl}/site/${tenant}/trips/${slug}`;
+    const tripUrl = `${baseUrl}/trips/${slug}`;
 
     const schema = {
         '@context': 'https://schema.org',

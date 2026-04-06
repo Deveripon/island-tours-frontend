@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SectionTitle from './section-title';
 
-export default function ActivitiesSection({ activities, tenantId }) {
+export default function ActivitiesSection({ activities }) {
     if (!activities || activities.length === 0) {
         return null;
     }
@@ -23,7 +23,7 @@ export default function ActivitiesSection({ activities, tenantId }) {
     const renderActivityCard = (activity, className, showDetails = true) => (
         <Link
             key={activity.id}
-            href={`/site/${tenantId}/activities/${activity.id}`}
+            href={`/activities/${activity.id}`}
             className={cn('group relative block h-full w-full', className)}>
             <Card className='h-full w-full p-0 overflow-hidden border-0 shadow-none rounded-xl relative isolate'>
                 <Image
@@ -65,7 +65,7 @@ export default function ActivitiesSection({ activities, tenantId }) {
     // Helper to render the "View All" card
     const renderViewAllCard = className => (
         <Link
-            href={`/site/${tenantId}/activities`}
+            href='/activities'
             className={cn('group relative block h-full w-full', className)}>
             <Card className='h-full w-full p-0 overflow-hidden border-0 shadow-none rounded-xl relative isolate bg-black'>
                 <Image

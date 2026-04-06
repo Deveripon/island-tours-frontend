@@ -1,15 +1,15 @@
-import { getTenantById } from '@/app/_actions/settingsActions';
 import {
     Call02Icon,
     Location01Icon,
     Mail01Icon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
+import { getSettings } from '@/app/_actions/settingsActions';
 
-export const ContactInfo = async ({ tenantId }) => {
-    const res = await getTenantById(tenantId);
-    const companyInformations = res.result?.data.companyInformations;
-    const billingInformations = res.result?.data.billingInformations;
+export const ContactInfo = async () => {
+    const res = await getSettings();
+    const companyInformations = res?.companyInformations;
+    const billingInformations = res?.billingInformations;
     console.log(companyInformations);
     console.log(billingInformations);
 
