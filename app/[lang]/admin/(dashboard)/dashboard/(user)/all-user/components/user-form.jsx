@@ -21,10 +21,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-    createUser,
-    updateUser,
-} from '@/app/_actions/userActions';
+import { createUser, updateUser } from '@/app/_actions/userActions';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -52,7 +49,7 @@ import { toast } from 'sonner';
 const defaultFormValues = {
     name: '',
     email: '',
-    role: 'STAFF',
+    role: '',
     password: '',
 };
 
@@ -105,7 +102,7 @@ export function UserForm({ open, editUser, setEditUser, onOpenChange, owner }) {
                 form.reset({
                     name: editUser.name || '',
                     email: editUser.email || '',
-                    role: editUser.role || 'USER',
+                    role: editUser.role || '',
                     password: '', // Don't populate password for editing
                     image: editUser.image || '',
                 });
@@ -188,14 +185,15 @@ export function UserForm({ open, editUser, setEditUser, onOpenChange, owner }) {
         [editUser, handleSheetClose, showPasswordField]
     );
 
-    // Check if this is an owner trying to change their own role from ADMIN
+    // Check if this is an owner trying to change their own role from ADMIN or SUPER_ADMIN
     const isChangingOwnAdminRole = values => {
         return (
             editUser &&
             owner &&
             owner.id === editUser.id &&
-            editUser.role === 'ADMIN' &&
-            values.role !== 'ADMIN'
+            (editUser.role === 'ADMIN' || editUser.role === 'SUPER_ADMIN') &&
+            values.role &&
+            values.role !== editUser.role
         );
     };
 
@@ -319,46 +317,53 @@ export function UserForm({ open, editUser, setEditUser, onOpenChange, owner }) {
                                         />
                                     </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name='role'
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    Role{' '}
-                                                    <span className='text-red-500'>
-                                                        *
-                                                    </span>{' '}
-                                                </FormLabel>
-                                                <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    value={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder='Select role' />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value='ADMIN'>
-                                                            Administrator
-                                                        </SelectItem>
-                                                        <SelectItem value='EDITOR'>
-                                                            Editor
-                                                        </SelectItem>
-                                                        <SelectItem value='STAFF'>
-                                                            Staff
-                                                        </SelectItem>
-                                                        <SelectItem value='GUIDE'>
-                                                            Guide
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                    {!(editUser?.role === 'SUPER_ADMIN' && owner?.role !== 'SUPER_ADMIN') && (
+                                        <FormField
+                                            control={form.control}
+                                            name='role'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>
+                                                        Role{' '}
+                                                        <span className='text-red-500'>
+                                                            *
+                                                        </span>{' '}
+                                                    </FormLabel>
+                                                    <Select
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        value={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder='Select role' />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            {owner?.role === 'SUPER_ADMIN' && (
+                                                                <SelectItem value='SUPER_ADMIN'>
+                                                                    Super Admin
+                                                                </SelectItem>
+                                                            )}
+                                                            <SelectItem value='ADMIN'>
+                                                                Administrator
+                                                            </SelectItem>
+                                                            <SelectItem value='EDITOR'>
+                                                                Editor
+                                                            </SelectItem>
+                                                            <SelectItem value='STAFF'>
+                                                                Staff
+                                                            </SelectItem>
+                                                            <SelectItem value='GUIDE'>
+                                                                Guide
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    )}
 
                                     {/* Show "Set New Password" button for editing when password field is hidden */}
                                     {editUser && !showPasswordField && (

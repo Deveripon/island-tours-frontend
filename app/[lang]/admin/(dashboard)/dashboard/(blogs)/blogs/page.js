@@ -4,11 +4,12 @@ import { AllBlogs } from './components/data-tables/blogs/all-blogs';
 const AllblogsListingPage = async () => {
     const response = await getAllBlogs('limit=100');
 
-    const blogsData = response?.result?.data || {};
+    const blogsData = response?.result?.data?.blogs || [];
+    console.log('Blogs Data:', blogsData);
 
     return (
         <div className='wrapper '>
-            <AllBlogs blogs={blogsData?.blogs || []} />
+            <AllBlogs blogs={blogsData || []} />
         </div>
     );
 };

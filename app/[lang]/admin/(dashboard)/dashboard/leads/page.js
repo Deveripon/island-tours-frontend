@@ -5,6 +5,7 @@ export default async function leadsPage() {
     const res = await getAllLeads();
 
     const leads = res?.result?.data;
+    console.log('Leads:', leads);
 
     return (
         <div className='container space-y-6'>

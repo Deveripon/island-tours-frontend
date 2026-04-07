@@ -1,9 +1,6 @@
 'use client';
 
-import {
-    removeProfilePhoto,
-    updateUserById,
-} from '@/app/_actions/userActions';
+import { removeProfilePhoto, updateUserById } from '@/app/_actions/userActions';
 
 import { AnimatedProgress } from '@/components/common/animate-progress';
 import { Button } from '@/components/ui/button';
@@ -27,6 +24,8 @@ const ProfilePhotoSection = ({ user }) => {
     const [uploading, setUploading] = useState(false);
 
     const [openCropper, setOpenCropper] = useState(false);
+
+    console.log(`user`, user);
 
     useEffect(() => {
         if (user) {
@@ -95,7 +94,8 @@ const ProfilePhotoSection = ({ user }) => {
 
                 const uploadRes = await fetch('/api/uploads/profile-photo', {
                     method: 'POST',
-                    body: formData });
+                    body: formData,
+                });
 
                 const uploadData = await uploadRes.json();
 
@@ -114,7 +114,8 @@ const ProfilePhotoSection = ({ user }) => {
                         image: {
                             url: uploadData.url,
                             public_id: uploadData.publicId,
-                        } });
+                        },
+                    });
 
                     setCurrentPhoto(uploadData.url);
                     setSelectedFile(null);

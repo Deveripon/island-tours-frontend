@@ -7,7 +7,7 @@ async function ProfilePageForDashboard() {
     const userId = session?.user?.id;
     const result = userId ? await getUserById(userId) : null;
 
-    return <Profile user={result?.success === true ? result?.user : null} />;
+    return <Profile user={result?.success === true ? result?.result : null} />;
 }
 
 export default ProfilePageForDashboard;

@@ -41,16 +41,29 @@ export const EditableSelectField = ({
                     name={id}
                     control={control}
                     defaultValue={defaultValue}
-                    render={({ field }) => (
+                    render={({ field }) => {
+                    // SelectItem requires string values; coerce to string for display
+                    const toStr = (v) =>
+                        v === null || v === undefined ? '' : String(v);
+
+                    // Try to convert back to original type on change
+                    const fromStr = (strVal) => {
+                        if (strVal === 'true') return true;
+                        if (strVal === 'false') return false;
+                        if (strVal !== '' && !isNaN(Number(strVal))) return Number(strVal);
+                        return strVal;
+                    };
+
+                    return (
                         <Select
                             disabled={isSaving}
-                            onValueChange={field.onChange}
+                            onValueChange={(v) => field.onChange(fromStr(v))}
                             onOpenChange={open => {
                                 if (open) {
                                     handleSelectOpen();
                                 }
                             }}
-                            value={field.value}>
+                            value={toStr(field.value)}>
                             <SelectTrigger
                                 className='w-full h-10 px-3 py-2 rounded-md
                                 bg-background border border-border
@@ -67,15 +80,16 @@ export const EditableSelectField = ({
                             <SelectContent className='bg-card border-border'>
                                 {options.map(option => (
                                     <SelectItem
-                                        key={option.value}
-                                        value={option.value}
+                                        key={toStr(option.value)}
+                                        value={toStr(option.value)}
                                         className='focus:bg-primary/10 focus:text-primary'>
                                         {option.label}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                    )}
+                    );
+                }}
                 />
 
                 {isEditing && (

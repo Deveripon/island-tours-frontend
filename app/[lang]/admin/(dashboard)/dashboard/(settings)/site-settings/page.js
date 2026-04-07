@@ -1,3 +1,4 @@
+import { logout } from '@/app/_actions/authActions';
 import {
     getSMTPConfig,
     getSiteInfo,
@@ -5,7 +6,6 @@ import {
     getSiteTheme,
     getSocialMedia,
 } from '@/app/_actions/settingsActions';
-import { logout } from '@/app/_actions/authActions';
 import { auth } from '@/auth';
 import { signOut } from 'next-auth/react';
 import SiteManagement from './components/site-management';
@@ -27,17 +27,24 @@ async function SettingsAndBillingPageForDashboard() {
             getSiteTheme(),
             getSocialMedia(),
         ]);
+    console.log(`siteInfo`, siteInfoRes);
+    console.log(`smtpRes`, smtpRes);
+    console.log(`seoRes`, seoRes);
+    console.log(`themeRes`, themeRes);
+    console.log(`socialRes`, socialRes);
 
     const data = {
-        siteInfo: siteInfoRes?.result?.data,
-        smtp: smtpRes?.result?.data,
-        siteSEO: seoRes?.result?.data,
+        siteInfo: siteInfoRes?.data,
+        smtp: smtpRes?.data,
+        siteSEO: seoRes?.data,
         siteTheme: {
-            ...themeRes?.result?.data,
-            primaryColor: themeRes?.result?.data?.primaryColor || '#FF0000',
+            ...themeRes?.data,
+            primaryColor: themeRes?.data?.primaryColor || '#FF0000',
         },
-        socialMedia: socialRes?.result?.data,
+        socialMedia: socialRes?.data,
     };
+
+
 
     return (
         <div className='container '>

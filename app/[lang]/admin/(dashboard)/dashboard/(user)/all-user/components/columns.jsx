@@ -1,5 +1,5 @@
 'use client';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn, formateToCapitalize } from '@/lib/utils';
@@ -51,10 +51,17 @@ export const columns = [
             return (
                 <Avatar className='h-16 w-16 rounded-md'>
                     <AvatarImage
-                        src={image?.url || image || '/placeholder-user.png'}
+                        src={
+                            image?.url ||
+                            image ||
+                            'https://github.com/shadcn.png'
+                        }
                         alt={row.original.name}
                         className='object-cover'
                     />
+                    <AvatarFallback>
+                        {row.original.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                 </Avatar>
             );
         },

@@ -5,7 +5,7 @@ import PageContent from './components/page-content';
 export default async function Bookings() {
     const bookings = await getAllBookings();
     console.log('Bookings:', bookings);
-    const bookingsData = bookings?.result?.sort(
+    const bookingsData = bookings?.result?.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
     const groupedData = getGroupedDataOfStatus(bookingsData);

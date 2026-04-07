@@ -10,366 +10,211 @@ import {
 } from '@/components/ui/form';
 import { PaintBoardIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
+import { updateSiteInfo, updateSiteTheme } from '@/app/_actions/settingsActions';
 import { ImageUploadWithSelector } from '../../../../components/common/image-upload-selector';
+import { ColorPickerField } from '../../../../(user)/profile/components/color-picker-field';
 
-const ColorPickerField = ({
-    id,
-    label,
-    control,
-    editingField,
-    setEditingField,
-    onSaveField,
-    isSaving,
-    validationRules,
-    resetField,
-    placeholder }) => {
-    const { watch, setValue } = useFormContext();
-    const colorValue = watch(id) || placeholder;
-    const isEditing = editingField === id;
-    const [showPalette, setShowPalette] = useState(false);
+const BrandingInformation = ({ data, siteInfo, validationRules }) => {
+    const router = useRouter();
+    const [isSaving, setIsSaving] = useState(false);
 
-    const colorPalette = [
-        '#3b82f6',
-        '#6366f1',
-        '#8b5cf6',
-        '#ec4899',
-        '#ef4444',
-        '#f97316',
-        '#f59e0b',
-        '#eab308',
-        '#84cc16',
-        '#22c55e',
-        '#10b981',
-        '#14b8a6',
-        '#06b6d4',
-        '#0ea5e9',
-        '#64748b',
-        '#6b7280',
-    ];
+    const methods = useForm({
+        defaultValues: {
+            logo: siteInfo?.logo || '',
+            favicon: siteInfo?.favicon || '',
+            primaryColor: data?.primaryColor || '#3b82f6',
+            secondaryColor: data?.secondaryColor || '#64748b',
+            accentColor: data?.accentColor || '#f59e0b',
+        },
+    });
 
-    const handlePaletteColorSelect = color => {
-        setValue(id, color, { shouldValidate: true, shouldDirty: true });
-        setEditingField(id);
-        setShowPalette(false);
+    const onSubmit = async (formData) => {
+        try {
+            setIsSaving(true);
+
+            // Theme colors — always safe to send
+            const themeRes = await updateSiteTheme({
+                primaryColor: formData.primaryColor,
+                secondaryColor: formData.secondaryColor,
+                accentColor: formData.accentColor,
+            });
+            if (themeRes && !themeRes.success) {
+                toast.error(typeof themeRes.error === 'string' ? themeRes.error : themeRes.error?.message || 'An error occurred');
+                return;
+            }
+
+            // Only send logo/favicon if they are actual image objects
+            const imagePayload = {};
+            if (formData.logo && typeof formData.logo === 'object' && formData.logo.imageId) {
+                imagePayload.logo = formData.logo;
+            }
+            if (formData.favicon && typeof formData.favicon === 'object' && formData.favicon.imageId) {
+                imagePayload.favicon = formData.favicon;
+            }
+
+            if (Object.keys(imagePayload).length > 0) {
+                const infoRes = await updateSiteInfo(imagePayload);
+                if (infoRes && !infoRes.success) {
+                    toast.error(typeof infoRes.error === 'string' ? infoRes.error : infoRes.error?.message || 'An error occurred');
+                    return;
+                }
+            }
+
+            toast.success('Branding settings saved successfully');
+            router.refresh();
+        } catch (error) {
+            toast.error('Failed to save branding settings');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
-    const isValidHex = hex => {
-        return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
+    const handleSaveFieldInfo = async (fieldId, explicitValue = null) => {
+        try {
+            const value = explicitValue !== null ? explicitValue : methods.getValues(fieldId);
+            // Don't send image fields unless they are valid image objects
+            if ((fieldId === 'logo' || fieldId === 'favicon') &&
+                (!value || typeof value !== 'object' || !value.imageId)) {
+                toast.error('Please select a valid image first');
+                return;
+            }
+            const result = await updateSiteInfo({ [fieldId]: value });
+            if (result && !result.success) { toast.error(typeof result.error === 'string' ? result.error : result.error?.message || 'An error occurred'); return; }
+            toast.success('Updated successfully');
+            router.refresh();
+        } catch (e) { toast.error('Failed to update'); }
     };
 
     return (
-        <FormField
-            control={control}
-            name={id}
-            rules={validationRules}
-            render={({ field }) => (
-                <FormItem>
-                    <FormLabel className='text-sm text-muted-foreground'>
-                        {label}
-                    </FormLabel>
-                    <div className='space-y-2'>
-                        <FormControl>
-                            <div className='relative'>
-                                <div className='flex items-center gap-2 px-3 py-2 border border-input rounded-lg bg-background hover:border-ring transition-colors'>
-                                    <input
-                                        type='color'
-                                        value={
-                                            isValidHex(field.value)
-                                                ? field.value
-                                                : placeholder
-                                        }
-                                        onChange={e => {
-                                            field.onChange(e.target.value);
-                                            setEditingField(id);
-                                        }}
-                                        className='w-8 h-8 rounded cursor-pointer border-0'
-                                    />
-                                    <input
-                                        type='text'
-                                        {...field}
-                                        onChange={e => {
-                                            const value =
-                                                e.target.value.startsWith('#')
-                                                    ? e.target.value
-                                                    : `#${e.target.value}`;
-                                            field.onChange(value);
-                                            setEditingField(id);
-                                        }}
-                                        placeholder={placeholder}
-                                        className='flex-1 text-sm font-mono bg-transparent outline-none uppercase'
-                                        maxLength={7}
-                                    />
-                                    <button
-                                        type='button'
-                                        onClick={() =>
-                                            setShowPalette(!showPalette)
-                                        }
-                                        className='p-1 hover:bg-accent rounded transition-colors'>
-                                        <HugeiconsIcon icon={PaintBoardIcon} size={16} className='text-muted-foreground' />
-                                    </button>
+        <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)} className='space-y-6'>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className='flex items-center gap-2'>
+                            <HugeiconsIcon icon={PaintBoardIcon} size={20} />
+                            Site Branding
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className='space-y-6'>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+                                <div>
+                                    <h3 className='text-sm font-medium text-gray-900 mb-4'>
+                                        Logos
+                                    </h3>
+                                    <div className='space-y-6'>
+                                        <FormField
+                                            control={methods.control}
+                                            name='logo'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Main Logo</FormLabel>
+                                                    <FormControl>
+                                                        <ImageUploadWithSelector
+                                                            fieldName='logo'
+                                                            onChange={(val) => {
+                                                                field.onChange(val);
+                                                                handleSaveFieldInfo('logo', val);
+                                                            }}
+                                                            multiple={false}
+                                                        />
+                                                    </FormControl>
+                                                    <FormDescription>
+                                                        Recommended size: 200x50px (SVG or
+                                                        PNG)
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={methods.control}
+                                            name='favicon'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Favicon</FormLabel>
+                                                    <FormControl>
+                                                        <ImageUploadWithSelector
+                                                            fieldName='favicon'
+                                                            onChange={(val) => {
+                                                                field.onChange(val);
+                                                                handleSaveFieldInfo('favicon', val);
+                                                            }}
+                                                            multiple={false}
+                                                        />
+                                                    </FormControl>
+                                                    <FormDescription>
+                                                        Appears in browser tabs. Size:
+                                                        32x32px (.ico or .png)
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
                                 </div>
 
-                                {showPalette && (
-                                    <div className='absolute z-10 mt-1 p-2 border border-border rounded-lg bg-card shadow-lg'>
-                                        <div className='grid grid-cols-8 gap-1.5'>
-                                            {colorPalette.map(color => (
-                                                <button
-                                                    key={color}
-                                                    type='button'
-                                                    onClick={() =>
-                                                        handlePaletteColorSelect(
-                                                            color
-                                                        )
-                                                    }
-                                                    className='w-7 h-7 rounded border hover:scale-110 transition-transform'
-                                                    style={{
-                                                        backgroundColor: color,
-                                                    }}
-                                                    title={color}
-                                                />
-                                            ))}
-                                        </div>
+                                <div>
+                                    <div className='flex justify-between items-center mb-4'>
+                                        <h3 className='text-sm font-medium text-gray-900'>Colors</h3>
+                                        <Button 
+                                            type='button' 
+                                            variant='ghost' 
+                                            size='sm' 
+                                            className='text-xs text-muted-foreground hover:text-foreground'
+                                            onClick={() => {
+                                                methods.resetField('primaryColor', { defaultValue: data?.primaryColor || '#3b82f6' });
+                                                methods.resetField('secondaryColor', { defaultValue: data?.secondaryColor || '#64748b' });
+                                                methods.resetField('accentColor', { defaultValue: data?.accentColor || '#f59e0b' });
+                                            }}
+                                        >
+                                            Revert to Original Colors
+                                        </Button>
                                     </div>
-                                )}
-                            </div>
-                        </FormControl>
-                        {isEditing && (
-                            <div className='flex gap-2'>
-                                <Button
-                                    type='button'
-                                    size='sm'
-                                    onClick={() => {
-                                        onSaveField(id);
-                                        setShowPalette(false);
-                                    }}
-                                    disabled={isSaving}>
-                                    {isSaving ? 'Saving...' : 'Save'}
-                                </Button>
-                                <Button
-                                    type='button'
-                                    variant='outline'
-                                    size='sm'
-                                    onClick={() => {
-                                        resetField(id);
-                                        setEditingField(null);
-                                        setShowPalette(false);
-                                    }}
-                                    disabled={isSaving}>
-                                    Cancel
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    );
-};
-
-const BrandingInformation = ({
-    control,
-    editingField,
-    setEditingField,
-    handleSaveField,
-    isSaving,
-    resetField,
-    formValidationRules,
-    siteInfo }) => {
-    const { watch } = useFormContext();
-    const logo = watch('logo');
-    const favicon = watch('favicon');
-    const [prevLogo, setPrevLogo] = useState(siteInfo?.logo);
-    const [prevFavicon, setPrevFavicon] = useState(siteInfo?.favicon);
-
-    useEffect(() => {
-        if (logo && logo?.imageId !== prevLogo?.imageId) {
-            setEditingField('logo');
-        }
-
-        if (favicon && favicon?.imageId !== prevFavicon?.imageId) {
-            setEditingField('favicon');
-        }
-    }, [
-        favicon,
-        logo,
-        prevFavicon?.imageId,
-        prevLogo?.imageId,
-        setEditingField,
-        editingField,
-    ]);
-
-    const isLogoEditing = editingField === 'logo';
-    const isFaviconEditing = editingField === 'favicon';
-
-    const handleLogoSave = () => {
-        handleSaveField('logo');
-        setPrevLogo(logo);
-        setEditingField(null);
-    };
-
-    const handleLogoCancel = () => {
-        resetField('logo');
-        setEditingField(null);
-    };
-
-    const handleFaviconSave = () => {
-        handleSaveField('favicon');
-        setPrevFavicon(favicon);
-        setEditingField(null);
-    };
-
-    const handleFaviconCancel = () => {
-        resetField('favicon');
-        setEditingField(null);
-    };
-
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                    <HugeiconsIcon icon={PaintBoardIcon} size={20} />
-                    Branding & Design
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6'>
-                    <ColorPickerField
-                        id='primaryColor'
-                        label='Primary Color'
-                        control={control}
-                        editingField={editingField}
-                        setEditingField={setEditingField}
-                        onSaveField={handleSaveField}
-                        isSaving={isSaving}
-                        validationRules={formValidationRules.primaryColor}
-                        resetField={resetField}
-                        placeholder='#3b82f6'
-                    />
-
-                    <ColorPickerField
-                        id='secondaryColor'
-                        label='Secondary Color'
-                        control={control}
-                        editingField={editingField}
-                        setEditingField={setEditingField}
-                        onSaveField={handleSaveField}
-                        isSaving={isSaving}
-                        validationRules={formValidationRules.secondaryColor}
-                        resetField={resetField}
-                        placeholder='#64748b'
-                    />
-
-                    <ColorPickerField
-                        id='accentColor'
-                        label='Accent Color'
-                        control={control}
-                        editingField={editingField}
-                        setEditingField={setEditingField}
-                        onSaveField={handleSaveField}
-                        isSaving={isSaving}
-                        validationRules={formValidationRules.accentColor}
-                        resetField={resetField}
-                        placeholder='#f59e0b'
-                    />
-                </div>
-
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-8 mt-6'>
-                    <div className='flex flex-col space-y-4'>
-                        <FormField
-                            control={control}
-                            name='logo'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Site Logo</FormLabel>
-                                    <FormControl>
-                                        <ImageUploadWithSelector
-                                            fieldName='logo'
-                                            onChange={field.onChange}
-                                            multiple={false}
+                                    <div className='grid grid-cols-1 gap-y-4'>
+                                        <ColorPickerField
+                                            id='primaryColor'
+                                            label='Primary Color'
+                                            control={methods.control}
+                                            validationRules={validationRules?.primaryColor}
+                                            placeholder='#3b82f6'
                                         />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Upload your logo
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
-                        {isLogoEditing && (
-                            <div className='flex gap-2 animate-in fade-in slide-in-from-right-2 duration-200'>
-                                <Button
-                                    type='button'
-                                    size='sm'
-                                    onClick={handleLogoSave}
-                                    disabled={isSaving}
-                                    className='transition-all duration-200 hover:scale-105 active:scale-95'>
-                                    {isSaving ? 'Saving...' : 'Save'}
-                                </Button>
-                                <Button
-                                    type='button'
-                                    variant='outline'
-                                    size='sm'
-                                    onClick={handleLogoCancel}
-                                    disabled={isSaving}
-                                    className='transition-all duration-200 hover:scale-105 active:scale-95'>
-                                    Cancel
-                                </Button>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className='flex flex-col space-y-4'>
-                        <FormField
-                            control={control}
-                            name='favicon'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Favicon</FormLabel>
-                                    <FormControl>
-                                        <ImageUploadWithSelector
-                                            fieldName='favicon'
-                                            onChange={field.onChange}
-                                            multiple={false}
+                                        <ColorPickerField
+                                            id='secondaryColor'
+                                            label='Secondary Color'
+                                            control={methods.control}
+                                            validationRules={validationRules?.secondaryColor}
+                                            placeholder='#64748b'
                                         />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Upload favicon (16x16 or 32x32 px)
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        {isFaviconEditing && (
-                            <div className='flex gap-2 animate-in fade-in slide-in-from-right-2 duration-200'>
-                                <Button
-                                    type='button'
-                                    size='sm'
-                                    onClick={handleFaviconSave}
-                                    disabled={isSaving}
-                                    className='transition-all duration-200 hover:scale-105 active:scale-95'>
-                                    {isSaving ? 'Saving...' : 'Save'}
-                                </Button>
-                                <Button
-                                    type='button'
-                                    variant='outline'
-                                    size='sm'
-                                    onClick={handleFaviconCancel}
-                                    disabled={isSaving}
-                                    className='transition-all duration-200 hover:scale-105 active:scale-95'>
-                                    Cancel
-                                </Button>
+
+                                        <ColorPickerField
+                                            id='accentColor'
+                                            label='Accent Color'
+                                            control={methods.control}
+                                            validationRules={validationRules?.accentColor}
+                                            placeholder='#f59e0b'
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    </CardContent>
+                </Card>
+                <div className='flex justify-end mt-6 pt-6 border-t'>
+                    <Button type='submit' disabled={isSaving} className='min-w-[150px]'>
+                        {isSaving ? 'Saving...' : 'Save All Branding Changes'}
+                    </Button>
                 </div>
-            </CardContent>
-        </Card>
+            </form>
+        </FormProvider>
     );
 };
 
 export default BrandingInformation;
-

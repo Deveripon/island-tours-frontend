@@ -9,7 +9,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
  */
 export async function getAllBookings(query = '') {
     try {
-        const responsePromise = fetch(`${baseUrl}/bookings${query ? `?${query}` : ''}`, {
+        const responsePromise = fetchWithAuth(`${baseUrl}/bookings${query ? `?${query}` : ''}`, {
             method: 'GET',
             next: {
                 revalidate: 3600,

@@ -1,6 +1,5 @@
 'use server';
 
-import { fetchWithAuth } from '@/utils/fetch-with-auth';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 

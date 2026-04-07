@@ -3,16 +3,19 @@ import PageContent from './components/page-content';
 
 export default async function MembersPage() {
     const res = await getAllUsers();
-    
+
     const sortingOrder = {
-        ADMIN: 1,
-        EDITOR: 2,
-        STAFF: 3,
-        GUIDE: 4,
-        USER: 5,
+        SUPER_ADMIN: 1,
+        ADMIN: 2,
+        EDITOR: 3,
+        STAFF: 4,
+        GUIDE: 5,
+        USER: 6,
     };
 
-    const users = res?.result || [];
+    const users = res?.result?.users || [];
+    console.log(`users`, users);
+
     const sortedUser = [...users].sort(
         (a, b) => (sortingOrder[a.role] || 99) - (sortingOrder[b.role] || 99)
     );

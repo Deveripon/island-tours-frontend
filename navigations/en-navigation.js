@@ -9,7 +9,6 @@ import {
     Invoice02Icon,
     InvoiceIcon,
     LicenseDraftIcon,
-    LockKeyIcon,
     Mail02Icon,
     MapPinpoint01Icon,
     NewsIcon,
@@ -237,12 +236,6 @@ export const enNavigations = {
                     items: [],
                 },
 
-                {
-                    title: 'API & Credentials',
-                    url: 'credentials',
-                    icon: LockKeyIcon,
-                    requiredPermissions: [Permission.MANAGE_SETTINGS],
-                },
                 {
                     title: 'Integrations',
                     url: 'automation',

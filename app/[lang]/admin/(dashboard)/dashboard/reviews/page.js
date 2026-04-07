@@ -4,7 +4,8 @@ import PageContent from './components/page-content';
 export default async function reviewsPage() {
     const res = await getAllReviews();
 
-    const reviews = res?.data?.data?.data;
+    const reviews = res?.result?.data?.data;
+    console.log('Reviews:', reviews);
 
     return (
         <div className='container space-y-6'>

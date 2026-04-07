@@ -97,10 +97,12 @@ export default function PostCreationPage() {
         try {
             if (mode !== 'update') {
                 const res = await createBlog(formData);
+                console.log('Blog Created:', res);
 
                 toast.success('Blog Saved successfully');
             } else {
                 const res = await updateBlog(blogId, formData);
+                console.log('Blog Updated:', res);
 
                 toast.success('Blog Updated successfully');
             }

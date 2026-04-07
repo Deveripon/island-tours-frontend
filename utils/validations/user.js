@@ -10,12 +10,7 @@ export const userSchema = z.object({
         .email('Please enter a valid email address')
         .max(255, 'Email must not exceed 255 characters')
         .toLowerCase(),
-    role: z
-        .enum(['ADMIN', 'EDITOR', 'STAFF', 'GUIDE'], {
-            required_error: 'Please select a role',
-            invalid_type_error: 'Invalid role selected',
-        })
-        .default('STAFF'),
+    role: z.string().trim().optional(),
 
     password: z
         .string()

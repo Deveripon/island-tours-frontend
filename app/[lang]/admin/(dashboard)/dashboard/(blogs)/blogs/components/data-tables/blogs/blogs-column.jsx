@@ -1,11 +1,10 @@
 'use client';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formateToCapitalize } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { Delete, GlobeLock, UploadCloud } from 'lucide-react';
-import Image from 'next/image';
 import { ActionDropdown } from './action-dropdown';
 
 export function defineActionBasedOnStatus(status) {
@@ -168,9 +167,7 @@ export const columns = [
                         </Badge>
                     ))}
                     {tags.length > 2 && (
-                        <Badge
-                            variant='secondary'
-                            className='text-xs'>
+                        <Badge variant='secondary' className='text-xs'>
                             +{tags.length - 2}
                         </Badge>
                     )}
@@ -184,18 +181,21 @@ export const columns = [
         cell: ({ row }) => {
             const authorImage =
                 row?.original?.createdBy?.image?.url ||
-                row.original.createdBy?.image ||
-                '/placeholder.svg';
+                row.original.createdBy?.image;
+            console.log(`Author image`, authorImage);
 
             return (
                 <div className='flex items-center gap-2'>
-                    <Image
-                        src={authorImage}
-                        alt={row.original.createdBy?.name || 'Author'}
-                        width={32}
-                        height={32}
-                        className='rounded-full object-cover'
-                    />
+                    <Avatar className='h-10 w-10 rounded-md'>
+                        <AvatarImage
+                            src={authorImage || 'https://github.com/shadcn.png'}
+                            alt={row.original.createdBy?.name}
+                            className='object-cover'
+                        />
+                        <AvatarFallback>
+                            {row.original.createdBy?.name?.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
                     <div className='text-sm truncate max-w-[120px]'>
                         {row.original.createdBy?.name}
                     </div>
@@ -226,8 +226,10 @@ export const columns = [
 
             const statusStyles = {
                 DRAFT: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400',
-                PUBLISHED: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400',
-                ARCHIVED: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400',
+                PUBLISHED:
+                    'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400',
+                ARCHIVED:
+                    'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400',
             };
 
             return (
@@ -269,3 +271,4 @@ export const columns = [
         },
     },
 ];
+
