@@ -22,4 +22,5 @@ export { updateSocialMedia } from './social-media/update';
 export { getTripPaymentPreferences } from './trip-payments/read';
 export { updatePreferredPaymentMethod, updateTripPaymentPreferences } from './trip-payments/update';
 export { updateWebhooks } from './webhooks/update';
+export { getWebhooks } from './webhooks/read';
 

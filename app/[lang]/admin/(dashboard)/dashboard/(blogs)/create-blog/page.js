@@ -61,14 +61,15 @@ export default function PostCreationPage() {
                 try {
                     setLoading(true);
                     const data = await getBlogById(blogId);
+                    console.log(`blogdata`, data);
 
                     setLoading(false);
                     if (data?.success) {
-                        setDataToEdit(data?.blog?.data);
-                        form.reset(data?.blog?.data);
-                        form.setValue('category', data?.blog?.data?.category);
-                        form.setValue('tags', data?.blog?.data?.tags);
-                        setTags(data?.blog?.data?.tags);
+                        setDataToEdit(data?.result?.data);
+                        form.reset(data?.result?.data);
+                        form.setValue('category', data?.result?.data?.category);
+                        form.setValue('tags', data?.result?.data?.tags);
+                        setTags(data?.result?.data?.tags);
                         setTimeout(() => { }, 0);
                     } else {
                         toast.error('Failed to load blog data for editing');
@@ -162,6 +163,7 @@ export default function PostCreationPage() {
                                 onSaveDraft={onSaveDraft}
                                 tags={tags}
                                 setTags={setTags}
+                                mode={mode}
                             />
                         </div>
                     </div>

@@ -280,7 +280,8 @@ export default function AdminBar() {
                                             src={
                                                 typeof user.image === 'string'
                                                     ? user.image
-                                                    : user.image?.url
+                                                    : user.image?.url ||
+                                                      'https://github.com/shadcn.png'
                                             }
                                             alt={user?.name || 'User'}
                                             fill

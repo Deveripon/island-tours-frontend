@@ -88,7 +88,9 @@ export function BlogSeoForm() {
         ogTitle: false,
         ogDescription: false,
         twitterTitle: false,
-        twitterDescription: false });
+        twitterDescription: false,
+        ogImage: false,
+    });
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '';
 
@@ -150,12 +152,12 @@ export function BlogSeoForm() {
                 shouldDirty: false });
         }
 
-        if (mainImage && !ogImageValue) {
+        if (mainImage && !userEdited.ogImage && !ogImageValue) {
             setValue('seo.ogImage', mainImage, {
                 shouldValidate: false,
                 shouldDirty: false });
         }
-    }, [title, content, mainImage, userEdited, setValue, ogImageValue]);
+    }, [title, content, mainImage, userEdited, setValue, ogImageValue, userEdited.ogImage]);
 
     const toggleSection = section => {
         setOpenSections(prev => ({
@@ -433,9 +435,14 @@ export function BlogSeoForm() {
                                                 <div className='rounded-lg border border-input overflow-hidden bg-muted/5 hover:bg-muted/10 transition-colors duration-200'>
                                                     <ImageUploadWithSelector
                                                         fieldName='seo.ogImage'
-                                                        onChange={
-                                                            field.onChange
-                                                        }
+                                                        onChange={val => {
+                                                            setUserEdited(
+                                                                prev => ({
+                                                                    ...prev,
+                                                                    ogImage: true })
+                                                            );
+                                                            field.onChange(val);
+                                                        }}
                                                         multiple={false}
                                                     />
                                                 </div>

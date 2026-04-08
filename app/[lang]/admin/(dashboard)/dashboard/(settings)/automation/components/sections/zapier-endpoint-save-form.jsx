@@ -44,8 +44,9 @@ export default function ZapierWebhookSetup({ existingZapierCatchUrl }) {
             } else {
                 setSaveStatus('error');
                 toast.error(
-                    response.error ||
-                        'Failed to save Zapier URL. Please try again.'
+                    typeof response.error === 'string'
+                        ? response.error
+                        : response.error?.message || 'Failed to save Zapier URL. Please try again.'
                 );
             }
         } catch (error) {

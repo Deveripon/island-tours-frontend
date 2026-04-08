@@ -17,7 +17,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const FormSidebar = ({ onSaveDraft, tags, setTags }) => {
+const FormSidebar = ({ onSaveDraft, tags, setTags, mode }) => {
     const [currentTag, setCurrentTag] = useState('');
     const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
@@ -149,7 +149,7 @@ const FormSidebar = ({ onSaveDraft, tags, setTags }) => {
                                 icon={Globe02Icon}
                                 className='w-4 h-4 mr-2'
                             />
-                            Publish Now
+                            {mode === 'update' ? 'Update Blog' : 'Publish Now'}
                         </Button>
                         <Button
                             type='button'
@@ -294,7 +294,7 @@ const FormSidebar = ({ onSaveDraft, tags, setTags }) => {
                             </Button>
                         </div>
 
-                        {tags.length > 0 && (
+                        {tags?.length > 0 && (
                             <div className='flex flex-wrap gap-2'>
                                 {tags.map((tag, index) => (
                                     <Badge

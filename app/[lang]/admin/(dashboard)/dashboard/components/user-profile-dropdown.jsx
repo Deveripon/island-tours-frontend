@@ -66,15 +66,17 @@ export default function ProfileDropdown({ loggedInUser, className }) {
     }, [handleKeyDown]);
 
     // handle click on item
-    function handleItemClick(clickOn) {
+    async function handleItemClick(clickOn) {
         setOpen(false);
         switch (clickOn) {
             case 'signOut':
-                async function handleLogOut() {
+                try {
                     await logout();
+                } catch {
+                    // Even if backend logout fails, NextAuth signOut must clear session cookies.
                 }
-                handleLogOut();
-                signOut();
+                await signOut({ callbackUrl: '/' });
+                break;
 
             default:
                 break;

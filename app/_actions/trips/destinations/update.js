@@ -25,6 +25,7 @@ export async function createDestination(data) {
         if (!response.ok) return { success: false, error: { message: result?.message || 'Creation failed' } };
 
         updateTag('destinations');
+        revalidatePath('/');
         revalidatePath('/dashboard/destinations');
 
         return { success: true, result };
@@ -54,6 +55,7 @@ export async function updateDestination(id, data) {
         updateTag('destinations');
         updateTag(`destination-${id}`);
         revalidatePath('/dashboard/destinations');
+        revalidatePath('/');
 
         return { success: true, result };
     } catch (error) {
@@ -80,6 +82,7 @@ export async function deleteDestination(id) {
         updateTag('destinations');
         updateTag(`destination-${id}`);
         revalidatePath('/dashboard/destinations');
+        revalidatePath('/');
 
         return { success: true, result };
     } catch (error) {

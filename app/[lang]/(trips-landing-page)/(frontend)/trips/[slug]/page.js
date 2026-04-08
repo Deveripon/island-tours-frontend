@@ -1,14 +1,14 @@
 import { getTripBySlug } from '@/app/_actions/trips/affiliateTripsAction';
 
 import {
-    getSiteInfo,
-    getTripPaymentPreferences,
+    getSiteInfo
 } from '@/app/_actions/settingsActions';
+import { getPrefferedPaymentMethod } from '@/app/_actions/settingsActions/payment-methods/read';
 import BreadCrumbs from './components/breadcrumbs';
 import ReletedTrips from './components/releted-trips-list';
 import TripContentWrapper from './components/trip-content-wrapper';
 
-export async function generateMetadata({ params }) {
+/* export async function generateMetadata({ params }) {
     const { slug } = await params;
 
     const [tripRes, siteInfoRes] = await Promise.all([
@@ -65,22 +65,26 @@ export async function generateMetadata({ params }) {
             canonical: seo?.canonical || `${process.env.NEXT_PUBLIC_BASE_URL}/trips/${slug}`,
         },
     };
-}
+} */
 
 export default async function TripDetailsPage({ params }) {
     const { slug } = await params;
 
-    const [tripRes, paymentPrefsRes, siteInfoRes] = await Promise.all([
+    const [tripRes, paymentPrefs, siteInfoRes] = await Promise.all([
         getTripBySlug(slug),
-        getTripPaymentPreferences(),
+        getPrefferedPaymentMethod(),
         getSiteInfo(),
     ]);
 
     const trip = tripRes?.result?.data;
-    const paymentPrefs = paymentPrefsRes?.data;
+    const paymentPref = paymentPrefs;
     const siteInfo = siteInfoRes?.data;
 
     const bookingForm = trip?.bookingForm || siteInfo?.bookingForm || 'v2';
+
+
+
+
 
     return (
         <div className='min-h-screen bg-background '>
@@ -88,7 +92,7 @@ export default async function TripDetailsPage({ params }) {
                 <BreadCrumbs last={trip?.title} />
 
                 <TripContentWrapper
-                    paymentMethod={paymentPrefs?.preferedPaymentMethod}
+                    paymentMethod={paymentPrefs?.data}
                     trip={trip}
                     bookingForm={bookingForm}>
                     <ReletedTrips trip={trip} />

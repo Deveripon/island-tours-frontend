@@ -87,7 +87,9 @@ export function TripSeoForm() {
         ogDescription: false,
         twitterTitle: false,
         twitterDescription: false,
-        twitterCard: false });
+        twitterCard: false,
+        ogImage: false,
+    });
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
 
@@ -162,8 +164,8 @@ export function TripSeoForm() {
                 shouldValidate: false });
         }
 
-        // Handle OG image separately as it doesn't depend on userEdited
-        if (mainImage && !ogImageValue) {
+        // Handle OG image auto-population only if user hasn't manually edited it
+        if (mainImage && !userEdited.ogImage && !ogImageValue) {
             setValue('seo.ogImage', mainImage, { shouldValidate: false });
         }
     }, [
@@ -181,6 +183,7 @@ export function TripSeoForm() {
         twitterDescriptionValue,
         twitterTitleValue,
         userEdited.ogDescription,
+        userEdited.ogImage,
         userEdited.ogTitle,
         userEdited.seoDescription,
         userEdited.seoTitle,
@@ -453,9 +456,14 @@ export function TripSeoForm() {
                                                 <FormControl>
                                                     <ImageUploadWithSelector
                                                         fieldName='seo.ogImage'
-                                                        onChange={
-                                                            field.onChange
-                                                        }
+                                                        onChange={val => {
+                                                            setUserEdited(
+                                                                prev => ({
+                                                                    ...prev,
+                                                                    ogImage: true })
+                                                            );
+                                                            field.onChange(val);
+                                                        }}
                                                         multiple={false}
                                                     />
                                                 </FormControl>

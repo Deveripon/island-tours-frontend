@@ -29,6 +29,9 @@ const robotsMetaOptions = [
     { label: 'No Index, No Follow', value: 'noindex, nofollow' },
 ];
 
+const isValidImageObject = value =>
+    value && typeof value === 'object' && (value.imageId || value.id);
+
 const SeoInformation = ({ data, validationRules }) => {
     const router = useRouter();
     const [isSaving, setIsSaving] = useState(false);
@@ -57,33 +60,44 @@ const SeoInformation = ({ data, validationRules }) => {
         },
     });
 
-    const onSubmit = async (formData) => {
+    const onSubmit = async formData => {
+        const payload = {
+            metaTitle: formData.metaTitle,
+            metaDescription: formData.metaDescription,
+            metaKeywords: formData.metaKeywords,
+            ogTitle: formData.ogTitle,
+            ogDescription: formData.ogDescription,
+            ogImage: formData.ogImage,
+            twitterTitle: formData.twitterTitle,
+            twitterDescription: formData.twitterDescription,
+            twitterImage: formData.twitterImage,
+            canonicalUrl: formData.canonicalUrl,
+            robotsMeta: formData.robotsMeta,
+            googleAnalyticsId: formData.googleAnalyticsId,
+            googleTagManagerId: formData.googleTagManagerId,
+            googleSearchConsole: formData.googleSearchConsole,
+            facebookPixelId: formData.facebookPixelId,
+            schemaType: formData.schemaType,
+            customSchema: formData.customSchema,
+            autoGenerateSitemap: formData.autoGenerateSitemap,
+            robotsTxt: formData.robotsTxt,
+        };
+        if (!isValidImageObject(formData.ogImage)) delete payload.ogImage;
+        if (!isValidImageObject(formData.twitterImage))
+            delete payload.twitterImage;
+
         try {
             setIsSaving(true);
-            const seoRes = await updateSiteSeo({
-                metaTitle: formData.metaTitle,
-                metaDescription: formData.metaDescription,
-                metaKeywords: formData.metaKeywords,
-                ogTitle: formData.ogTitle,
-                ogDescription: formData.ogDescription,
-                ogImage: formData.ogImage,
-                twitterTitle: formData.twitterTitle,
-                twitterDescription: formData.twitterDescription,
-                twitterImage: formData.twitterImage,
-                canonicalUrl: formData.canonicalUrl,
-                robotsMeta: formData.robotsMeta,
-                googleAnalyticsId: formData.googleAnalyticsId,
-                googleTagManagerId: formData.googleTagManagerId,
-                googleSearchConsole: formData.googleSearchConsole,
-                facebookPixelId: formData.facebookPixelId,
-                schemaType: formData.schemaType,
-                customSchema: formData.customSchema,
-                autoGenerateSitemap: formData.autoGenerateSitemap,
-                robotsTxt: formData.robotsTxt,
-            });
+            console.log(`payload`, JSON.stringify(payload, null, 2));
+
+            const seoRes = await updateSiteSeo(payload);
 
             if (seoRes && !seoRes.success) {
-                toast.error(typeof seoRes.error === 'string' ? seoRes.error : (seoRes.error?.message || 'An error occurred'));
+                toast.error(
+                    typeof seoRes.error === 'string'
+                        ? seoRes.error
+                        : seoRes.error?.message || 'An error occurred'
+                );
                 return;
             }
 
@@ -98,17 +112,38 @@ const SeoInformation = ({ data, validationRules }) => {
 
     const handleSaveField = async (fieldId, explicitValue = null) => {
         try {
-            const value = explicitValue !== null ? explicitValue : methods.getValues(fieldId);
+            const value =
+                explicitValue !== null
+                    ? explicitValue
+                    : methods.getValues(fieldId);
+            if (
+                (fieldId === 'ogImage' || fieldId === 'twitterImage') &&
+                !isValidImageObject(value)
+            ) {
+                toast.error('Please select a valid image first');
+                return;
+            }
             const result = await updateSiteSeo({ [fieldId]: value });
-            if (result && !result.success) { toast.error(typeof result.error === 'string' ? result.error : result.error?.message || 'An error occurred'); return; }
+            if (result && !result.success) {
+                toast.error(
+                    typeof result.error === 'string'
+                        ? result.error
+                        : result.error?.message || 'An error occurred'
+                );
+                return;
+            }
             toast.success('Updated successfully');
             router.refresh();
-        } catch (e) { toast.error('Failed to update'); }
+        } catch (e) {
+            toast.error('Failed to update');
+        }
     };
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                className='space-y-6'>
                 <Card>
                     <CardHeader>
                         <CardTitle className='flex items-center gap-2'>
@@ -132,7 +167,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                             setEditingField={() => {}}
                                             onSaveField={handleSaveField}
                                             isSaving={isSaving}
-                                            validationRules={validationRules?.metaTitle}
+                                            validationRules={
+                                                validationRules?.metaTitle
+                                            }
                                             resetField={methods.resetField}
                                             placeholder='SEO Title (60 chars max)'
                                         />
@@ -146,7 +183,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                             setEditingField={() => {}}
                                             onSaveField={handleSaveField}
                                             isSaving={isSaving}
-                                            validationRules={validationRules?.metaDescription}
+                                            validationRules={
+                                                validationRules?.metaDescription
+                                            }
                                             resetField={methods.resetField}
                                             placeholder='SEO Description (160 chars max)'
                                             rows={3}
@@ -162,7 +201,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                             setEditingField={() => {}}
                                             onSaveField={handleSaveField}
                                             isSaving={isSaving}
-                                            validationRules={validationRules?.metaKeywords}
+                                            validationRules={
+                                                validationRules?.metaKeywords
+                                            }
                                             resetField={methods.resetField}
                                             placeholder='travel, b2b, agency, business travel'
                                         />
@@ -176,7 +217,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                         setEditingField={() => {}}
                                         onSaveField={handleSaveField}
                                         isSaving={isSaving}
-                                        validationRules={validationRules?.canonicalUrl}
+                                        validationRules={
+                                            validationRules?.canonicalUrl
+                                        }
                                         resetField={methods.resetField}
                                         placeholder='https://yourdomain.com'
                                     />
@@ -210,7 +253,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                         setEditingField={() => {}}
                                         onSaveField={handleSaveField}
                                         isSaving={isSaving}
-                                        validationRules={validationRules?.ogTitle}
+                                        validationRules={
+                                            validationRules?.ogTitle
+                                        }
                                         resetField={methods.resetField}
                                         placeholder='Facebook share title (95 chars max)'
                                     />
@@ -221,19 +266,23 @@ const SeoInformation = ({ data, validationRules }) => {
                                             name='ogImage'
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>OG Image</FormLabel>
+                                                    <FormLabel>
+                                                        OG Image
+                                                    </FormLabel>
                                                     <FormControl>
                                                         <ImageUploadWithSelector
                                                             fieldName='ogImage'
-                                                            onChange={(val) => {
-                                                                field.onChange(val);
-                                                                handleSaveField('ogImage', val);
+                                                            onChange={val => {
+                                                                field.onChange(
+                                                                    val
+                                                                );
                                                             }}
                                                             multiple={false}
                                                         />
                                                     </FormControl>
                                                     <FormDescription>
-                                                        Facebook share image (1200x630 px)
+                                                        Facebook share image
+                                                        (1200x630 px)
                                                     </FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
@@ -250,7 +299,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                             setEditingField={() => {}}
                                             onSaveField={handleSaveField}
                                             isSaving={isSaving}
-                                            validationRules={validationRules?.ogDescription}
+                                            validationRules={
+                                                validationRules?.ogDescription
+                                            }
                                             resetField={methods.resetField}
                                             placeholder='Facebook share description (200 chars max)'
                                             rows={3}
@@ -274,7 +325,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                         setEditingField={() => {}}
                                         onSaveField={handleSaveField}
                                         isSaving={isSaving}
-                                        validationRules={validationRules?.twitterTitle}
+                                        validationRules={
+                                            validationRules?.twitterTitle
+                                        }
                                         resetField={methods.resetField}
                                         placeholder='Twitter share title (70 chars max)'
                                     />
@@ -285,19 +338,23 @@ const SeoInformation = ({ data, validationRules }) => {
                                             name='twitterImage'
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Twitter Image</FormLabel>
+                                                    <FormLabel>
+                                                        Twitter Image
+                                                    </FormLabel>
                                                     <FormControl>
                                                         <ImageUploadWithSelector
                                                             fieldName='twitterImage'
-                                                            onChange={(val) => {
-                                                                field.onChange(val);
-                                                                handleSaveField('twitterImage', val);
+                                                            onChange={val => {
+                                                                field.onChange(
+                                                                    val
+                                                                );
                                                             }}
                                                             multiple={false}
                                                         />
                                                     </FormControl>
                                                     <FormDescription>
-                                                        Twitter share image (1200x675 px)
+                                                        Twitter share image
+                                                        (1200x675 px)
                                                     </FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
@@ -314,7 +371,9 @@ const SeoInformation = ({ data, validationRules }) => {
                                             setEditingField={() => {}}
                                             onSaveField={handleSaveField}
                                             isSaving={isSaving}
-                                            validationRules={validationRules?.twitterDescription}
+                                            validationRules={
+                                                validationRules?.twitterDescription
+                                            }
                                             resetField={methods.resetField}
                                             placeholder='Twitter share description (200 chars max)'
                                             rows={3}
@@ -326,7 +385,10 @@ const SeoInformation = ({ data, validationRules }) => {
                     </CardContent>
                 </Card>
                 <div className='flex justify-end mt-6 pt-6 border-t'>
-                    <Button type='submit' disabled={isSaving} className='min-w-[150px]'>
+                    <Button
+                        type='submit'
+                        disabled={isSaving}
+                        className='min-w-[150px]'>
                         {isSaving ? 'Saving...' : 'Save All SEO Changes'}
                     </Button>
                 </div>
@@ -336,3 +398,4 @@ const SeoInformation = ({ data, validationRules }) => {
 };
 
 export default SeoInformation;
+

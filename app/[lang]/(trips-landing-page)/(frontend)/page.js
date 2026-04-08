@@ -1,6 +1,6 @@
 import { getDictionary } from '@/app/[lang]/_dictionaries/dictionaries';
-import { getAllActivities } from '@/app/_actions/trips/activityActions';
 import { getSiteInfo } from '@/app/_actions/settingsActions';
+import { getAllActivities } from '@/app/_actions/trips/activityActions';
 import ActivitiesSection from '../components/home/activities-section';
 import CTASection from '../components/home/cta-section';
 import FeaturedTrips from '../components/home/featured-trips';
@@ -23,6 +23,9 @@ export default async function Home({ params }) {
         activitiesRes?.result?.data?.filter(activity => activity?._count?.affiliateTrips > 0) || [];
 
     const siteInfo = siteInfoRes?.data;
+
+    console.log(`siteinfo data`, siteInfo);
+
 
     const faqs = siteInfo?.faqs || [
         {

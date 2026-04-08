@@ -44,11 +44,7 @@ import DemoOverlay from './blocks/demo-overlay';
 import SortableBlock from './blocks/sortable-block';
 import BookingSidebar from './booking-sidebar';
 
-const TripContentWrapperInner = ({
-    trip,
-    paymentMethod,
-    bookingForm,
-}) => {
+const TripContentWrapperInner = ({ trip, paymentMethod, bookingForm }) => {
     const { mode, MODES, setMode, isAdmin } = useAdmin();
     const { blocks, actions } = useBlockEdit();
 

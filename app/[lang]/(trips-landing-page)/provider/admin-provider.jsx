@@ -25,9 +25,9 @@ const AdminProvider = ({ children }) => {
             setError(null);
 
             const res = await getUserById(session?.user?.id);
-
-            if (res?.success && res?.user) {
-                setUser(res?.user);
+            console.log(`res`, res);
+            if (res?.success && res?.result) {
+                setUser(res?.result);
             }
         } catch (err) {
             setError(err.message || 'Failed to fetch user data'); // Better error handling
@@ -42,8 +42,13 @@ const AdminProvider = ({ children }) => {
 
     const isTripDetailsPage =
         pathname.includes('trips') && params.slug ? true : false;
+    console.log(`isTripDetailsPage`, isTripDetailsPage);
 
-    const isAdmin = session?.user?.id === user?.id && user?.role === 'ADMIN';
+    const isAdmin =
+        session?.user?.id === user?.id &&
+        (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN');
+
+    console.log(`isAdmin`, isAdmin);
 
     const handleLogout = async () => {
         await signOut({

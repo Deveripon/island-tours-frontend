@@ -46,8 +46,9 @@ export default function N8nWebhookSetup({ existingN8nCatchUrl }) {
             } else {
                 setSaveStatus('error');
                 toast.error(
-                    response.error ||
-                        'Failed to save n8n URL. Please try again.'
+                    typeof response.error === 'string'
+                        ? response.error
+                        : response.error?.message || 'Failed to save n8n URL. Please try again.'
                 );
             }
         } catch (error) {

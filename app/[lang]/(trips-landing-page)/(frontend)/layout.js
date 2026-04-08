@@ -102,10 +102,12 @@ import AdminProvider from '../provider/admin-provider';
 } */
 
 export default async function HomePageLayout({ children }) {
-    const themeRes = await getSiteTheme();
-    const siteInfoRes = await getSiteInfo();
-    const socialMediaRes = await getSocialMedia();
-    const destinationsRes = await getAllDestinations();
+    const [themeRes, siteInfoRes, socialMediaRes, destinationsRes] = await Promise.all([
+        getSiteTheme(),
+        getSiteInfo(),
+        getSocialMedia(),
+        getAllDestinations()
+    ]);
 
     const theme = themeRes?.data;
     const siteInfo = siteInfoRes?.data;

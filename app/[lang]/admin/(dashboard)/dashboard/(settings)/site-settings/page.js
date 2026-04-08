@@ -6,8 +6,7 @@ import {
     getSiteTheme,
     getSocialMedia,
 } from '@/app/_actions/settingsActions';
-import { auth } from '@/auth';
-import { signOut } from 'next-auth/react';
+import { auth, signOut } from '@/auth';
 import SiteManagement from './components/site-management';
 
 async function SettingsAndBillingPageForDashboard() {
@@ -15,7 +14,7 @@ async function SettingsAndBillingPageForDashboard() {
 
     if (session && session?.error === 'RefreshAccessTokenError') {
         await logout();
-        signOut({
+        await signOut({
             redirectTo: '/',
         });
     }

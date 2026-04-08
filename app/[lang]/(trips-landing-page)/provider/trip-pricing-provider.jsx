@@ -220,8 +220,8 @@ export const TripProvider = ({ children }) => {
 
             const res = await getTripBySlug(slug);
 
-            if (res?.success && res?.trip?.data) {
-                setTripData(res.trip.data);
+            if (res?.success && res?.result?.data) {
+                setTripData(res.result.data);
             } else {
                 notFound();
             }

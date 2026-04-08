@@ -1,5 +1,4 @@
-
-import { getMailchimpConfig } from '@/app/_actions/settingsActions';
+import { getMailchimpConfig, getWebhooks } from '@/app/_actions/settingsActions';
 import AutomationSetup from './components/automation-setup';
 
 export default async function AutomationPage() {
@@ -18,9 +17,9 @@ export default async function AutomationPage() {
                     'Go to Audience > Settings to find your "Unique Audience ID".',
                     'Enter the API Key and Audience ID in the fields below.',
                     'Ensure your Server Prefix (e.g., us19) is correct.',
-                    'Click "Save Configuration" to save.'
+                    'Click "Save Configuration" to save.',
                 ],
-                payload: null
+                payload: null,
             },
             zapier: {
                 id: 'leads-by-zapier',
@@ -36,7 +35,6 @@ export default async function AutomationPage() {
                     'Map your form fields to the webhook payload',
                     'Test your webhook and turn on your Zap',
                 ],
-
                 payload: {
                     email: "Lead's Email             => eg. john@example.com (required)",
                     name: "Lead's Name              => eg. John Doe  (optional)",
@@ -61,7 +59,6 @@ export default async function AutomationPage() {
                     'Map your form fields to the webhook payload',
                     'Execute the workflow to test the webhook',
                 ],
-
                 payload: {
                     email: "Lead's Email             => eg. john@example.com (required)",
                     name: "Lead's Name              => eg. John Doe  (optional)",
@@ -74,16 +71,24 @@ export default async function AutomationPage() {
             },
         },
     };
-    const mailchimpConfig = await getMailchimpConfig();
-    const webhookUrlConfig = mailchimpConfig?.result?.data?.webhookUrls || [];
-    const existingZapierCatchUrl = webhookUrlConfig.find(
+
+    const [mailchimpRes, webhooksRes] = await Promise.all([
+        getMailchimpConfig(),
+        getWebhooks(),
+    ]);
+
+    const mailchimpConfigData = mailchimpRes?.data;
+    const webhookUrls = webhooksRes?.data?.webhookUrls || [];
+    console.log(`webhookUrls`, webhookUrls);
+
+    const existingZapierCatchUrl = webhookUrls?.find(
         config => config.type === 'zapier_leads_catch_url'
     )?.url;
 
-    const existingN8nCatchUrl = webhookUrlConfig.find(
+    const existingN8nCatchUrl = webhookUrls?.find(
         config => config.type === 'n8n_leads_catch_url'
     )?.url;
-    const mailchimpConfigData = mailchimpConfig?.result?.data;
+
     return (
         <div className='container'>
             <div className='flex items-center justify-between'>

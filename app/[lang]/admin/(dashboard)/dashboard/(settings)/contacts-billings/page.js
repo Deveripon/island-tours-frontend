@@ -1,18 +1,17 @@
+import { logout } from '@/app/_actions/authActions';
 import {
     getBillingInformation,
     getCompanyInfo,
     getNotificationPreferences,
 } from '@/app/_actions/settingsActions';
-import { logout } from '@/app/_actions/authActions';
-import { auth } from '@/auth';
-import { signOut } from 'next-auth/react';
+import { auth, signOut } from '@/auth';
 import SettingsAndBilling from './components/settings-billing';
 
 async function SettingsAndBillingPageForDashboard() {
     const session = await auth();
     if (session && session?.error === 'RefreshAccessTokenError') {
         await logout();
-        signOut({
+        await signOut({
             redirectTo: '/',
         });
     }
@@ -24,10 +23,12 @@ async function SettingsAndBillingPageForDashboard() {
     ]);
 
     const data = {
-        companyInformations: companyRes?.result?.data,
-        billingInformations: billingRes?.result?.data,
-        notificationPreferences: notificationsRes?.result?.data,
+        companyInformations: companyRes?.data,
+        billingInformations: billingRes?.data,
+        notificationPreferences: notificationsRes?.data,
     };
+    console.log(`data`, data);
+
 
     return (
         <div className='container'>

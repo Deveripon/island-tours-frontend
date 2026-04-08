@@ -4,17 +4,23 @@ import Configuration from './components/cofiguration';
 
 export default async function PaymentMethods() {
     const response = await getPaymentConfiguration();
-    const configuration = response?.result?.data?.paymentMethodConfiguration;
-    const preferredMethod = response?.result?.data?.preferedPaymentMethod;
+    const configuration = response?.data?.paymentMethodConfiguration;
+    const preferredMethod = response?.data?.preferedPaymentMethod;
+
+    console.log(`configuration`, configuration);
+    console.log(`preferredMethod`, preferredMethod);
+    console.log(`response`, response);
 
     return (
         <div className='container'>
             <div className='flex  items-center justify-between'>
                 <div>
-                    <h1 className='text-2xl font-semibold tracking-tight'>Payment Configuration</h1>
+                    <h1 className='text-2xl font-semibold tracking-tight'>
+                        Payment Configuration
+                    </h1>
                     <p className='text-sm text-muted-foreground'>
-                        Set up your payment processing with Stripe to start accepting
-                        payments from customers worldwide.
+                        Set up your payment processing with Stripe to start
+                        accepting payments from customers worldwide.
                     </p>
                 </div>
             </div>
@@ -29,7 +35,9 @@ export default async function PaymentMethods() {
                     <h2 className='text-xs font-semibold text-foreground'>
                         Can&apos;t find the payment gateway you are looking for?
                     </h2>
-                    <Link href='#' className='text-xs ml-4 underline text-primary hover:text-primary/80'>
+                    <Link
+                        href='#'
+                        className='text-xs ml-4 underline text-primary hover:text-primary/80'>
                         Request Payment Gateway
                     </Link>
                 </div>

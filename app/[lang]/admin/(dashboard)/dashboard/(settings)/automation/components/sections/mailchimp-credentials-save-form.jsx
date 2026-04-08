@@ -29,9 +29,9 @@ export default function MailchimpCredentialsSaveForm({ mailchimpConfig }) {
     } = useForm({
         resolver: zodResolver(mailchimpSchema),
         defaultValues: {
-            apiKey: mailchimpConfig?.mailchimp?.apiKey || '',
-            serverPrefix: mailchimpConfig?.mailchimp?.serverPrefix || '',
-            audienceId: mailchimpConfig?.mailchimp?.audienceId || '',
+            apiKey: mailchimpConfig?.apiKey || '',
+            serverPrefix: mailchimpConfig?.serverPrefix || '',
+            audienceId: mailchimpConfig?.audienceId || '',
         },
     });
 
