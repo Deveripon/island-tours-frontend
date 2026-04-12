@@ -12,21 +12,46 @@ export default function SuccessPage() {
 
     useEffect(() => {
         let timeoutId;
+        // Max 20 retries × 2 s = 40 s wait time before showing an error.
+        // This covers the time Stripe takes to deliver the webhook + our
+        // server to process it before the booking is marked CONFIRMED.
+        const MAX_RETRIES = 20;
 
-        const checkBookingStatus = async () => {
+        const checkBookingStatus = async (retryCount = 0) => {
             try {
                 const response = await getBookingByStripeSessionId(session_id);
-                console.log(` response`, response);
-
 
                 if (response?.data?.status === 'CONFIRMED') {
                     setBookingStatus('CONFIRMED');
                     setBookingData(response.data);
-                } else if (response?.data?.status === 'processing') {
-                    timeoutId = setTimeout(checkBookingStatus, 2000);
+                } else if (
+                    response?.data?.status === 'DRAFT' ||
+                    response?.data?.status === 'processing'
+                ) {
+                    // Booking exists but webhook hasn't confirmed it yet — retry
+                    if (retryCount < MAX_RETRIES) {
+                        timeoutId = setTimeout(
+                            () => checkBookingStatus(retryCount + 1),
+                            2000
+                        );
+                    } else {
+                        setBookingStatus('error');
+                    }
+                } else {
+                    // Any other status (CANCELLED etc.) — stop polling
+                    setBookingStatus('error');
                 }
             } catch (error) {
-                setBookingStatus('error');
+                // Booking not found yet means the webhook hasn't been processed.
+                // Retry instead of immediately showing an error.
+                if (retryCount < MAX_RETRIES) {
+                    timeoutId = setTimeout(
+                        () => checkBookingStatus(retryCount + 1),
+                        2000
+                    );
+                } else {
+                    setBookingStatus('error');
+                }
             }
         };
 

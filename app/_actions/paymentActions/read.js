@@ -1,4 +1,4 @@
-'use server';
+    'use server';
 
 import { fetchWithAuth } from '@/utils/fetch-with-auth';
 

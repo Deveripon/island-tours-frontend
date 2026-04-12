@@ -1,6 +1,7 @@
 'use client';
 
 import { formateDate } from '@/app/[lang]/(trips-landing-page)/utils';
+import { downloadInvoiceAction } from '@/app/_actions/bookingActions/read';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -12,42 +13,35 @@ import {
     TickDouble01Icon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { saveAs } from 'file-saver';
 import { Calendar, Clock, Home, Mail, Phone } from 'lucide-react';
 import Link from 'next/link';
+import { saveAs } from 'file-saver';
+
 const SuccessPageContent = ({ bookingData }) => {
     // Function to download receipt
     async function downloadReceipt(bookingId) {
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/generate/${bookingId}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Accept: 'application/pdf',
-                    },
-                }
-            );
+            // Call the Server Action
+            const result = await downloadInvoiceAction(bookingId);
+            console.log(`download respoanse`, result);
 
-            if (!response.ok) {
-                throw new Error(
-                    `Failed to download the invoice: ${response.status} ${response.statusText}`
-                );
+            if (!result.success) {
+                throw new Error(result.error?.message || result.error);
             }
 
-            // Check if the response is actually a PDF
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/pdf')) {
-                throw new Error('Response is not a PDF file');
+            // Convert Base64 string back to a Uint8Array
+            const binaryString = window.atob(result.base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
             }
 
-            const blob = await response.blob();
+            // Create a Blob from the Uint8Array and trigger download
+            const blob = new Blob([bytes], { type: result.contentType });
             saveAs(blob, `invoice-${bookingId || 'receipt'}.pdf`);
         } catch (error) {
-            // Show user-friendly error message
-            alert(
-                'Failed to download receipt. Please try again or contact support.'
-            );
+            console.error('Download error:', error);
+            alert('Failed to download receipt. Please try again or contact support.');
         }
     }
 

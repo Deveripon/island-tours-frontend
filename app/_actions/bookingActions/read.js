@@ -172,3 +172,45 @@ export async function downloadReceipt(bookingId) {
         return { success: false, error: { message: error?.message || 'Failed to generate receipt' } };
     }
 }
+
+
+
+export async function downloadInvoiceAction(bookingId) {
+    try {
+
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/invoices/generate/${bookingId}`,
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/pdf'
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Failed to download: ${response.status}`);
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/pdf')) {
+            throw new Error('Response is not a PDF file');
+        }
+
+        // Convert the PDF blob to an ArrayBuffer, then to a Base64 string
+        // so it can be safely serialized and passed back to the client.
+        const arrayBuffer = await response.arrayBuffer();
+        const base64Data = Buffer.from(arrayBuffer).toString('base64');
+
+        return {
+            success: true,
+            base64Data,
+            contentType,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message || 'Something went wrong',
+        };
+    }
+}
