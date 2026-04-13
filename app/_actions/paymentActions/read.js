@@ -1,4 +1,4 @@
-    'use server';
+'use server';
 
 import { fetchWithAuth } from '@/utils/fetch-with-auth';
 
@@ -162,7 +162,7 @@ export async function getPaymentsByCustomerId(customerId) {
         const result = await response.json();
         if (!response.ok) return { success: false, error: { message: result?.message || 'Failed to fetch customer payments' } };
 
-        return { success: true, ...result };
+        return { success: true, result: result };
     } catch (error) {
         return { success: false, error: { message: error?.message || 'An error occurred' } };
     }

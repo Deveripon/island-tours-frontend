@@ -23,11 +23,11 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export function SidebarNav({ loggedInUser, tanentid, items }) {
+export function SidebarNav({ loggedInUser, items }) {
     const pathname = usePathname();
 
     // Helper function to check if a path is active
-    const basePath = `/site/${tanentid}/account`;
+    const basePath = `/account`;
     const isPathActive = url => {
         if (!url || url === '#') return false;
 
@@ -105,7 +105,7 @@ export function SidebarNav({ loggedInUser, tanentid, items }) {
                     <SidebarMenuButton
                         tooltip='Dashboard'
                         onClick={() => {
-                            window.location.href = `/site/${tanentid}`;
+                            window.location.href = `/`;
                         }}
                         className='w-full h-9 px-3 border-l-4 py-2 rounded-none border-transparent text-sidebar-foreground/70 hover:text-sidebar-foreground transition-all duration-150 hover:border-primary hover:bg-sidebar-accent'>
                         <HugeiconsIcon

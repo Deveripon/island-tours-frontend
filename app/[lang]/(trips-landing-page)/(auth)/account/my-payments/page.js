@@ -6,6 +6,7 @@ import PageContent from './components/page-content';
 export default async function MyPaymentsPage() {
     const session = await auth();
     const payments = await getPaymentsByCustomerId(session?.user?.id);
+    console.log(`customers payment`, payments);
 
     const paymentsData = payments?.result?.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)

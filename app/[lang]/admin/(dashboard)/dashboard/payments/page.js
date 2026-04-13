@@ -4,7 +4,7 @@ import PageContent from './components/page-content';
 export default async function MyPaymentsPage() {
     const payments = await getAllPayments();
     console.log('Payments:', payments);
-    const paymentsData = payments?.result?.payments.sort(
+    const paymentsData = payments?.payments?.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
 

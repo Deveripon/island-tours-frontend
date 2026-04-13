@@ -12,7 +12,7 @@ const data = {
     },
 };
 
-export default async function AppSidebar({ items, tanentid, ...props }) {
+export default async function AppSidebar({ items, ...props }) {
     const session = await auth();
 
     return (
@@ -22,18 +22,10 @@ export default async function AppSidebar({ items, tanentid, ...props }) {
             collapsible='none'
             {...props}>
             <SidebarContent className='!h-auto mt-8 ml-4'>
-                <SidebarNav
-                    tanentid={tanentid}
-                    loggedInUser={session?.data?.user}
-                    items={items}
-                />
+                <SidebarNav loggedInUser={session?.data?.user} items={items} />
             </SidebarContent>
 
-            <SidebarFooterMenu
-                data={data}
-                session={session}
-                tanentid={tanentid}
-            />
+            <SidebarFooterMenu data={data} session={session} />
         </Sidebar>
     );
 }
